@@ -116,3 +116,34 @@ A implementação da `TangleEngine` deverá respeitar esta sequência de estados
 As regras específicas de transição entre estados serão implementadas posteriormente, mantendo esta decisão como referência.
 
 ---------------------------------------------------------------------
+
+# Data: 2026-07-10
+
+## Decisão
+
+A `TangleEngine` avança automaticamente para a próxima etapa da Timeline sempre que recebe o evento `timelineChange`.
+
+A ordem das transições segue a sequência definida pela Timeline:
+
+- initialization
+- introduction
+- exploration
+- focus
+- reflection
+- conclusion
+
+O evento não transporta informação sobre o destino da transição. Cabe exclusivamente à `TangleEngine` determinar a próxima etapa.
+
+## Motivo
+
+A Timeline representa um fluxo linear previamente definido.
+
+Centralizar esta responsabilidade na `TangleEngine` evita duplicação de lógica e garante um comportamento consistente em toda a aplicação.
+
+## Consequência
+
+O `EngineEvent` permanece simples.
+
+A `TangleEngine` passa a ser responsável por conhecer e aplicar a sequência de estados da Timeline.
+
+---------------------------------------------------------------------
