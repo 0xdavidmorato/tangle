@@ -46,7 +46,9 @@ export class TangleEngine implements Engine {
         break;
 
       case "conclusion":
-        break;
+        return;
     }
+
+    this.timeline.stages.push(this.currentStage);
   }
 }
