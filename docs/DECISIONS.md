@@ -147,3 +147,28 @@ O `EngineEvent` permanece simples.
 A `TangleEngine` passa a ser responsável por conhecer e aplicar a sequência de estados da Timeline.
 
 ---------------------------------------------------------------------
+# Data: 2026-07-10
+
+## Decisão
+
+A `Timeline` passa a representar o histórico das etapas percorridas pela `TangleEngine` durante a execução.
+
+Cada transição adiciona a nova `TimelineStage` ao histórico, preservando todas as etapas anteriormente percorridas.
+
+A propriedade `currentStage` permanece responsável por representar a etapa atual da execução.
+
+## Motivo
+
+A etapa atual e o histórico possuem responsabilidades distintas.
+
+A `currentStage` permite à `TangleEngine` conhecer rapidamente o estado atual, enquanto a `Timeline` mantém um registo cronológico da evolução da experiência.
+
+Esta separação elimina ambiguidades e evita que a `Timeline` seja utilizada para determinar o estado atual.
+
+## Consequência
+
+A `TangleEngine` deverá atualizar simultaneamente a `currentStage` e a `Timeline` sempre que ocorrer uma transição.
+
+A `Timeline` passará a conter todas as etapas percorridas desde a inicialização da Engine, preservando a ordem em que ocorreram.
+
+---------------------------------------------------------------------

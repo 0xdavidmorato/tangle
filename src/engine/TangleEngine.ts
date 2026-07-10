@@ -1,10 +1,14 @@
 import type { Graph } from "../graph";
 import type { Engine } from "./Engine";
 import type { EngineEvent } from "./Event";
-import type { TimelineStage } from "./Timeline";
+import type { Timeline, TimelineStage } from "./Timeline";
 
 export class TangleEngine implements Engine {
   public currentStage: TimelineStage = "initialization";
+
+  public timeline: Timeline = {
+    stages: ["initialization"],
+  };
 
   constructor(public readonly graph: Graph) {}
 
