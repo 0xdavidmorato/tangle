@@ -2,19 +2,13 @@
 ## Esse é um dos documentos mais valiosos.
 
 Cada decisão deverá seguir um formato como este:
-# 2026-07-09
-
+# Data: 2026-07-09
 ## Decisão
-
-Os cinco pilares serão representados como Clusters.
-
+Texto
 ## Motivo
-
-Evita tratar o projeto como um conjunto de páginas independentes.
-
+Texto
 ## Consequência
-
-Toda a navegação passa a ser baseada no Graph.
+Texto
 ---------------------------------------------------------------------
 # 2026-07-10
 
@@ -91,3 +85,34 @@ A arquitetura deve servir como contrato para todo o desenvolvimento.
 Durante a implementação, todas as soluções deverão respeitar a arquitetura definida.
 
 Novas ideias ou melhorias ficam registadas para uma futura revisão arquitetural, não sendo incorporadas automaticamente na versão em desenvolvimento.
+
+# Data: 2026-07-10
+
+## Decisão
+
+A Timeline passa a representar formalmente a progressão funcional da experiência do utilizador dentro do TANGLE.
+
+Foram definidos os seguintes estados:
+
+- initialization
+- introduction
+- exploration
+- focus
+- reflection
+- conclusion
+
+A `TangleEngine` será a única responsável por gerir a evolução entre estes estados através de `EngineEvent`.
+
+## Motivo
+
+O projeto necessita de um ciclo de vida bem definido para que a Engine possa controlar a experiência de navegação de forma previsível.
+
+Documentar esta decisão antes da implementação garante que o comportamento da Engine será orientado pela documentação, conforme estabelecido no projeto.
+
+## Consequência
+
+A implementação da `TangleEngine` deverá respeitar esta sequência de estados.
+
+As regras específicas de transição entre estados serão implementadas posteriormente, mantendo esta decisão como referência.
+
+---------------------------------------------------------------------
