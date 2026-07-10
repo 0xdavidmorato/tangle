@@ -172,3 +172,50 @@ A `TangleEngine` deverá atualizar simultaneamente a `currentStage` e a `Timelin
 A `Timeline` passará a conter todas as etapas percorridas desde a inicialização da Engine, preservando a ordem em que ocorreram.
 
 ---------------------------------------------------------------------
+
+# Data: 2026-07-10
+
+## Decisão
+
+Os `EngineEvent` representam intenções de interação com o TANGLE.
+
+Cada evento possui uma responsabilidade única e é interpretado exclusivamente pela `TangleEngine`.
+
+Nesta fase do projeto, apenas o evento `timelineChange` possui comportamento implementado.
+
+Os restantes eventos serão implementados de forma incremental, à medida que as respetivas responsabilidades forem documentadas.
+
+## Motivo
+
+A implementação da Engine será orientada por eventos.
+
+Documentar previamente a responsabilidade de cada evento evita ambiguidades e garante que cada comportamento é implementado de forma consistente com a arquitetura do projeto.
+
+## Consequência
+
+Novos comportamentos da `TangleEngine` apenas poderão ser implementados após a definição da responsabilidade do respetivo `EngineEvent`.
+
+---------------------------------------------------------------------
+# Data: 2026-07-10
+
+## Decisão
+
+O evento `focus` representa a seleção de um `Node` pelo utilizador.
+
+A `TangleEngine` passa a controlar qual o `Node` atualmente focado.
+
+Apenas um `Node` pode estar focado em simultâneo.
+
+## Motivo
+
+O foco é um dos comportamentos fundamentais da navegação no TANGLE.
+
+Centralizar esta responsabilidade na `TangleEngine` garante consistência durante a exploração do conhecimento.
+
+## Consequência
+
+A `TangleEngine` passará a manter uma referência ao `Node` atualmente focado.
+
+Os restantes comportamentos relacionados com foco serão implementados de forma incremental.
+
+---------------------------------------------------------------------
