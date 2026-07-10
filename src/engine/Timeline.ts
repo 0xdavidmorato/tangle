@@ -5,3 +5,7 @@ export type TimelineStage =
   | "focus"
   | "reflection"
   | "conclusion";
+
+  export interface Timeline {
+  stages: TimelineStage[];
+}

@@ -9,7 +9,13 @@ export class TangleEngine implements Engine {
   constructor(public readonly graph: Graph) {}
 
   public dispatch(event: EngineEvent): void {
-    // TODO: implementar o processamento de eventos
-    void event;
-  }
+    switch (event) {
+        case "timelineChange":
+        // TODO: atualizar a timeline narrativa
+        break;
+
+        default:
+        break;
+        }
+    }
 }
