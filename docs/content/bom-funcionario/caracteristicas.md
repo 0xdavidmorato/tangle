@@ -1,0 +1,5 @@
+- Características Gerais de um bom funcionário
+    - Competência técnica
+    - Proatividade
+    - Trabalho em equipe
+    - Ética profissional
