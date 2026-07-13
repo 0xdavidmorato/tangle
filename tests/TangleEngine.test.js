@@ -70,6 +70,8 @@ test("focus selects an existing unlocked node", () => {
   engine.dispatch({ type: "focus", nodeId: "available-node" });
 
   assert.equal(engine.focusedNode, graph.nodes[0]);
+  assert.deepEqual(engine.focusedConnections, [graph.connections[0]]);
+  assert.deepEqual(engine.relatedNodes, [graph.nodes[1]]);
 });
 
 test("focus preserves the current node for locked or unknown nodes", () => {
@@ -81,6 +83,19 @@ test("focus preserves the current node for locked or unknown nodes", () => {
 
   engine.dispatch({ type: "focus", nodeId: "unknown-node" });
   assert.equal(engine.focusedNode, graph.nodes[0]);
+  assert.deepEqual(engine.focusedConnections, [graph.connections[0]]);
+  assert.deepEqual(engine.relatedNodes, [graph.nodes[1]]);
+});
+
+test("blur clears the complete focus context", () => {
+  const engine = new TangleEngine(graph);
+  engine.dispatch({ type: "focus", nodeId: "available-node" });
+
+  engine.dispatch("blur");
+
+  assert.equal(engine.focusedNode, null);
+  assert.deepEqual(engine.focusedConnections, []);
+  assert.deepEqual(engine.relatedNodes, []);
 });
 
 test("the concrete graph maps every content node to Markdown", () => {

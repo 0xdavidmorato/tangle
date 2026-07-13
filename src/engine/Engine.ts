@@ -1,5 +1,4 @@
-import type { Graph } from "../graph";
-import type { Node } from "../graph";
+import type { Connection, Graph, Node } from "../graph";
 import type { EngineEvent } from "./Event";
 import type { Timeline, TimelineStage } from "./Timeline";
 
@@ -8,6 +7,8 @@ export interface Engine {
   currentStage: TimelineStage;
   timeline: Timeline;
   readonly focusedNode: Node | null;
+  readonly focusedConnections: readonly Connection[];
+  readonly relatedNodes: readonly Node[];
 
   dispatch(event: EngineEvent): void;
 }

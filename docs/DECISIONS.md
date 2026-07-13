@@ -223,6 +223,42 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+O evento `focus` já seleciona um Node, mas a Engine ainda não disponibiliza o
+contexto das suas relações. Isso deixaria a futura Presentation responsável
+por percorrer o Graph e decidir quais Connections respondem ao foco, apesar de
+essa seleção ser comportamento da experiência. O evento `blur` já pertence ao
+contrato, mas não possui comportamento definido.
+
+## Decisão
+
+Ao aceitar um evento `focus`, a `TangleEngine` passa a expor, além do Node
+focado, as Connections incidentes nesse Node e os Nodes existentes no extremo
+oposto dessas Connections. Relações direcionadas e bidirecionais pertencem ao
+contexto quando o Node focado é qualquer um dos seus extremos.
+
+O evento `blur` limpa atomicamente o Node focado e todo o contexto relacional.
+Pedidos de foco inválidos continuam a preservar integralmente o contexto
+atual.
+
+## Justificação
+
+As Connections representam influências e a especificação determina que um
+conceito nunca deve aparecer isolado. Resolver o contexto na Engine impede a
+duplicação dessa regra na Interface, mantém o Graph como fonte de verdade e
+permite que a Presentation apenas represente o estado recebido.
+
+## Consequência
+
+A Engine expõe `focusedConnections` e `relatedNodes` como coleções somente de
+leitura. Não altera Nodes nem Connections do Graph; apenas mantém referências
+aos elementos que compõem o contexto da sessão atual. A forma visual de
+destacar esse contexto continua a pertencer à Presentation.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 A `TangleEngine` codificava a ordem da Timeline num `switch`, apesar de a
 narrativa já pertencer ao Graph. Isso obrigaria a alterar a Engine para mudar
 um percurso narrativo.

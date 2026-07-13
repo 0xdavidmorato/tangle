@@ -139,6 +139,18 @@ VisualState nunca altera o domínio.
 
 ---
 
+## Contexto de foco
+
+Durante a execução, a Engine mantém no máximo um Node focado. O contexto desse
+foco é composto pelas Connections que chegam ao Node ou partem dele e pelos
+Nodes existentes no extremo oposto dessas relações.
+
+Esse contexto referencia o Graph sem o alterar. A forma de representar o Node
+focado, as relações e os Nodes relacionados pertence exclusivamente à
+Presentation.
+
+---
+
 ## Relações
 
 Graph
