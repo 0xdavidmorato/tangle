@@ -63,7 +63,7 @@ export function TangleExperience({
           </div>
           <div>
             <strong>TANGLE</strong>
-            <small>Tudo está ligado.</small>
+            <small>David Morato</small>
           </div>
         </div>
         <div className="header-tools">
@@ -87,10 +87,12 @@ export function TangleExperience({
 
       <section className="experience-copy">
         <span className="eyebrow">Conhecimento organizacional</span>
-        <h1>Uma organização é um organismo vivo.</h1>
+        <h1>Uma empresa é um organismo vivo.</h1>
         <p>
-          Aproxime-se de um conceito e observe como cada decisão reverbera pela
-          rede.
+          Nenhum sucesso acontece sozinho. Nenhum problema existe isoladamente.
+        </p>
+        <p>
+          O sucesso ou o fracasso de uma empresa é resultado do trabalho que o antecede!
         </p>
       </section>
 
