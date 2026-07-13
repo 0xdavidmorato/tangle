@@ -223,6 +223,38 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+O primeiro Node de cada Cluster também era usado como hub visual do pilar. Isso
+sobrepunha o nome do Cluster ao conteúdo, colocava “Características” sobre “Boa
+Empresa” e comprimia Clusters com mais Nodes, como “Bom Negócio”.
+
+## Decisão
+
+Presentation passa a calcular hubs visuais de Cluster separados dos Nodes de
+conteúdo. Os hubs representam apenas agrupamento e não são adicionados ao
+Graph. Todos os Nodes reais, incluindo o primeiro de cada Cluster, são
+satélites externos e continuam interativos.
+
+O raio e a abertura do leque são proporcionais à quantidade de Nodes. O layout
+garante pelo menos 60 px entre Nodes do mesmo Cluster e usa um viewBox com
+margem adicional para rótulos, halos e ícones.
+
+## Justificação
+
+A separação reflete corretamente a hierarquia Graph → Cluster → Node e reserva
+espaço próprio para os nomes dos pilares. Regras proporcionais e testes de
+distância substituem ajustes frágeis por conteúdo específico.
+
+## Consequência
+
+O renderer apresenta seis hubs principais e dezanove Nodes de conteúdo. Novos
+Nodes aumentam automaticamente a abertura do respetivo Cluster, sem exigir
+coordenadas manuais ou alterar o domínio.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 O primeiro workflow de Pages falhou em npm ci porque a versão de npm fornecida
 pelo runner Node 22 interpretou dependências opcionais multiplataforma de forma
 diferente da versão usada para gerar o lockfile.

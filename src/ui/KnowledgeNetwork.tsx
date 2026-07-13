@@ -7,6 +7,7 @@ import type {
 } from "../presentation";
 import {
   createCurvedPath,
+  createRadialClusterLayout,
   createRadialLayout,
   networkCenter,
 } from "../presentation";
@@ -28,23 +29,20 @@ export function KnowledgeNetwork({
   onFocus,
 }: KnowledgeNetworkProps) {
   const positionedNodes = createRadialLayout(nodes, clusters);
+  const positionedClusters = createRadialClusterLayout(clusters);
   const positions = new Map(
     positionedNodes.map((node) => [node.id, { x: node.x, y: node.y }]),
   );
-  const clusterRoots = clusters
-    .map((cluster) => {
-      const root = positionedNodes.find(
-        (node) => node.id === cluster.nodeIds[0],
-      );
-      return root ? { cluster, root } : null;
-    })
-    .filter((entry) => entry !== null);
+  const clusterRoots = clusters.map((cluster, index) => ({
+    cluster,
+    root: positionedClusters[index]!,
+  }));
 
   return (
     <div className="network-shell">
       <svg
         className="knowledge-network"
-        viewBox="0 0 1000 730"
+        viewBox="-40 -35 1080 800"
         role="img"
         aria-labelledby="network-title network-description"
       >
@@ -169,7 +167,7 @@ export function KnowledgeNetwork({
                   })}
                 </g>
 
-                {cluster.nodeIds.slice(1).map((nodeId, index) => {
+                {cluster.nodeIds.map((nodeId, index) => {
                   const node = positionedNodes.find(
                     (candidate) => candidate.id === nodeId,
                   );
@@ -253,21 +251,50 @@ export function KnowledgeNetwork({
           </text>
         </g>
 
+        <g className="cluster-hubs" aria-hidden="true">
+          {positionedClusters.map((cluster) => {
+            const inwardX = networkCenter.x - cluster.x;
+            const inwardY = networkCenter.y - cluster.y;
+            const length = Math.hypot(inwardX, inwardY) || 1;
+            const labelX = (inwardX / length) * 52;
+            const labelY = (inwardY / length) * 52 + 4;
+
+            return (
+              <g
+                key={cluster.id}
+                className={`cluster-hub tone-${palette[cluster.colorIndex]}`}
+                transform={`translate(${cluster.x} ${cluster.y})`}
+              >
+                <circle r="43" className="cluster-hub-aura" />
+                <circle r="29" className="cluster-hub-orb" />
+                <NodeIcon
+                  clusterIndex={cluster.colorIndex}
+                  nodeIndex={0}
+                  size={24}
+                />
+                <text
+                  x={labelX}
+                  y={labelY}
+                  textAnchor={
+                    labelX > 8 ? "start" : labelX < -8 ? "end" : "middle"
+                  }
+                  className="cluster-label"
+                >
+                  {cluster.name}
+                </text>
+              </g>
+            );
+          })}
+        </g>
+
         <g className="knowledge-nodes">
           {positionedNodes.map((node) => {
             const isPrimary = node.emphasis === "primary";
             const cluster = clusters.find(
               (candidate) => candidate.id === node.clusterId,
             );
-            const isClusterRoot = cluster?.nodeIds[0] === node.id;
             const { clusterIndex, nodeIndex } = node;
-            const radius = isClusterRoot
-              ? isPrimary
-                ? 34
-                : 28
-              : isPrimary
-                ? 23
-                : 15;
+            const radius = isPrimary ? 23 : 15;
             return (
               <g
                 key={node.id}
@@ -296,18 +323,9 @@ export function KnowledgeNetwork({
                 <circle r={radius} className="node-orb" />
                 <NodeIcon
                   clusterIndex={clusterIndex}
-                  nodeIndex={nodeIndex}
+                  nodeIndex={nodeIndex + 1}
                   size={radius * 0.92}
                 />
-                {isClusterRoot ? (
-                  <text
-                    y={-(radius + 20)}
-                    textAnchor="middle"
-                    className="cluster-label"
-                  >
-                    {cluster.name}
-                  </text>
-                ) : null}
                 <text
                   y={radius + 24}
                   textAnchor="middle"

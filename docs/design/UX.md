@@ -19,6 +19,8 @@ selecionar um Node e pode começar a explorar imediatamente.
   Nodes sem transformar pertença em influência.
 - Os Nodes de conteúdo abrem-se para o exterior de cada pilar, preservando uma
   leitura clara do centro para a periferia.
+- Cada pilar possui um hub visual próprio. O nome do pilar ocupa a zona interior
+  e todos os conteúdos ficam na periferia, evitando sobreposição.
 - Todos os Nodes possuem um símbolo visual; o texto permanece disponível para
   identificação inequívoca.
 - Uma malha ambiental discreta acrescenta profundidade sem representar
@@ -80,6 +82,9 @@ até aos Nodes e circulam pelas Connections, comunicando que a rede está ativa.
 Cada pilar respira através de um halo subtil e possui uma constelação periférica
 de micro-nós. Essa densidade é atmosférica e nunca deve ser confundida com Nodes
 ou Connections de conhecimento.
+
+O enquadramento inclui margem para que rótulos, halos e Nodes extremos
+permaneçam integralmente visíveis.
 
 ## Acessibilidade
 

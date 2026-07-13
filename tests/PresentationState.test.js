@@ -8,6 +8,7 @@ const {
 } = require("../.test-dist/presentation/createPresentationState.js");
 const {
   createRadialLayout,
+  createRadialClusterLayout,
   networkCenter,
 } = require("../.test-dist/presentation/RadialLayout.js");
 
@@ -73,12 +74,13 @@ test("radial layout projects every satellite away from the network center", () =
   const engine = new TangleEngine(tangleGraph);
   const state = createPresentationState(engine);
   const layout = createRadialLayout(state.nodes, state.clusters);
+  const clusterLayout = createRadialClusterLayout(state.clusters);
 
-  for (const cluster of state.clusters) {
-    const root = layout.find((node) => node.id === cluster.nodeIds[0]);
+  for (const [clusterIndex, cluster] of state.clusters.entries()) {
+    const root = clusterLayout[clusterIndex];
     assert.ok(root);
 
-    for (const nodeId of cluster.nodeIds.slice(1)) {
+    for (const nodeId of cluster.nodeIds) {
       const satellite = layout.find((node) => node.id === nodeId);
       assert.ok(satellite);
       const outwardX = root.x - networkCenter.x;
@@ -92,6 +94,39 @@ test("radial layout projects every satellite away from the network center", () =
         outwardProjection > 0,
         `${satellite.id} must be outside its cluster root`,
       );
+    }
+  }
+});
+
+test("radial layout preserves readable spacing and safe bounds", () => {
+  const engine = new TangleEngine(tangleGraph);
+  const state = createPresentationState(engine);
+  const layout = createRadialLayout(state.nodes, state.clusters);
+
+  for (const node of layout) {
+    assert.ok(node.x >= 40 && node.x <= 960, `${node.id} x is in bounds`);
+    assert.ok(node.y >= 40 && node.y <= 690, `${node.id} y is in bounds`);
+  }
+
+  for (const cluster of state.clusters) {
+    const clusterNodes = layout.filter(
+      (node) => node.clusterId === cluster.id,
+    );
+
+    for (let first = 0; first < clusterNodes.length; first += 1) {
+      for (let second = first + 1; second < clusterNodes.length; second += 1) {
+        const firstNode = clusterNodes[first];
+        const secondNode = clusterNodes[second];
+        const distance = Math.hypot(
+          firstNode.x - secondNode.x,
+          firstNode.y - secondNode.y,
+        );
+
+        assert.ok(
+          distance >= 60,
+          `${firstNode.id} and ${secondNode.id} need readable spacing`,
+        );
+      }
     }
   }
 });

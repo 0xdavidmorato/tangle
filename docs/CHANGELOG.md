@@ -64,3 +64,10 @@ v0.10
 - Exportação estática do Next configurada.
 - Base path /tangle aplicado no ambiente GitHub Actions.
 - Workflow automatizado publica o TANGLE no GitHub Pages.
+
+v0.11
+
+- Hubs de Cluster deixam de ocupar o mesmo espaço dos Nodes de conteúdo.
+- Leques radiais adaptam-se à quantidade de Nodes.
+- Distância mínima e limites visuais passam a ser testados.
+- ViewBox ganha margem para manter toda a rede visível.
