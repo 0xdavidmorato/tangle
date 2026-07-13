@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type PointerEvent } from "react";
 import type { EngineEvent } from "../engine";
 import { TangleEngine } from "../engine";
 import type { Graph } from "../graph";
@@ -21,6 +21,7 @@ export function TangleExperience({
   contentByNodeId,
 }: TangleExperienceProps) {
   const engineRef = useRef<TangleEngine | null>(null);
+  const experienceRef = useRef<HTMLElement | null>(null);
   if (!engineRef.current) {
     engineRef.current = new TangleEngine(graph);
   }
@@ -38,8 +39,20 @@ export function TangleExperience({
     (node) => node.emphasis === "primary",
   );
 
+  function handlePointerMove(event: PointerEvent<HTMLElement>) {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    event.currentTarget.style.setProperty("--look-x", `${x * -9}px`);
+    event.currentTarget.style.setProperty("--look-y", `${y * -7}px`);
+  }
+
   return (
-    <main className={`experience ${focusedNode ? "has-focus" : ""}`}>
+    <main
+      ref={experienceRef}
+      className={`experience ${focusedNode ? "has-focus" : ""}`}
+      onPointerMove={handlePointerMove}
+    >
       <header className="experience-header">
         <div className="brand">
           <div className="brand-mark" aria-hidden="true">
@@ -69,8 +82,19 @@ export function TangleExperience({
         </p>
       </section>
 
+      <aside className="cluster-legend" aria-label="Domínios de conhecimento">
+        {state.clusters.map((cluster, index) => (
+          <div key={cluster.id} className="cluster-legend-item">
+            <span className={`legend-orb legend-tone-${index % 6}`} />
+            <span>{cluster.name}</span>
+            <small>{cluster.nodeIds.length}</small>
+          </div>
+        ))}
+      </aside>
+
       <KnowledgeNetwork
         nodes={state.nodes}
+        clusters={state.clusters}
         connections={state.connections}
         onFocus={(nodeId) => dispatch({ type: "focus", nodeId })}
       />

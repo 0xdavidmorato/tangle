@@ -47,6 +47,11 @@ export function createPresentationState(engine: Engine): PresentationState {
     timeline: [...engine.timeline.stages],
     nodes,
     connections,
+    clusters: engine.graph.clusters.map((cluster) => ({
+      id: cluster.id,
+      name: cluster.name,
+      nodeIds: [...cluster.nodeIds],
+    })),
     journey: engine.activeJourney
       ? {
           id: engine.activeJourney.id,

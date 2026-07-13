@@ -199,6 +199,8 @@ button {
   width: min(1120px, 94vw);
   height: min(790px, 88vh);
   overflow: visible;
+  transform: translate(var(--look-x, 0), var(--look-y, 0));
+  transition: transform 1.2s var(--ease-organic);
 }
 
 .ambient-particles circle {
@@ -207,13 +209,37 @@ button {
   animation: particle-drift 7s ease-in-out infinite alternate;
 }
 
+.ambient-filament {
+  fill: none;
+  stroke: #3fc6d5;
+  stroke-width: 0.35;
+  opacity: 0.075;
+}
+
 .cluster-link {
+  fill: none;
   stroke-width: 0.8;
   stroke-dasharray: 2 5;
   opacity: 0.24;
 }
 
+.core-filament {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.15;
+  opacity: 0.24;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.core-filament.is-echo {
+  stroke-width: 0.55;
+  stroke-dasharray: 2 8;
+  opacity: 0.16;
+  animation: energy-flow 5s linear infinite;
+}
+
 .domain-link {
+  fill: none;
   stroke: #42e6ef;
   transition:
     opacity 500ms ease,
@@ -301,6 +327,79 @@ button {
   stroke: #02080e;
   stroke-width: 3px;
   stroke-linejoin: round;
+}
+
+.cluster-label {
+  fill: currentColor;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  paint-order: stroke;
+  stroke: #02080e;
+  stroke-width: 4px;
+  text-transform: uppercase;
+}
+
+.cluster-legend {
+  position: absolute;
+  z-index: 4;
+  top: 305px;
+  left: 36px;
+  display: grid;
+  width: 190px;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid rgba(66, 164, 184, 0.12);
+  border-radius: 15px;
+  background: rgba(2, 11, 18, 0.46);
+  backdrop-filter: blur(12px);
+}
+
+.cluster-legend-item {
+  display: grid;
+  grid-template-columns: 23px 1fr auto;
+  align-items: center;
+  min-height: 31px;
+  color: #9eb5be;
+  font-size: 10px;
+}
+
+.cluster-legend-item small {
+  color: #405f6b;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.legend-orb {
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: color-mix(in srgb, currentColor 22%, transparent);
+  box-shadow: 0 0 9px currentColor;
+}
+
+.legend-tone-0 {
+  color: #2eefff;
+}
+
+.legend-tone-1 {
+  color: #ffd24c;
+}
+
+.legend-tone-2 {
+  color: #ff9e3d;
+}
+
+.legend-tone-3 {
+  color: #a879ff;
+}
+
+.legend-tone-4 {
+  color: #4fe18b;
+}
+
+.legend-tone-5 {
+  color: #ff6853;
 }
 
 .network-node:hover .node-aura,
@@ -600,6 +699,10 @@ button {
   }
 
   .experience-status {
+    display: none;
+  }
+
+  .cluster-legend {
     display: none;
   }
 

@@ -30,6 +30,12 @@ export interface PresentationConnection {
   readonly emphasis: Exclude<PresentationEmphasis, "related">;
 }
 
+export interface PresentationCluster {
+  readonly id: string;
+  readonly name: string;
+  readonly nodeIds: readonly string[];
+}
+
 export interface PresentationJourney {
   readonly id: string;
   readonly name: string;
@@ -44,5 +50,6 @@ export interface PresentationState {
   readonly timeline: readonly GlobalState[];
   readonly nodes: readonly PresentationNode[];
   readonly connections: readonly PresentationConnection[];
+  readonly clusters: readonly PresentationCluster[];
   readonly journey: PresentationJourney | null;
 }

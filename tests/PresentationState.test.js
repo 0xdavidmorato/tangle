@@ -30,6 +30,7 @@ test("presentation projects focus and relations without hiding graph context", (
   assert.equal(contextNode.emphasis, "context");
   assert.equal(focusedConnection.emphasis, "primary");
   assert.equal(state.nodes.length, tangleGraph.nodes.length);
+  assert.equal(state.clusters.length, tangleGraph.clusters.length);
 });
 
 test("presentation reflects session state and journey progress", () => {
