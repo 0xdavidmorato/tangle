@@ -15,6 +15,10 @@ selecionar um Node e pode começar a explorar imediatamente.
 
 - Todos os Nodes permanecem presentes.
 - Connections documentadas são distinguíveis da organização visual por Cluster.
+- O núcleo irradia filamentos para os Clusters; os Clusters organizam os seus
+  Nodes sem transformar pertença em influência.
+- Uma malha ambiental discreta acrescenta profundidade sem representar
+  conhecimento.
 - Movimento e luz sugerem atividade sem impedir leitura ou interação.
 - A interface identifica a etapa atual e a dimensão do universo sem competir
   com a rede.
@@ -62,6 +66,9 @@ conclusão é definida pelo utilizador.
 
 Esses papéis são semânticos. Cor, escala, brilho ou movimento podem evoluir sem
 alterar Engine ou Graph.
+
+O movimento de profundidade responde suavemente à posição do olhar. Essa
+resposta é exclusivamente visual e nunca altera foco, Journey ou conteúdo.
 
 ## Acessibilidade
 

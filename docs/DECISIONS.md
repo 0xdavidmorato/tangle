@@ -223,6 +223,42 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+O renderer precisava representar a hierarquia Graph → Clusters → Nodes e
+distinguir ligações estruturais de Connections de domínio. Também era
+necessário garantir que novos Markdown não ficassem esquecidos fora do Graph.
+
+## Decisão
+
+Presentation passa a incluir os Clusters no snapshot, preservando apenas
+identidade, nome e Node IDs. O renderer usa três camadas distintas:
+
+- malha ambiental decorativa, sem significado de domínio;
+- filamentos estruturais entre o núcleo, Clusters e os seus Nodes;
+- Connections do Graph, com destaque e fluxo próprios.
+
+A cobertura de conteúdo é uma invariante testada bidirecionalmente: todos os
+Markdown de docs/content aparecem exatamente uma vez no Graph e todas as
+referências são carregáveis e não vazias.
+
+## Justificação
+
+Separar as camadas evita apresentar decoração ou pertença a Cluster como se
+fossem influências de domínio. Expor Clusters pela Presentation impede a UI de
+consultar ou reconstruir diretamente a organização do Graph. A paridade
+automática protege a escalabilidade baseada em dados.
+
+## Consequência
+
+Adicionar ou remover conteúdo exige atualizar o Graph na mesma alteração. O
+renderer pode aumentar densidade, profundidade e movimento sem inventar
+Connections. A composição visual continua substituível e independente da
+Engine.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 Os Nodes referenciam Markdown, mas nenhuma camada carrega o recurso. Além
 disso, o projeto precisa de um primeiro renderer executável sem permitir que a
 tecnologia escolhida determine Engine, Graph ou Presentation.

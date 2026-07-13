@@ -31,3 +31,10 @@ v0.5
 - Next.js e React restaurados como infraestrutura da experiência web.
 - Primeiro renderer SVG navegável com foco, contexto relacional e conteúdo.
 - Dependências deixam de ser versionadas no repositório.
+
+v0.6
+
+- Cobertura bidirecional garante a implantação dos 19 conteúdos Markdown.
+- Clusters passam a integrar o snapshot de Presentation.
+- Rede ganha filamentos estruturais, Connections curvas e malha ambiental.
+- Profundidade reage organicamente ao ponteiro sem alterar a Engine.
