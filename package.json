@@ -6,7 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc --rootDir src --outDir .test-dist --declaration false --declarationMap false --sourceMap false && node --test tests/TangleEngine.test.js"
   },
   "repository": {
     "type": "git",

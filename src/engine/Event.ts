@@ -1,7 +1,6 @@
-export type EngineEvent =
+export type EngineEventType =
   | "mouseenter"
   | "mouseleave"
-  | "focus"
   | "blur"
   | "activate"
   | "deactivate"
@@ -10,3 +9,10 @@ export type EngineEvent =
   | "zoom"
   | "cameraMove"
   | "timelineChange";
+
+export interface FocusEvent {
+  type: "focus";
+  nodeId: string;
+}
+
+export type EngineEvent = EngineEventType | FocusEvent;

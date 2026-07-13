@@ -1,10 +1,6 @@
-export type TimelineStage =
-  | "initialization"
-  | "introduction"
-  | "exploration"
-  | "focus"
-  | "reflection"
-  | "conclusion";
+import type { GlobalState } from "../graph/GlobalState";
+
+export type TimelineStage = GlobalState;
 
   export interface Timeline {
   stages: TimelineStage[];

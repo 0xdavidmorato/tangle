@@ -42,6 +42,7 @@ Responsabilidades:
 - resolver transições;
 - responder às ações do utilizador;
 - comunicar alterações para a interface.
+- manter o histórico da Timeline da execução atual.
 
 ---
 
@@ -59,6 +60,7 @@ Responsabilidades:
 - representar os Nodes;
 - representar as ligações;
 - representar os percursos possíveis.
+- disponibilizar a sequência narrativa estática.
 
 ---
 

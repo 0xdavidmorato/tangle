@@ -53,6 +53,10 @@ Exemplos:
 
 Um Node pertence sempre a um único Cluster.
 
+O conteúdo de um Node é composto por referências a recursos, nunca por
+componentes. Atualmente cada `ContentReference` aponta, por caminho relativo,
+para um ficheiro Markdown.
+
 ---
 
 ## Edge
@@ -61,7 +65,39 @@ Representa uma ligação entre dois Nodes.
 
 As ligações permitem construir relações de conhecimento e percursos de aprendizagem.
 
-As Edges são direcionadas.
+Uma `Connection` identifica os dois extremos através de `sourceNodeId` e
+`targetNodeId` e possui os seguintes atributos de domínio:
+
+- `direction`: `directed` ou `bidirectional`;
+- `intensity`: força normalizada da influência, entre `0` e `1`;
+- `priority`: relevância normalizada da relação, entre `0` e `1`;
+- `meaning`: descrição textual obrigatória da influência.
+
+Uma relação bidirecional é representada por uma única Connection. As Edges são
+direcionadas apenas quando a sua `direction` é `directed`.
+
+---
+
+## Estados
+
+O estado global da experiência é um de `initialization`, `introduction`,
+`exploration`, `focus`, `reflection` ou `conclusion`.
+
+Cada Node possui dois estados independentes:
+
+- funcional: `locked`, `unlocked`, `active`, `inactive` ou `completed`;
+- visual: `visible`, `hidden`, `highlighted`, `selected`, `focused` ou
+  `fading`.
+
+O estado funcional pertence ao comportamento do domínio. O estado visual é
+apenas uma informação de apresentação e não altera o domínio.
+
+O Graph possui ainda uma `narrativeTimeline` imutável, que define a sequência
+narrativa disponível. Esta não deve ser confundida com a `Timeline` da Engine,
+que regista apenas as etapas percorridas na execução atual.
+
+O Graph inicial mapeia os ficheiros de `docs/content` para Nodes; os Markdown
+continuam a ser a fonte do texto e não são copiados para código.
 
 ---
 

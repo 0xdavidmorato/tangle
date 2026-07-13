@@ -219,3 +219,184 @@ A `TangleEngine` passará a manter uma referência ao `Node` atualmente focado.
 Os restantes comportamentos relacionados com foco serão implementados de forma incremental.
 
 ---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
+O domínio e os conteúdos Markdown estavam definidos, mas ainda não existia uma
+instância do Graph que os ligasse de forma navegável.
+
+## Decisão
+
+O Graph inicial será uma definição de dados em `src/graph/tangleGraph.ts`.
+Cada ficheiro de `docs/content` corresponde a um Node do seu Cluster. As
+Connections iniciais representam apenas as interligações descritas em
+`PROJECT.md`; a jornada linear usa os Nodes introdutórios dos seis pilares e a
+exploratória disponibiliza todos os Nodes.
+
+## Justificação
+
+Centralizar o mapeamento torna o conhecimento auditável, evita texto duplicado
+e permite acrescentar conteúdo por extensão de dados, sem alterar a Engine ou
+a interface.
+
+## Consequência
+
+O Graph passa a ser uma fonte concreta de conhecimento. Novas relações só
+devem ser acrescentadas quando a respetiva influência for documentada.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
+Os Nodes já são proprietários do conteúdo, mas `content: string[]` não
+descrevia se cada valor era texto, caminho ou outro recurso. Os conteúdos
+existentes do TANGLE estão em ficheiros Markdown separados da interface.
+
+## Decisão
+
+`Node.content` passa a conter `ContentReference`. Nesta fase, cada referência
+possui `path`, relativo à raiz do projeto, e `format: "markdown"`.
+
+## Justificação
+
+O domínio identifica o conteúdo sem o carregar, interpretar ou decidir como
+apresentá-lo. Assim, o Graph mantém-se como fonte de verdade e o Content
+Renderer continua responsável por transformar Markdown em interface.
+
+## Consequência
+
+O carregamento de ficheiros e a conversão Markdown pertencem a uma futura
+camada de infraestrutura/conteúdo. Novos formatos poderão ser acrescentados
+por extensão ao tipo de referência, sem alterar Nodes existentes.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
+O `Graph` declarava uma timeline como `string[]`, enquanto a `TangleEngine`
+já utiliza `Timeline` para o histórico das etapas efetivamente percorridas.
+Ambas as responsabilidades recebiam o mesmo nome, embora uma seja
+conhecimento narrativo e a outra estado de execução.
+
+## Decisão
+
+O Graph passa a expor `narrativeTimeline`, uma sequência imutável de
+`GlobalState` que define a narrativa disponível para a experiência. A
+`Timeline` da Engine permanece o histórico mutável da execução.
+
+## Justificação
+
+A sequência narrativa pertence ao conhecimento reutilizável do TANGLE; o
+histórico pertence à sessão em curso. Separar os contratos preserva a fonte de
+verdade do Graph e impede que a Engine altere a narrativa ao processar eventos.
+
+## Consequência
+
+Consumidores que precisam da ordem narrativa consultam
+`graph.narrativeTimeline`. Consumidores que precisam do percurso já realizado
+consultam `engine.timeline`. Nenhuma camada de apresentação decide ou altera
+qualquer uma das duas sequências.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
+A Engine precisa de testes executáveis para validar regras de comportamento
+independentemente de qualquer interface. O projeto ainda não possui uma
+ferramenta de testes configurada.
+
+## Decisão
+
+Os testes unitários da Engine utilizarão o executor nativo `node:test`. O
+TypeScript de produção será compilado temporariamente para `.test-dist` antes
+da execução, sem adicionar dependências externas.
+
+## Justificação
+
+O executor já está disponível no ambiente Node utilizado pelo projeto e cobre
+o isolamento necessário para as regras da Engine. A compilação temporária
+testa o código que será efetivamente executado sem introduzir uma biblioteca
+de testes na arquitetura.
+
+## Consequência
+
+O comando `npm test` passa a compilar e executar os testes unitários. O
+diretório `.test-dist` é um artefacto descartável e não pertence ao repositório.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
+A decisão existente define que o evento `focus` seleciona um `Node`, mas o
+contrato `EngineEvent` ainda não transportava a identidade do Node nem definia
+como a Engine deveria tratar um pedido inválido.
+
+## Decisão
+
+O evento `focus` passa a ser representado por `{ type: "focus", nodeId }`.
+
+A `TangleEngine` resolve o `nodeId` exclusivamente no `Graph`. Apenas Nodes
+existentes e cujo `functionalState` não seja `locked` podem receber foco. Um
+pedido para um Node inexistente ou bloqueado não altera o foco atual.
+
+## Justificação
+
+O identificador mantém a interface livre de referências diretas ao domínio e
+preserva o `Graph` como fonte de verdade para o conhecimento. Ignorar pedidos
+inválidos torna a Engine previsível sem introduzir estados ou efeitos visuais
+na camada de comportamento.
+
+## Consequência
+
+A Engine expõe o Node focado como estado de leitura. A Presentation poderá
+reagir a esse estado sem alterar o Graph. Os restantes eventos mantêm o
+contrato atual até que a respetiva responsabilidade seja documentada.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
+Os estados globais, os estados dos Nodes e os atributos de `Connection`
+existiam como listas documentais ou valores `string`, sem um contrato único e
+verificável pelo TypeScript. A especificação exige que uma Connection expresse
+direção, intensidade, prioridade e significado.
+
+## Decisão
+
+Fica definida, provisoriamente, a seguinte taxonomia:
+
+- `GlobalState`: `initialization`, `introduction`, `exploration`, `focus`,
+  `reflection` e `conclusion`;
+- `FunctionalState`: `locked`, `unlocked`, `active`, `inactive` e `completed`;
+- `VisualState`: `visible`, `hidden`, `highlighted`, `selected`, `focused` e
+  `fading`;
+- `ConnectionDirection`: `directed` ou `bidirectional`;
+- `ConnectionIntensity` e `ConnectionPriority`: números normalizados entre
+  `0` e `1`;
+- `ConnectionMeaning`: descrição textual obrigatória da influência.
+
+`TimelineStage` reutiliza `GlobalState`. Uma Connection bidirecional continua
+a declarar `sourceNodeId` e `targetNodeId`; ambos identificam os extremos da
+mesma relação, sem inverter ou duplicar a Connection.
+
+## Justificação
+
+Os tipos fechados protegem as invariantes do domínio sem colocar regras de
+apresentação na Engine. A escala normalizada permite que futuras camadas de
+apresentação interpretem intensidade e prioridade de forma consistente, sem
+impor uma tecnologia visual.
+
+## Consequência
+
+Nodes e Connections deixam de aceitar valores arbitrários para estes campos.
+A validação de limites numéricos em dados externos será introduzida quando
+existir uma camada de carregamento de conteúdo; nesta fase, o contrato é
+documental e de tipo.
+
+---------------------------------------------------------------------
