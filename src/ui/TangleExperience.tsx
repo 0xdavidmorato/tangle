@@ -29,6 +29,7 @@ export function TangleExperience({
   const [state, setState] = useState<PresentationState>(() =>
     createPresentationState(engineRef.current!),
   );
+  const [motionEnabled, setMotionEnabled] = useState(true);
 
   function dispatch(event: EngineEvent) {
     engineRef.current!.dispatch(event);
@@ -50,7 +51,7 @@ export function TangleExperience({
   return (
     <main
       ref={experienceRef}
-      className={`experience ${focusedNode ? "has-focus" : ""}`}
+      className={`experience ${focusedNode ? "has-focus" : ""} ${motionEnabled ? "motion-on" : "motion-off"}`}
       onPointerMove={handlePointerMove}
     >
       <header className="experience-header">
@@ -65,11 +66,22 @@ export function TangleExperience({
             <small>Tudo está ligado.</small>
           </div>
         </div>
-        <div className="experience-status" aria-live="polite">
-          <span className="status-pulse" />
-          <span>{state.stage}</span>
-          <span className="status-separator">/</span>
-          <span>{state.nodes.length} conceitos</span>
+        <div className="header-tools">
+          <button
+            type="button"
+            className="motion-control"
+            aria-pressed={motionEnabled}
+            onClick={() => setMotionEnabled((enabled) => !enabled)}
+          >
+            <span className="motion-control-dot" aria-hidden="true" />
+            Movimento {motionEnabled ? "ativo" : "pausado"}
+          </button>
+          <div className="experience-status" aria-live="polite">
+            <span className="status-pulse" />
+            <span>{state.stage}</span>
+            <span className="status-separator">/</span>
+            <span>{state.nodes.length} conceitos</span>
+          </div>
         </div>
       </header>
 

@@ -135,8 +135,18 @@ export function KnowledgeNetwork({
                     const spread = (microIndex / 7 - 0.5) * 1.7;
                     const distance = 48 + (microIndex % 3) * 15;
                     const point = {
-                      x: root.x + Math.cos(outwardAngle + spread) * distance,
-                      y: root.y + Math.sin(outwardAngle + spread) * distance,
+                      x: Number(
+                        (
+                          root.x +
+                          Math.cos(outwardAngle + spread) * distance
+                        ).toFixed(4),
+                      ),
+                      y: Number(
+                        (
+                          root.y +
+                          Math.sin(outwardAngle + spread) * distance
+                        ).toFixed(4),
+                      ),
                     };
                     return (
                       <g key={`micro-${cluster.id}-${microIndex}`}>

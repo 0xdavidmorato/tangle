@@ -51,3 +51,10 @@ v0.8
 - Fluxos luminosos deixam de depender de SVG SMIL e passam para CSS contínuo.
 - Cada Cluster ganha halo respiratório.
 - Quarenta e oito micro-nós aumentam a densidade neural da composição.
+
+v0.9
+
+- Coordenadas canónicas eliminam hydration mismatch no SVG.
+- Movimento passa a ter controlo explícito no cabeçalho.
+- Trilhos luminosos ganham maior contraste, comprimento e brilho.
+- Rede ocupa mais espaço e o texto introdutório perde peso visual.

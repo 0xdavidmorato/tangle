@@ -17,6 +17,10 @@ export interface RadialNode extends PresentationNode, LayoutPoint {
 
 export const networkCenter: LayoutPoint = { x: 500, y: 365 };
 
+function canonical(value: number): number {
+  return Number(value.toFixed(4));
+}
+
 export function createRadialLayout(
   nodes: readonly PresentationNode[],
   clusters: readonly PresentationCluster[],
@@ -43,7 +47,11 @@ export function createRadialLayout(
     };
 
     if (nodeIndex <= 0) {
-      return { ...base, x: clusterX, y: clusterY };
+      return {
+        ...base,
+        x: canonical(clusterX),
+        y: canonical(clusterY),
+      };
     }
 
     const satelliteCount = Math.max(1, (cluster?.nodeIds.length ?? 1) - 1);
@@ -56,13 +64,17 @@ export function createRadialLayout(
 
     return {
       ...base,
-      x: Math.min(
-        955,
-        Math.max(45, clusterX + Math.cos(satelliteAngle) * satelliteRadius),
+      x: canonical(
+        Math.min(
+          955,
+          Math.max(45, clusterX + Math.cos(satelliteAngle) * satelliteRadius),
+        ),
       ),
-      y: Math.min(
-        680,
-        Math.max(48, clusterY + Math.sin(satelliteAngle) * satelliteRadius),
+      y: canonical(
+        Math.min(
+          680,
+          Math.max(48, clusterY + Math.sin(satelliteAngle) * satelliteRadius),
+        ),
       ),
     };
   });
@@ -77,5 +89,5 @@ export function createCurvedPath(
   const midpointY = (source.y + target.y) / 2;
   const normalX = -(target.y - source.y) * bend;
   const normalY = (target.x - source.x) * bend;
-  return `M ${source.x} ${source.y} Q ${midpointX + normalX} ${midpointY + normalY} ${target.x} ${target.y}`;
+  return `M ${canonical(source.x)} ${canonical(source.y)} Q ${canonical(midpointX + normalX)} ${canonical(midpointY + normalY)} ${canonical(target.x)} ${canonical(target.y)}`;
 }

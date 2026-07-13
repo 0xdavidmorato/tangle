@@ -86,7 +86,7 @@ ou Connections de conhecimento.
 - Nodes são alcançáveis por teclado e ativados por Enter ou Espaço.
 - Elementos interativos possuem nomes acessíveis.
 - O conteúdo permanece texto HTML semântico depois de transformado do Markdown.
-- A experiência respeita a preferência por movimento reduzido.
+- Um controlo visível permite pausar e reativar todo o movimento da experiência.
 - Contraste e foco visível devem ser preservados em todos os refinamentos.
 
 ## Ecrãs pequenos

@@ -223,6 +223,37 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+O SVG apresentava hydration mismatch porque servidor e navegador produziam
+diferenças na última casa decimal de cálculos trigonométricos. Em alguns
+ambientes, a preferência global de movimento também ocultava toda a energia,
+sem deixar ao utilizador uma forma explícita de a reativar.
+
+## Decisão
+
+Todas as coordenadas e control points do layout são convertidos para números
+canónicos com quatro casas decimais antes da renderização.
+
+A experiência inicia com movimento ativo e oferece um controlo persistente na
+sessão para pausar ou reativar animações. O modo pausado remove os trilhos e
+ondas e suspende as restantes animações.
+
+## Justificação
+
+Valores canónicos garantem HTML idêntico no SSR e na hidratação. Um controlo
+visível torna o estado do movimento compreensível e permite ao utilizador
+escolher entre a atmosfera viva pretendida e uma experiência estática.
+
+## Consequência
+
+O renderer deixa de produzir diferenças de precisão entre servidor e cliente.
+A animação não desaparece silenciosamente por configuração externa; pode ser
+pausada e retomada diretamente na interface.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 As partículas de energia baseadas em SVG animateMotion apareciam inicialmente,
 mas podiam deixar de animar depois da hidratação ou em combinações específicas
 de navegador. A densidade periférica também permanecia abaixo da sensação
