@@ -88,3 +88,16 @@ test("the concrete graph maps every content node to Markdown", () => {
   assert.equal(tangleGraph.nodes.length, 19);
   assert.ok(tangleGraph.nodes.every((node) => node.content[0]?.format === "markdown"));
 });
+
+test("timeline progression follows the graph narrative", () => {
+  const engine = new TangleEngine({ ...graph, narrativeTimeline: ["introduction", "conclusion"] });
+
+  engine.dispatch("timelineChange");
+
+  assert.equal(engine.currentStage, "conclusion");
+  assert.deepEqual(engine.timeline.stages, ["introduction", "conclusion"]);
+});
+
+test("an empty narrative timeline is rejected", () => {
+  assert.throws(() => new TangleEngine({ ...graph, narrativeTimeline: [] }));
+});

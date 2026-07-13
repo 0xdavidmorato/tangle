@@ -223,6 +223,32 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+A `TangleEngine` codificava a ordem da Timeline num `switch`, apesar de a
+narrativa já pertencer ao Graph. Isso obrigaria a alterar a Engine para mudar
+um percurso narrativo.
+
+## Decisão
+
+A Engine inicializa na primeira etapa de `graph.narrativeTimeline` e avança
+para a etapa seguinte dessa sequência ao receber `timelineChange`. A narrativa
+do Graph deve conter pelo menos uma etapa; uma narrativa vazia é inválida.
+
+## Justificação
+
+A progressão é comportamento da Engine, mas a ordem é conhecimento do Graph.
+Esta separação permite reutilizar a mesma Engine com narrativas diferentes.
+
+## Consequência
+
+Ao chegar à última etapa, a Engine preserva o estado e o histórico atuais.
+Uma configuração sem narrativa falha na inicialização, antes de iniciar uma
+experiência inconsistente.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 O domínio e os conteúdos Markdown estavam definidos, mas ainda não existia uma
 instância do Graph que os ligasse de forma navegável.
 

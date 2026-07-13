@@ -4,15 +4,22 @@ import type { EngineEvent } from "./Event";
 import type { Timeline, TimelineStage } from "./Timeline";
 
 export class TangleEngine implements Engine {
-  public currentStage: TimelineStage = "initialization";
+  public currentStage: TimelineStage;
 
-  public timeline: Timeline = {
-    stages: ["initialization"],
-  };
+  public timeline: Timeline;
 
   public focusedNode: Node | null = null;
 
-  constructor(public readonly graph: Graph) {}
+  constructor(public readonly graph: Graph) {
+    const [initialStage] = graph.narrativeTimeline;
+
+    if (!initialStage) {
+      throw new Error("The graph narrative timeline must not be empty.");
+    }
+
+    this.currentStage = initialStage;
+    this.timeline = { stages: [initialStage] };
+  }
 
   public dispatch(event: EngineEvent): void {
     if (typeof event !== "string") {
@@ -41,30 +48,14 @@ export class TangleEngine implements Engine {
   }
 
   private advanceTimeline(): void {
-    switch (this.currentStage) {
-      case "initialization":
-        this.currentStage = "introduction";
-        break;
+    const currentIndex = this.graph.narrativeTimeline.indexOf(this.currentStage);
+    const nextStage = this.graph.narrativeTimeline[currentIndex + 1];
 
-      case "introduction":
-        this.currentStage = "exploration";
-        break;
-
-      case "exploration":
-        this.currentStage = "focus";
-        break;
-
-      case "focus":
-        this.currentStage = "reflection";
-        break;
-
-      case "reflection":
-        this.currentStage = "conclusion";
-        break;
-
-      case "conclusion":
-        return;
+    if (!nextStage) {
+      return;
     }
+
+    this.currentStage = nextStage;
 
     this.timeline.stages.push(this.currentStage);
   }
