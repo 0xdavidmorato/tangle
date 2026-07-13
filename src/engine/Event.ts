@@ -2,17 +2,24 @@ export type EngineEventType =
   | "mouseenter"
   | "mouseleave"
   | "blur"
-  | "activate"
-  | "deactivate"
-  | "complete"
   | "scroll"
   | "zoom"
   | "cameraMove"
-  | "timelineChange";
+  | "timelineChange"
+  | "reset";
 
-export interface FocusEvent {
-  type: "focus";
+export type NodeEventType = "focus" | "activate" | "deactivate" | "complete";
+
+export interface NodeEvent {
+  type: NodeEventType;
   nodeId: string;
 }
 
-export type EngineEvent = EngineEventType | FocusEvent;
+export interface JourneyStartEvent {
+  type: "journeyStart";
+  journeyId: string;
+}
+
+export type FocusEvent = NodeEvent & { type: "focus" };
+
+export type EngineEvent = EngineEventType | NodeEvent | JourneyStartEvent;

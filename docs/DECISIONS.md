@@ -223,6 +223,41 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+O Graph define estados iniciais nos Nodes, mas a experiência também necessita
+de estado mutável por sessão. Mutar diretamente o Graph misturaria conhecimento
+com histórico de execução. Journey e vários eventos estavam modelados sem
+regras completas, impedindo implementações futuras previsíveis.
+
+## Decisão
+
+A Engine mantém uma cópia dos estados funcionais dos Nodes para a sessão e
+expõe consultas sem alterar o Graph. Eventos que alteram Nodes passam a
+transportar nodeId. As transições válidas, o reset, as invariantes e o ciclo de
+vida das Journeys ficam definidos em docs/ENGINE_RULES.md.
+
+Journeys lineares avançam quando o Node atual é concluído; Journeys
+exploratórias acumulam conclusões sem impor ordem. Uma Journey ativa limita o
+foco aos Nodes que lhe pertencem e, no modo linear, ao Node atual.
+
+## Justificação
+
+Separar configuração de execução preserva o Graph como fonte de verdade
+reutilizável e permite criar várias sessões sobre o mesmo conhecimento. Um
+contrato comportamental explícito evita que Interface, Presentation ou futuros
+eventos decidam regras de progressão.
+
+## Consequência
+
+Configurações inválidas falham na construção da Engine. locked e completed não
+são alterados sem uma regra explícita; o primeiro permanece bloqueado e o
+segundo é terminal durante a sessão. Eventos de interação visual permanecem
+neutros até as regras correspondentes serem documentadas.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 O evento `focus` já seleciona um Node, mas a Engine ainda não disponibiliza o
 contexto das suas relações. Isso deixaria a futura Presentation responsável
 por percorrer o Graph e decidir quais Connections respondem ao foco, apesar de

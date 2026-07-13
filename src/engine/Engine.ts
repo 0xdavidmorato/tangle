@@ -1,8 +1,9 @@
-import type { Connection, Graph, Node } from "../graph";
+import type { Connection, FunctionalState, Graph, Node } from "../graph";
 import type { EngineEvent } from "./Event";
+import type { JourneyState } from "./JourneyState";
 import type { Timeline, TimelineStage } from "./Timeline";
 
-export interface Engine {
+export interface Engine extends JourneyState {
   readonly graph: Graph;
   currentStage: TimelineStage;
   timeline: Timeline;
@@ -11,4 +12,5 @@ export interface Engine {
   readonly relatedNodes: readonly Node[];
 
   dispatch(event: EngineEvent): void;
+  getFunctionalState(nodeId: string): FunctionalState | null;
 }

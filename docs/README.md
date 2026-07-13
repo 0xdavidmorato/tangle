@@ -12,5 +12,6 @@ Antes de alterar qualquer parte do sistema consulte:
 - ARCHITECTURE.md
 - DECISIONS.md
 - DOMAIN.md
+- ENGINE_RULES.md
 
 A documentação é a fonte de verdade do projeto.
