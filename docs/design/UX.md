@@ -77,6 +77,10 @@ resposta é exclusivamente visual e nunca altera foco, Journey ou conteúdo.
 O núcleo pulsa num ritmo orgânico e emite ondas. Luzes percorrem os filamentos
 até aos Nodes e circulam pelas Connections, comunicando que a rede está ativa.
 
+Cada pilar respira através de um halo subtil e possui uma constelação periférica
+de micro-nós. Essa densidade é atmosférica e nunca deve ser confundida com Nodes
+ou Connections de conhecimento.
+
 ## Acessibilidade
 
 - Nodes são alcançáveis por teclado e ativados por Enter ou Espaço.

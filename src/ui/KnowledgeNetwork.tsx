@@ -97,56 +97,99 @@ export function KnowledgeNetwork({
         </g>
 
         <g className="cluster-structure" aria-hidden="true">
-          {clusterRoots.map(({ cluster, root }, clusterIndex) => (
-            <g key={cluster.id}>
-              <path
-                d={createCurvedPath(networkCenter, root, 0.045)}
-                className={`core-filament tone-${palette[clusterIndex % palette.length]}`}
-              />
-              <path
-                d={createCurvedPath(networkCenter, root, -0.035)}
-                className={`core-filament is-echo tone-${palette[clusterIndex % palette.length]}`}
-              />
-              <circle
-                r="2.2"
-                className={`energy-particle tone-${palette[clusterIndex % palette.length]}`}
-              >
-                <animateMotion
-                  dur={`${3.2 + clusterIndex * 0.35}s`}
-                  begin={`-${clusterIndex * 0.55}s`}
-                  repeatCount="indefinite"
-                  path={createCurvedPath(networkCenter, root, 0.045)}
+          {clusterRoots.map(({ cluster, root }, clusterIndex) => {
+            const tone = palette[clusterIndex % palette.length];
+            const corePath = createCurvedPath(networkCenter, root, 0.045);
+            const outwardAngle = Math.atan2(
+              root.y - networkCenter.y,
+              root.x - networkCenter.x,
+            );
+
+            return (
+              <g key={cluster.id}>
+                <circle
+                  cx={root.x}
+                  cy={root.y}
+                  r="52"
+                  className={`cluster-halo tone-${tone}`}
                 />
-              </circle>
-              {cluster.nodeIds.slice(1).map((nodeId, index) => {
-                const node = positionedNodes.find(
-                  (candidate) => candidate.id === nodeId,
-                );
-                const path = node
-                  ? createCurvedPath(root, node, index % 2 === 0 ? 0.09 : -0.09)
-                  : "";
-                return node ? (
-                  <g key={`cluster-${node.id}`}>
-                    <path
-                      d={path}
-                      className={`cluster-link tone-${palette[node.colorIndex]}`}
-                    />
-                    <circle
-                      r="1.45"
-                      className={`energy-particle is-satellite tone-${palette[node.colorIndex]}`}
-                    >
-                      <animateMotion
-                        dur={`${2.8 + index * 0.4}s`}
-                        begin={`-${index * 0.7}s`}
-                        repeatCount="indefinite"
-                        path={path}
+                <path
+                  d={corePath}
+                  className={`core-filament tone-${tone}`}
+                />
+                <path
+                  d={createCurvedPath(networkCenter, root, -0.035)}
+                  className={`core-filament is-echo tone-${tone}`}
+                />
+                <path
+                  d={corePath}
+                  className={`energy-trail is-core tone-${tone}`}
+                  style={{
+                    animationDelay: `${clusterIndex * -0.58}s`,
+                    animationDuration: `${3.1 + clusterIndex * 0.22}s`,
+                  }}
+                />
+
+                <g className="cluster-micro-network">
+                  {Array.from({ length: 8 }, (_, microIndex) => {
+                    const spread = (microIndex / 7 - 0.5) * 1.7;
+                    const distance = 48 + (microIndex % 3) * 15;
+                    const point = {
+                      x: root.x + Math.cos(outwardAngle + spread) * distance,
+                      y: root.y + Math.sin(outwardAngle + spread) * distance,
+                    };
+                    return (
+                      <g key={`micro-${cluster.id}-${microIndex}`}>
+                        <path
+                          d={createCurvedPath(
+                            root,
+                            point,
+                            microIndex % 2 ? 0.07 : -0.07,
+                          )}
+                          className={`micro-filament tone-${tone}`}
+                        />
+                        <circle
+                          cx={point.x}
+                          cy={point.y}
+                          r={microIndex % 3 === 0 ? 1.8 : 1.15}
+                          className={`micro-node tone-${tone}`}
+                        />
+                      </g>
+                    );
+                  })}
+                </g>
+
+                {cluster.nodeIds.slice(1).map((nodeId, index) => {
+                  const node = positionedNodes.find(
+                    (candidate) => candidate.id === nodeId,
+                  );
+                  const path = node
+                    ? createCurvedPath(
+                        root,
+                        node,
+                        index % 2 === 0 ? 0.09 : -0.09,
+                      )
+                    : "";
+                  return node ? (
+                    <g key={`cluster-${node.id}`}>
+                      <path
+                        d={path}
+                        className={`cluster-link tone-${palette[node.colorIndex]}`}
                       />
-                    </circle>
-                  </g>
-                ) : null;
-              })}
-            </g>
-          ))}
+                      <path
+                        d={path}
+                        className={`energy-trail is-satellite tone-${palette[node.colorIndex]}`}
+                        style={{
+                          animationDelay: `${index * -0.72}s`,
+                          animationDuration: `${2.7 + index * 0.36}s`,
+                        }}
+                      />
+                    </g>
+                  ) : null;
+                })}
+              </g>
+            );
+          })}
         </g>
 
         <g className="domain-connections">
@@ -169,16 +212,13 @@ export function KnowledgeNetwork({
                         : 0.2 + connection.priority * 0.25,
                   }}
                 />
-                <circle
-                  r={connection.emphasis === "primary" ? 2.8 : 1.7}
-                  className={`energy-particle is-domain is-${connection.emphasis}`}
-                >
-                  <animateMotion
-                    dur={`${4.8 - connection.intensity * 1.8}s`}
-                    repeatCount="indefinite"
-                    path={path}
-                  />
-                </circle>
+                <path
+                  d={path}
+                  className={`energy-trail is-domain is-${connection.emphasis}`}
+                  style={{
+                    animationDuration: `${4.8 - connection.intensity * 1.8}s`,
+                  }}
+                />
               </g>
             );
           })}

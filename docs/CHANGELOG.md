@@ -45,3 +45,9 @@ v0.7
 - Todos os Nodes recebem iconografia SVG.
 - Núcleo ganha batimento duplo e ondas de propagação.
 - Partículas de energia percorrem filamentos e Connections.
+
+v0.8
+
+- Fluxos luminosos deixam de depender de SVG SMIL e passam para CSS contínuo.
+- Cada Cluster ganha halo respiratório.
+- Quarenta e oito micro-nós aumentam a densidade neural da composição.

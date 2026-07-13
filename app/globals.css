@@ -223,6 +223,28 @@ button {
   opacity: 0.24;
 }
 
+.cluster-halo {
+  fill: currentColor;
+  opacity: 0.035;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cluster-breathe 5.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px currentColor);
+}
+
+.micro-filament {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.45;
+  opacity: 0.2;
+}
+
+.micro-node {
+  fill: currentColor;
+  opacity: 0.72;
+  filter: drop-shadow(0 0 3px currentColor);
+}
+
 .core-filament {
   fill: none;
   stroke: currentColor;
@@ -280,23 +302,44 @@ button {
   animation-delay: 0.24s;
 }
 
-.energy-particle {
-  fill: currentColor;
+.energy-trail {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-dasharray: 1 18;
   opacity: 0.9;
-  filter: drop-shadow(0 0 4px currentColor);
+  filter: drop-shadow(0 0 5px currentColor);
   pointer-events: none;
+  animation: trail-flow 3.2s linear infinite;
+  vector-effect: non-scaling-stroke;
 }
 
-.energy-particle.is-satellite {
-  opacity: 0.62;
+.energy-trail.is-core {
+  stroke-width: 2.5;
+  stroke-dasharray: 1 24;
 }
 
-.energy-particle.is-domain {
+.energy-trail.is-satellite {
+  stroke-width: 1.65;
+  stroke-dasharray: 1 13;
+  opacity: 0.76;
+}
+
+.energy-trail.is-domain {
   color: #8df8ff;
+  stroke-width: 2;
+  stroke-dasharray: 1 20;
 }
 
-.energy-particle.is-domain.is-context {
-  opacity: 0.34;
+.energy-trail.is-domain.is-context {
+  opacity: 0.38;
+}
+
+.energy-trail.is-domain.is-primary {
+  stroke-width: 3;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px #8df8ff);
 }
 
 .core-title {
@@ -687,6 +730,12 @@ button {
   }
 }
 
+@keyframes trail-flow {
+  to {
+    stroke-dashoffset: -120;
+  }
+}
+
 @keyframes core-float {
   0%,
   100% {
@@ -733,6 +782,18 @@ button {
   }
   50% {
     opacity: 0.12;
+  }
+}
+
+@keyframes cluster-breathe {
+  0%,
+  100% {
+    opacity: 0.025;
+    transform: scale(0.88);
+  }
+  50% {
+    opacity: 0.075;
+    transform: scale(1.18);
   }
 }
 
@@ -817,7 +878,7 @@ button {
     transition-duration: 0.01ms !important;
   }
 
-  .energy-particle,
+  .energy-trail,
   .core-pulse-ring {
     display: none;
   }

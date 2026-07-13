@@ -223,6 +223,39 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+As partículas de energia baseadas em SVG animateMotion apareciam inicialmente,
+mas podiam deixar de animar depois da hidratação ou em combinações específicas
+de navegador. A densidade periférica também permanecia abaixo da sensação
+neural da referência visual.
+
+## Decisão
+
+O fluxo de energia passa a usar caminhos SVG sobrepostos animados por CSS com
+stroke-dashoffset. Cada caminho mantém duração e fase próprias, mas já não
+depende de SMIL.
+
+Cada Cluster recebe ainda um halo respiratório e uma micro-rede atmosférica de
+oito pontos e filamentos. Esses elementos são decorativos, ficam marcados como
+não interativos e não são adicionados ao Graph nem tratados como Connections.
+
+## Justificação
+
+Animações CSS em propriedades de stroke permanecem estáveis durante hidratação
+e permitem representar vários pontos luminosos ao longo do mesmo caminho. As
+micro-redes aproximam a composição da densidade orgânica pretendida sem
+inventar conhecimento ou relações.
+
+## Consequência
+
+O renderer deixa de emitir animateMotion. A preferência por movimento reduzido
+continua a remover trilhos e ondas. Malha ambiental, micro-rede estrutural e
+Connections de domínio mantêm estilos visualmente distintos.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 Os Nodes secundários eram posicionados com um ângulo oposto ao vetor radial do
 Cluster, fazendo-os crescer em direção ao centro. Os Nodes também não possuíam
 iconografia e a sensação de vida dependia apenas de brilho estático.
