@@ -223,6 +223,31 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+O primeiro workflow de Pages falhou em npm ci porque a versão de npm fornecida
+pelo runner Node 22 interpretou dependências opcionais multiplataforma de forma
+diferente da versão usada para gerar o lockfile.
+
+## Decisão
+
+O workflow instala npm 11.6.1 antes de executar npm ci, igualando a versão do
+ambiente de desenvolvimento que validou e gerou package-lock.json.
+
+## Justificação
+
+Fixar o resolvedor torna a instalação reproduzível entre Windows e Linux sem
+adicionar dependências transitivas ao domínio do projeto nem editar
+manualmente o lockfile.
+
+## Consequência
+
+Alterações futuras da versão npm deverão atualizar workflow e lockfile na mesma
+mudança.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 Ativar GitHub Pages não publicava o TANGLE porque o repositório continha uma
 aplicação Next sem exportação estática, sem prefixo para o subdiretório
 /tangle e sem workflow de deploy.
