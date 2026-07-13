@@ -17,3 +17,17 @@ v0.2
 v0.3
 
 - Engine especificada.
+
+v0.4
+
+- Graph inicial ligado ao conteúdo Markdown.
+- Engine com Timeline, foco, estados de sessão e Journeys.
+- Contrato Presentation independente de framework.
+- Testes automatizados da Fundação.
+
+v0.5
+
+- Loader Markdown e origem filesystem isolados em Infrastructure.
+- Next.js e React restaurados como infraestrutura da experiência web.
+- Primeiro renderer SVG navegável com foco, contexto relacional e conteúdo.
+- Dependências deixam de ser versionadas no repositório.

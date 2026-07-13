@@ -223,6 +223,43 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+Os Nodes referenciam Markdown, mas nenhuma camada carrega o recurso. Além
+disso, o projeto precisa de um primeiro renderer executável sem permitir que a
+tecnologia escolhida determine Engine, Graph ou Presentation.
+
+## Decisão
+
+O carregamento de conteúdo usa um ContentLoader independente da origem e um
+ContentSource injetável. A implementação inicial de Infrastructure lê ficheiros
+relativos à raiz configurada e rejeita caminhos que escapem dessa raiz. O
+loader devolve Markdown sem o interpretar; a transformação visual pertence ao
+renderer.
+
+O primeiro renderer restaura Next.js 16 e React 19, presentes no commit inicial
+do projeto. A rede será desenhada inicialmente com SVG, DOM e CSS a partir do
+snapshot de Presentation. react-markdown transforma o corpo Markdown em React
+sem permitir HTML bruto. Nenhuma biblioteca de grafos ou WebGL será adicionada
+até existir uma necessidade que SVG não satisfaça.
+
+## Justificação
+
+A abstração de origem permite substituir filesystem por HTTP, CMS ou conteúdo
+empacotado sem alterar domínio ou Presentation. Next e React preservam a
+continuidade tecnológica do repositório. SVG fornece interação, acessibilidade,
+animação e teste com uma superfície menor para a primeira experiência.
+
+## Consequência
+
+Código de filesystem fica confinado a Infrastructure e executa apenas no
+servidor. Componentes não leem ficheiros diretamente nem duplicam texto. Um
+futuro renderer WebGL poderá consumir o mesmo snapshot e os mesmos eventos sem
+alterar Graph ou Engine.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 A arquitetura define Presentation como a fronteira que adapta Engine e Graph
 para a Interface, mas ainda não existia um contrato concreto. Sem essa
 fronteira, uma futura UI teria de interpretar foco, relações, Journey e estados

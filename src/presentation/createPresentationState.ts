@@ -25,6 +25,7 @@ export function createPresentationState(engine: Engine): PresentationState {
         : relatedNodeIds.has(node.id)
           ? "related"
           : "context",
+    isJourneyCurrent: engine.currentJourneyNode?.id === node.id,
     content: [...node.content],
   }));
 

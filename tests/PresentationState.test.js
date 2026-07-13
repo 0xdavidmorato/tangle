@@ -48,6 +48,11 @@ test("presentation reflects session state and journey progress", () => {
   assert.equal(completedNode.functionalState, "completed");
   assert.equal(state.journey.id, "core-narrative");
   assert.equal(state.journey.currentNodeId, "bom-negocio.definicao");
+  assert.equal(
+    state.nodes.find((node) => node.id === "bom-negocio.definicao")
+      .isJourneyCurrent,
+    true,
+  );
   assert.deepEqual(state.journey.completedNodeIds, [
     "boa-empresa.visao-geral",
   ]);

@@ -1,12 +1,13 @@
 {
   "name": "tangle",
   "version": "1.0.0",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "private": true,
   "scripts": {
-    "test": "tsc --rootDir src --outDir .test-dist --declaration false --declarationMap false --sourceMap false && node --test tests/*.test.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "tsc -p tsconfig.test.json && node --test tests/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,20 @@
   "homepage": "https://github.com/0xdavidmorato/tangle#readme",
   "description": "",
   "devDependencies": {
-    "typescript": "^7.0.2"
+    "@types/node": "^20.19.43",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.2.10",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "next": "^16.2.10",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-markdown": "^10.1.0"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
   }
 }
