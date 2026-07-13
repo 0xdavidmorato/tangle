@@ -17,6 +17,10 @@ selecionar um Node e pode começar a explorar imediatamente.
 - Connections documentadas são distinguíveis da organização visual por Cluster.
 - O núcleo irradia filamentos para os Clusters; os Clusters organizam os seus
   Nodes sem transformar pertença em influência.
+- Os Nodes de conteúdo abrem-se para o exterior de cada pilar, preservando uma
+  leitura clara do centro para a periferia.
+- Todos os Nodes possuem um símbolo visual; o texto permanece disponível para
+  identificação inequívoca.
 - Uma malha ambiental discreta acrescenta profundidade sem representar
   conhecimento.
 - Movimento e luz sugerem atividade sem impedir leitura ou interação.
@@ -69,6 +73,9 @@ alterar Engine ou Graph.
 
 O movimento de profundidade responde suavemente à posição do olhar. Essa
 resposta é exclusivamente visual e nunca altera foco, Journey ou conteúdo.
+
+O núcleo pulsa num ritmo orgânico e emite ondas. Luzes percorrem os filamentos
+até aos Nodes e circulam pelas Connections, comunicando que a rede está ativa.
 
 ## Acessibilidade
 

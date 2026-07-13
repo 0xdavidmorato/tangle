@@ -223,6 +223,44 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+Os Nodes secundários eram posicionados com um ângulo oposto ao vetor radial do
+Cluster, fazendo-os crescer em direção ao centro. Os Nodes também não possuíam
+iconografia e a sensação de vida dependia apenas de brilho estático.
+
+## Decisão
+
+O layout radial passa a ser uma função pura da Presentation. Cada satélite é
+projetado num leque centrado no vetor exterior do seu Cluster e limitado ao
+viewBox. Um teste matemático verifica que a projeção de cada satélite em
+relação ao centro é positiva.
+
+A iconografia SVG pertence exclusivamente à UI. Pilares recebem variantes
+visuais por posição de Cluster e conteúdos recebem variantes por posição
+interna, sem adicionar significado ou texto ao domínio.
+
+O núcleo usa um ritmo de dois batimentos e ondas de propagação. Partículas de
+energia percorrem apenas filamentos estruturais e Connections existentes. Com
+movimento reduzido, partículas e ondas são removidas.
+
+## Justificação
+
+Extrair o layout torna a composição testável e independente do SVG. A
+iconografia melhora reconhecimento sem colocar componentes no Graph. Vincular
+energia a relações existentes faz com que a animação comunique estrutura e
+influência, em vez de ser um efeito arbitrário.
+
+## Consequência
+
+Alterações futuras de distribuição radial podem ser validadas sem renderizar a
+Interface. Todos os Nodes possuem símbolo, os conceitos expandem-se para fora
+dos pilares e o sistema transmite atividade contínua respeitando
+acessibilidade.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 O renderer precisava representar a hierarquia Graph → Clusters → Nodes e
 distinguir ligações estruturais de Connections de domínio. Também era
 necessário garantir que novos Markdown não ficassem esquecidos fora do Graph.

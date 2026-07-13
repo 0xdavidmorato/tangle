@@ -38,3 +38,10 @@ v0.6
 - Clusters passam a integrar o snapshot de Presentation.
 - Rede ganha filamentos estruturais, Connections curvas e malha ambiental.
 - Profundidade reage organicamente ao ponteiro sem alterar a Engine.
+
+v0.7
+
+- Layout radial testável projeta os Nodes para fora dos pilares.
+- Todos os Nodes recebem iconografia SVG.
+- Núcleo ganha batimento duplo e ondas de propagação.
+- Partículas de energia percorrem filamentos e Connections.

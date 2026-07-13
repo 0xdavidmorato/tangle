@@ -5,15 +5,12 @@ import type {
   PresentationConnection,
   PresentationNode,
 } from "../presentation";
-
-interface Point {
-  readonly x: number;
-  readonly y: number;
-}
-
-interface PositionedNode extends PresentationNode, Point {
-  readonly colorIndex: number;
-}
+import {
+  createCurvedPath,
+  createRadialLayout,
+  networkCenter,
+} from "../presentation";
+import { NodeIcon } from "./NodeIcon";
 
 interface KnowledgeNetworkProps {
   readonly nodes: readonly PresentationNode[];
@@ -24,65 +21,13 @@ interface KnowledgeNetworkProps {
 
 const palette = ["cyan", "gold", "orange", "violet", "green", "coral"];
 
-function positionNodes(
-  nodes: readonly PresentationNode[],
-  clusters: readonly PresentationCluster[],
-): PositionedNode[] {
-  const clusterIds = clusters.map((cluster) => cluster.id);
-
-  return nodes.map((node) => {
-    const clusterIndex = clusterIds.indexOf(node.clusterId);
-    const clusterNodes = nodes.filter(
-      (candidate) => candidate.clusterId === node.clusterId,
-    );
-    const nodeIndex = clusterNodes.findIndex(
-      (candidate) => candidate.id === node.id,
-    );
-    const clusterAngle =
-      -Math.PI / 2 + (clusterIndex / clusterIds.length) * Math.PI * 2;
-    const clusterRadius = clusterIndex === clusterIds.length - 1 ? 190 : 275;
-    const clusterX = 500 + Math.cos(clusterAngle) * clusterRadius;
-    const clusterY = 365 + Math.sin(clusterAngle) * clusterRadius * 0.72;
-
-    if (nodeIndex === 0) {
-      return {
-        ...node,
-        x: clusterX,
-        y: clusterY,
-        colorIndex: clusterIndex % palette.length,
-      };
-    }
-
-    const satelliteAngle =
-      clusterAngle +
-      Math.PI +
-      ((nodeIndex - 1) / Math.max(1, clusterNodes.length - 1) - 0.5) * 1.25;
-    const satelliteRadius = 82 + (nodeIndex % 2) * 20;
-
-    return {
-      ...node,
-      x: clusterX + Math.cos(satelliteAngle) * satelliteRadius,
-      y: clusterY + Math.sin(satelliteAngle) * satelliteRadius,
-      colorIndex: clusterIndex % palette.length,
-    };
-  });
-}
-
-function curvedPath(source: Point, target: Point, bend = 0.12): string {
-  const midpointX = (source.x + target.x) / 2;
-  const midpointY = (source.y + target.y) / 2;
-  const normalX = -(target.y - source.y) * bend;
-  const normalY = (target.x - source.x) * bend;
-  return `M ${source.x} ${source.y} Q ${midpointX + normalX} ${midpointY + normalY} ${target.x} ${target.y}`;
-}
-
 export function KnowledgeNetwork({
   nodes,
   clusters,
   connections,
   onFocus,
 }: KnowledgeNetworkProps) {
-  const positionedNodes = positionNodes(nodes, clusters);
+  const positionedNodes = createRadialLayout(nodes, clusters);
   const positions = new Map(
     positionedNodes.map((node) => [node.id, { x: node.x, y: node.y }]),
   );
@@ -135,7 +80,7 @@ export function KnowledgeNetwork({
             return (
               <path
                 key={`mesh-${index}`}
-                d={curvedPath(source, target, index % 2 ? 0.035 : -0.035)}
+                d={createCurvedPath(source, target, index % 2 ? 0.035 : -0.035)}
                 className="ambient-filament"
               />
             );
@@ -155,23 +100,49 @@ export function KnowledgeNetwork({
           {clusterRoots.map(({ cluster, root }, clusterIndex) => (
             <g key={cluster.id}>
               <path
-                d={curvedPath({ x: 500, y: 365 }, root, 0.045)}
+                d={createCurvedPath(networkCenter, root, 0.045)}
                 className={`core-filament tone-${palette[clusterIndex % palette.length]}`}
               />
               <path
-                d={curvedPath({ x: 500, y: 365 }, root, -0.035)}
+                d={createCurvedPath(networkCenter, root, -0.035)}
                 className={`core-filament is-echo tone-${palette[clusterIndex % palette.length]}`}
               />
+              <circle
+                r="2.2"
+                className={`energy-particle tone-${palette[clusterIndex % palette.length]}`}
+              >
+                <animateMotion
+                  dur={`${3.2 + clusterIndex * 0.35}s`}
+                  begin={`-${clusterIndex * 0.55}s`}
+                  repeatCount="indefinite"
+                  path={createCurvedPath(networkCenter, root, 0.045)}
+                />
+              </circle>
               {cluster.nodeIds.slice(1).map((nodeId, index) => {
                 const node = positionedNodes.find(
                   (candidate) => candidate.id === nodeId,
                 );
+                const path = node
+                  ? createCurvedPath(root, node, index % 2 === 0 ? 0.09 : -0.09)
+                  : "";
                 return node ? (
-                  <path
-                    key={`cluster-${node.id}`}
-                    d={curvedPath(root, node, index % 2 === 0 ? 0.09 : -0.09)}
-                    className={`cluster-link tone-${palette[node.colorIndex]}`}
-                  />
+                  <g key={`cluster-${node.id}`}>
+                    <path
+                      d={path}
+                      className={`cluster-link tone-${palette[node.colorIndex]}`}
+                    />
+                    <circle
+                      r="1.45"
+                      className={`energy-particle is-satellite tone-${palette[node.colorIndex]}`}
+                    >
+                      <animateMotion
+                        dur={`${2.8 + index * 0.4}s`}
+                        begin={`-${index * 0.7}s`}
+                        repeatCount="indefinite"
+                        path={path}
+                      />
+                    </circle>
+                  </g>
                 ) : null;
               })}
             </g>
@@ -184,25 +155,39 @@ export function KnowledgeNetwork({
             const target = positions.get(connection.targetNodeId);
             if (!source || !target) return null;
 
+            const path = createCurvedPath(source, target);
             return (
-              <path
-                key={connection.id}
-                d={curvedPath(source, target)}
-                className={`domain-link is-${connection.emphasis}`}
-                style={{
-                  strokeWidth: 1.5 + connection.intensity * 2.4,
-                  opacity:
-                    connection.emphasis === "primary"
-                      ? 1
-                      : 0.2 + connection.priority * 0.25,
-                }}
-              />
+              <g key={connection.id}>
+                <path
+                  d={path}
+                  className={`domain-link is-${connection.emphasis}`}
+                  style={{
+                    strokeWidth: 1.5 + connection.intensity * 2.4,
+                    opacity:
+                      connection.emphasis === "primary"
+                        ? 1
+                        : 0.2 + connection.priority * 0.25,
+                  }}
+                />
+                <circle
+                  r={connection.emphasis === "primary" ? 2.8 : 1.7}
+                  className={`energy-particle is-domain is-${connection.emphasis}`}
+                >
+                  <animateMotion
+                    dur={`${4.8 - connection.intensity * 1.8}s`}
+                    repeatCount="indefinite"
+                    path={path}
+                  />
+                </circle>
+              </g>
             );
           })}
         </g>
 
         <g className="tangle-core" aria-hidden="true">
           <circle cx="500" cy="365" r="92" fill="url(#core-gradient)" />
+          <circle cx="500" cy="365" r="56" className="core-pulse-ring ring-one" />
+          <circle cx="500" cy="365" r="68" className="core-pulse-ring ring-two" />
           <circle
             cx="500"
             cy="365"
@@ -221,11 +206,18 @@ export function KnowledgeNetwork({
         <g className="knowledge-nodes">
           {positionedNodes.map((node) => {
             const isPrimary = node.emphasis === "primary";
-            const radius = isPrimary ? 28 : node.name === "Definição" ? 19 : 16;
             const cluster = clusters.find(
               (candidate) => candidate.id === node.clusterId,
             );
             const isClusterRoot = cluster?.nodeIds[0] === node.id;
+            const { clusterIndex, nodeIndex } = node;
+            const radius = isClusterRoot
+              ? isPrimary
+                ? 34
+                : 28
+              : isPrimary
+                ? 23
+                : 15;
             return (
               <g
                 key={node.id}
@@ -243,12 +235,20 @@ export function KnowledgeNetwork({
                   }
                 }}
               >
-                <circle r={radius + 11} className="node-aura" />
+                <circle
+                  r={radius + 11}
+                  className="node-aura"
+                  style={{ animationDelay: `${(clusterIndex + nodeIndex) * -0.38}s` }}
+                />
                 {node.isJourneyCurrent ? (
                   <circle r={radius + 17} className="journey-ring" />
                 ) : null}
                 <circle r={radius} className="node-orb" />
-                <circle r={Math.max(3, radius * 0.2)} className="node-seed" />
+                <NodeIcon
+                  clusterIndex={clusterIndex}
+                  nodeIndex={nodeIndex}
+                  size={radius * 0.92}
+                />
                 {isClusterRoot ? (
                   <text
                     y={-(radius + 20)}

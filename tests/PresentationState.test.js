@@ -6,6 +6,10 @@ const { tangleGraph } = require("../.test-dist/graph/tangleGraph.js");
 const {
   createPresentationState,
 } = require("../.test-dist/presentation/createPresentationState.js");
+const {
+  createRadialLayout,
+  networkCenter,
+} = require("../.test-dist/presentation/RadialLayout.js");
 
 test("presentation projects focus and relations without hiding graph context", () => {
   const engine = new TangleEngine(tangleGraph);
@@ -63,4 +67,31 @@ test("presentation reflects session state and journey progress", () => {
     ).functionalState,
     "unlocked",
   );
+});
+
+test("radial layout projects every satellite away from the network center", () => {
+  const engine = new TangleEngine(tangleGraph);
+  const state = createPresentationState(engine);
+  const layout = createRadialLayout(state.nodes, state.clusters);
+
+  for (const cluster of state.clusters) {
+    const root = layout.find((node) => node.id === cluster.nodeIds[0]);
+    assert.ok(root);
+
+    for (const nodeId of cluster.nodeIds.slice(1)) {
+      const satellite = layout.find((node) => node.id === nodeId);
+      assert.ok(satellite);
+      const outwardX = root.x - networkCenter.x;
+      const outwardY = root.y - networkCenter.y;
+      const satelliteX = satellite.x - root.x;
+      const satelliteY = satellite.y - root.y;
+      const outwardProjection =
+        outwardX * satelliteX + outwardY * satelliteY;
+
+      assert.ok(
+        outwardProjection > 0,
+        `${satellite.id} must be outside its cluster root`,
+      );
+    }
+  }
 });
