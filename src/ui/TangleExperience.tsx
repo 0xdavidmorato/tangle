@@ -86,10 +86,10 @@ export function TangleExperience({
       </header>
 
       <section className="experience-copy">
-        <span className="eyebrow">Conhecimento organizacional</span>
-        <h1>Uma empresa é um organismo vivo.</h1>
+        <span className="eyebrow">Foca no bom!</span>
+        <h1>Empresas não nascem grandes. Crescem!</h1>
         <p>
-          Nenhum sucesso acontece sozinho. Nenhum problema existe isoladamente.
+          Nenhum sucesso acontece sozinho. Nenhum problema existe por acaso.
         </p>
         <p>
           O sucesso ou o fracasso de uma empresa é resultado do trabalho que o antecede!
