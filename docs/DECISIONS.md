@@ -223,6 +223,39 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+A arquitetura define Presentation como a fronteira que adapta Engine e Graph
+para a Interface, mas ainda não existia um contrato concreto. Sem essa
+fronteira, uma futura UI teria de interpretar foco, relações, Journey e estados
+funcionais diretamente.
+
+## Decisão
+
+Presentation expõe um snapshot semântico e somente de leitura criado a partir
+da Engine. O snapshot contém etapa, Timeline, Nodes, Connections, conteúdo,
+estado funcional e progresso da Journey. A atenção visual é expressa apenas
+pelos níveis primary, related e context.
+
+O snapshot não contém posições, cores, dimensões, movimentos, câmara,
+partículas ou decisões de framework.
+
+## Justificação
+
+Uma projeção semântica permite que qualquer tecnologia visual represente o
+mesmo comportamento sem duplicar regras da Engine. Manter todos os Nodes no
+snapshot preserva a regra de que o utilizador não perde a perceção da rede
+completa durante o foco.
+
+## Consequência
+
+A Interface consome Presentation e envia intenções à Engine. Renderers podem
+interpretar os níveis de atenção de formas diferentes, desde que mantenham o
+contexto visível e não alterem o domínio.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 O Graph define estados iniciais nos Nodes, mas a experiência também necessita
 de estado mutável por sessão. Mutar diretamente o Graph misturaria conhecimento
 com histórico de execução. Journey e vários eventos estavam modelados sem

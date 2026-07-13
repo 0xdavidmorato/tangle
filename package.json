@@ -6,7 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "tsc --rootDir src --outDir .test-dist --declaration false --declarationMap false --sourceMap false && node --test tests/TangleEngine.test.js"
+    "test": "tsc --rootDir src --outDir .test-dist --declaration false --declarationMap false --sourceMap false && node --test tests/*.test.js"
   },
   "repository": {
     "type": "git",
