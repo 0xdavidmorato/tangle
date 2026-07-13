@@ -223,6 +223,38 @@ Os restantes comportamentos relacionados com foco serão implementados de forma 
 
 ## Contexto
 
+Ativar GitHub Pages não publicava o TANGLE porque o repositório continha uma
+aplicação Next sem exportação estática, sem prefixo para o subdiretório
+/tangle e sem workflow de deploy.
+
+## Decisão
+
+O TANGLE usa o static export oficial do Next para gerar out/. Em GitHub
+Actions, basePath e assetPrefix recebem /tangle; no desenvolvimento local
+permanecem vazios.
+
+Um workflow acionado por push para main executa instalação reproduzível,
+testes, build, upload do artefacto out/ e deploy através das actions oficiais
+configure-pages, upload-pages-artifact e deploy-pages.
+
+## Justificação
+
+GitHub Pages serve apenas ficheiros estáticos e o projeto atual não necessita
+de funções dinâmicas no servidor depois do build. O prefixo condicional mantém
+assets corretos em https://0xdavidmorato.github.io/tangle/ sem alterar a
+experiência local.
+
+## Consequência
+
+Cada push para main publica automaticamente uma versão testada. Funcionalidades
+futuras que dependam de runtime de servidor deverão usar infraestrutura externa
+ou motivar uma revisão explícita desta decisão de alojamento.
+
+---------------------------------------------------------------------
+# Data: 2026-07-13
+
+## Contexto
+
 O SVG apresentava hydration mismatch porque servidor e navegador produziam
 diferenças na última casa decimal de cálculos trigonométricos. Em alguns
 ambientes, a preferência global de movimento também ocultava toda a energia,

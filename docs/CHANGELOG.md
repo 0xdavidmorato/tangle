@@ -58,3 +58,9 @@ v0.9
 - Movimento passa a ter controlo explícito no cabeçalho.
 - Trilhos luminosos ganham maior contraste, comprimento e brilho.
 - Rede ocupa mais espaço e o texto introdutório perde peso visual.
+
+v0.10
+
+- Exportação estática do Next configurada.
+- Base path /tangle aplicado no ambiente GitHub Actions.
+- Workflow automatizado publica o TANGLE no GitHub Pages.
