@@ -20,7 +20,7 @@ export interface RadialCluster extends LayoutPoint {
   readonly colorIndex: number;
 }
 
-export const networkCenter: LayoutPoint = { x: 500, y: 365 };
+export const networkCenter: LayoutPoint = { x: 520, y: 330 };
 
 function canonical(value: number): number {
   return Number(value.toFixed(4));
@@ -58,21 +58,27 @@ export function createRadialLayout(
     const fanSpread =
       satelliteCount >= 5 ? 2 : satelliteCount === 4 ? 1.8 : 1.6;
     const satelliteAngle = clusterAngle + fanPosition * fanSpread;
+    const standardSatelliteRadius =
+      128 + Math.max(0, satelliteCount - 2) * 10 + (nodeIndex % 2) * 11;
     const satelliteRadius =
-      112 + Math.max(0, satelliteCount - 2) * 8 + (nodeIndex % 2) * 9;
+      clusterIndex === 2
+        ? 88 + (nodeIndex % 2) * 8
+        : clusterIndex === 5
+          ? 72
+          : standardSatelliteRadius;
 
     return {
       ...base,
       x: canonical(
         Math.min(
-          955,
-          Math.max(45, hub.x + Math.cos(satelliteAngle) * satelliteRadius),
+          960,
+          Math.max(40, hub.x + Math.cos(satelliteAngle) * satelliteRadius),
         ),
       ),
       y: canonical(
         Math.min(
-          680,
-          Math.max(48, hub.y + Math.sin(satelliteAngle) * satelliteRadius),
+          650,
+          Math.max(40, hub.y + Math.sin(satelliteAngle) * satelliteRadius),
         ),
       ),
     };
@@ -82,17 +88,24 @@ export function createRadialLayout(
 export function createRadialClusterLayout(
   clusters: readonly PresentationCluster[],
 ): RadialCluster[] {
+  const constellation = [
+    { x: 330, y: 175 },
+    { x: 710, y: 175 },
+    { x: 800, y: 405 },
+    { x: 455, y: 510 },
+    { x: 225, y: 355 },
+    { x: 520, y: 495 },
+  ];
+
   return clusters.map((cluster, clusterIndex) => {
-    const angle =
-      -Math.PI / 2 + (clusterIndex / clusters.length) * Math.PI * 2;
-    const radius = clusterIndex === clusters.length - 1 ? 190 : 265;
+    const placement = constellation[clusterIndex % constellation.length]!;
 
     return {
       id: cluster.id,
       name: cluster.name,
       colorIndex: clusterIndex % 6,
-      x: canonical(networkCenter.x + Math.cos(angle) * radius),
-      y: canonical(networkCenter.y + Math.sin(angle) * radius * 0.72),
+      x: canonical(placement.x),
+      y: canonical(placement.y),
     };
   });
 }

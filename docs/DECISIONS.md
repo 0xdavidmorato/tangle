@@ -1,4 +1,59 @@
 # DECISIONS.md: decisões arquiteturais tomadas e respetiva justificação.
+
+# 2026-07-14
+
+## Contexto
+
+A primeira rede SVG implementou corretamente as camadas semânticas e o
+comportamento de foco, mas a distribuição radial, os controlos periféricos e o
+brilho uniforme ainda comunicavam um diagrama técnico. A referência visual
+oficial pede uma composição mais espacial, densa e cinematográfica.
+
+## Decisão
+
+O refinamento visual permanece restrito a Presentation e UI. O renderer passa
+a privilegiar uma composição assimétrica e estratificada, com luz seletiva,
+névoa ambiental, filamentos em planos distintos e interface translúcida
+integrada na cena. Graph, Connections, Engine, conteúdo e semântica de foco
+não são alterados.
+
+## Justificação
+
+Separar a evolução estética do domínio preserva a arquitetura estabelecida e
+permite aproximar a experiência da referência oficial sem inventar
+conhecimento ou alterar regras de navegação.
+
+## Consequência
+
+O SVG pode reinterpretar posições, materiais e animações a partir do mesmo
+snapshot de Presentation. Elementos atmosféricos continuam explicitamente
+decorativos e os requisitos de pausa, movimento reduzido, teclado e contexto
+em foco mantêm-se.
+
+---------------------------------------------------------------------
+
+# 2026-07-14
+
+## Decisão
+
+O renderer introduz progressão visual local em três níveis: núcleo TANGLE,
+pilares e conteúdos. O núcleo e os hubs de Cluster são elementos interativos;
+os seus eventos apenas controlam a revelação visual no componente Experience.
+A legenda lateral e os cards de navegação orgânica chamam os mesmos controlos.
+
+## Motivo
+
+A referência oficial define a navegação como parte da composição e apresenta o
+núcleo como ponto de entrada para a rede. Esta progressão torna a exploração
+legível sem transformar os Clusters em Nodes de domínio ou alterar a Engine.
+
+## Consequência
+
+O estado dos níveis pertence exclusivamente à UI. Foco, relações, Journey e
+conteúdo continuam a ser resolvidos pela Engine e Presentation; o Graph não
+recebe novos elementos nem Connections artificiais.
+
+---------------------------------------------------------------------
 ## Esse é um dos documentos mais valiosos.
 
 Cada decisão deverá seguir um formato como este:

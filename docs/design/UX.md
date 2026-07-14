@@ -11,6 +11,16 @@ espaço principal e o conceito central comunica “Tudo está ligado”.
 Não existe navegação por páginas. O utilizador recebe uma instrução curta para
 selecionar um Node e pode começar a explorar imediatamente.
 
+O núcleo TANGLE é também a primeira ação da narrativa: selecioná-lo revela os
+pilares principais. Selecionar um pilar revela os seus conceitos de conteúdo;
+selecionar um conceito abre o respetivo foco e contexto relacional. A legenda
+lateral e os cards de navegação orgânica oferecem os mesmos atalhos sem criar
+uma navegação por páginas.
+
+Interligações não ocupa lugar na constelação dos pilares. É apresentado como
+um cartão explicativo próprio, pois o seu objetivo é interpretar as relações
+entre os cinco pilares e não competir visualmente com eles.
+
 ## Rede em repouso
 
 - Todos os Nodes permanecem presentes.
@@ -28,6 +38,11 @@ selecionar um Node e pode começar a explorar imediatamente.
 - Movimento e luz sugerem atividade sem impedir leitura ou interação.
 - A interface identifica a etapa atual e a dimensão do universo sem competir
   com a rede.
+- A composição usa vários planos visuais: uma névoa de fundo, filamentos
+  distantes, a estrutura navegável e pontos de energia. Estes planos devem
+  produzir uma rede espacial e viva, nunca a aparência de um fluxograma radial.
+- A cor e o brilho são hierárquicos: o contexto é sereno, as relações possuem
+  pulso próprio e o foco é a fonte de contraste mais intensa.
 
 ## Foco
 
@@ -85,6 +100,10 @@ ou Connections de conhecimento.
 
 O enquadramento inclui margem para que rótulos, halos e Nodes extremos
 permaneçam integralmente visíveis.
+
+O enquadramento privilegia uma ocupação larga e assimétrica. A rede deve
+preencher a cena e reservar áreas de respiração para os controlos e o conteúdo,
+sem converter esses elementos em barras de navegação ou menus de páginas.
 
 ## Acessibilidade
 

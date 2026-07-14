@@ -10,6 +10,8 @@ import {
 } from "../presentation";
 import { ContentPanel } from "./ContentPanel";
 import { KnowledgeNetwork } from "./KnowledgeNetwork";
+import { NavigationLegend } from "./NavigationLegend";
+import { OrganicNavigation } from "./OrganicNavigation";
 
 interface TangleExperienceProps {
   readonly graph: Graph;
@@ -30,6 +32,8 @@ export function TangleExperience({
     createPresentationState(engineRef.current!),
   );
   const [motionEnabled, setMotionEnabled] = useState(true);
+  const [networkLevel, setNetworkLevel] = useState<0 | 1 | 2>(0);
+  const [activeClusterId, setActiveClusterId] = useState<string | null>(null);
 
   function dispatch(event: EngineEvent) {
     engineRef.current!.dispatch(event);
@@ -46,6 +50,49 @@ export function TangleExperience({
     const y = (event.clientY - bounds.top) / bounds.height - 0.5;
     event.currentTarget.style.setProperty("--look-x", `${x * -9}px`);
     event.currentTarget.style.setProperty("--look-y", `${y * -7}px`);
+  }
+
+  function revealCore() {
+    dispatch("blur");
+    setActiveClusterId(null);
+    setNetworkLevel(0);
+  }
+
+  function revealClusters() {
+    dispatch("blur");
+    setNetworkLevel(1);
+  }
+
+  function revealCluster(clusterId: string) {
+    if (clusterId === "interligacoes") {
+      exploreInterconnections();
+      return;
+    }
+
+    dispatch("blur");
+    setActiveClusterId(clusterId);
+    setNetworkLevel(2);
+  }
+
+  function focusNode(nodeId: string) {
+    const node = state.nodes.find((candidate) => candidate.id === nodeId);
+    if (node) {
+      if (node.clusterId === "interligacoes") {
+        setActiveClusterId(null);
+        setNetworkLevel(1);
+      } else {
+        setActiveClusterId(node.clusterId);
+        setNetworkLevel(2);
+      }
+    }
+    dispatch({ type: "focus", nodeId });
+  }
+
+  function exploreInterconnections() {
+    const interconnections = state.nodes.find(
+      (node) => node.clusterId === "interligacoes",
+    );
+    if (interconnections) focusNode(interconnections.id);
   }
 
   return (
@@ -85,32 +132,23 @@ export function TangleExperience({
         </div>
       </header>
 
-      <section className="experience-copy">
-        <span className="eyebrow">Foca no bom!</span>
-        <h1>Empresas não nascem grandes. Crescem!</h1>
-        <p>
-          Nenhum sucesso acontece sozinho. Nenhum problema existe por acaso.
-        </p>
-        <p>
-          O sucesso ou o fracasso de uma empresa é resultado do trabalho que o antecede!
-        </p>
-      </section>
-
-      <aside className="cluster-legend" aria-label="Domínios de conhecimento">
-        {state.clusters.map((cluster, index) => (
-          <div key={cluster.id} className="cluster-legend-item">
-            <span className={`legend-orb legend-tone-${index % 6}`} />
-            <span>{cluster.name}</span>
-            <small>{cluster.nodeIds.length}</small>
-          </div>
-        ))}
-      </aside>
+      <NavigationLegend
+        clusters={state.clusters}
+        activeClusterId={activeClusterId}
+        level={networkLevel}
+        onCoreSelect={revealCore}
+        onClusterSelect={revealCluster}
+      />
 
       <KnowledgeNetwork
         nodes={state.nodes}
         clusters={state.clusters}
         connections={state.connections}
-        onFocus={(nodeId) => dispatch({ type: "focus", nodeId })}
+        level={networkLevel}
+        activeClusterId={activeClusterId}
+        onCoreFocus={revealClusters}
+        onClusterFocus={revealCluster}
+        onFocus={focusNode}
       />
 
       <div className="journey-controls" aria-label="Percurso de exploração">
@@ -134,11 +172,21 @@ export function TangleExperience({
         </button>
       </div>
 
-      <footer className="experience-footer">
-        <span>Selecione um nó para explorar</span>
-        <span className="footer-line" />
-        <span>A rede completa permanece sempre presente</span>
-      </footer>
+      <div className="experience-guidance" aria-live="polite">
+        <span className="guidance-mark" aria-hidden="true" />
+        <span>{focusedNode ? "Relações em foco" : "Selecione um nó para explorar"}</span>
+        <span className="guidance-detail">{state.nodes.length} conceitos ligados</span>
+      </div>
+
+      <OrganicNavigation
+        level={networkLevel}
+        onCoreSelect={revealCore}
+        onClusterSelect={() => {
+          const nextCluster = activeClusterId ?? state.clusters[0]?.id;
+          if (nextCluster) revealCluster(nextCluster);
+        }}
+        onInterconnections={exploreInterconnections}
+      />
 
       {focusedNode ? (
         <ContentPanel

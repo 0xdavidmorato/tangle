@@ -17,6 +17,10 @@ interface KnowledgeNetworkProps {
   readonly nodes: readonly PresentationNode[];
   readonly clusters: readonly PresentationCluster[];
   readonly connections: readonly PresentationConnection[];
+  readonly level: 0 | 1 | 2;
+  readonly activeClusterId: string | null;
+  readonly onCoreFocus: () => void;
+  readonly onClusterFocus: (clusterId: string) => void;
   readonly onFocus: (nodeId: string) => void;
 }
 
@@ -26,23 +30,27 @@ export function KnowledgeNetwork({
   nodes,
   clusters,
   connections,
+  level,
+  activeClusterId,
+  onCoreFocus,
+  onClusterFocus,
   onFocus,
 }: KnowledgeNetworkProps) {
   const positionedNodes = createRadialLayout(nodes, clusters);
   const positionedClusters = createRadialClusterLayout(clusters);
-  const positions = new Map(
-    positionedNodes.map((node) => [node.id, { x: node.x, y: node.y }]),
+  const clusterPositions = new Map(
+    positionedClusters.map((cluster) => [cluster.id, cluster]),
   );
   const clusterRoots = clusters.map((cluster, index) => ({
     cluster,
     root: positionedClusters[index]!,
-  }));
+  })).filter(({ cluster }) => cluster.id !== "interligacoes");
 
   return (
     <div className="network-shell">
       <svg
         className="knowledge-network"
-        viewBox="-40 -35 1080 800"
+        viewBox="-65 -25 1170 700"
         role="img"
         aria-labelledby="network-title network-description"
       >
@@ -63,10 +71,25 @@ export function KnowledgeNetwork({
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          <radialGradient id="atmosphere-gradient">
+            <stop offset="0%" stopColor="#167b97" stopOpacity="0.22" />
+            <stop offset="48%" stopColor="#0d405c" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#020814" stopOpacity="0" />
+          </radialGradient>
         </defs>
 
+        <ellipse
+          cx={networkCenter.x}
+          cy={networkCenter.y}
+          rx="490"
+          ry="300"
+          fill="url(#atmosphere-gradient)"
+          className="network-atmosphere"
+          aria-hidden="true"
+        />
+
         <g className="ambient-particles" aria-hidden="true">
-          {Array.from({ length: 30 }, (_, index) => {
+          {Array.from({ length: 42 }, (_, index) => {
             const source = {
               x: (index * 83 + 47) % 980,
               y: (index * 137 + 31) % 710,
@@ -83,7 +106,7 @@ export function KnowledgeNetwork({
               />
             );
           })}
-          {Array.from({ length: 38 }, (_, index) => (
+          {Array.from({ length: 64 }, (_, index) => (
             <circle
               key={index}
               cx={(index * 83 + 47) % 980}
@@ -94,7 +117,7 @@ export function KnowledgeNetwork({
           ))}
         </g>
 
-        <g className="cluster-structure" aria-hidden="true">
+        {level > 0 ? <g className="cluster-structure">
           {clusterRoots.map(({ cluster, root }, clusterIndex) => {
             const tone = palette[clusterIndex % palette.length];
             const corePath = createCurvedPath(networkCenter, root, 0.045);
@@ -108,7 +131,7 @@ export function KnowledgeNetwork({
                 <circle
                   cx={root.x}
                   cy={root.y}
-                  r="52"
+                  r="66"
                   className={`cluster-halo tone-${tone}`}
                 />
                 <path
@@ -198,22 +221,32 @@ export function KnowledgeNetwork({
               </g>
             );
           })}
-        </g>
+        </g> : null}
 
-        <g className="domain-connections">
+        {level > 0 ? <g className="domain-connections">
           {connections.map((connection) => {
-            const source = positions.get(connection.sourceNodeId);
-            const target = positions.get(connection.targetNodeId);
+            const sourceNode = nodes.find(
+              (node) => node.id === connection.sourceNodeId,
+            );
+            const targetNode = nodes.find(
+              (node) => node.id === connection.targetNodeId,
+            );
+            const source = sourceNode
+              ? clusterPositions.get(sourceNode.clusterId)
+              : null;
+            const target = targetNode
+              ? clusterPositions.get(targetNode.clusterId)
+              : null;
             if (!source || !target) return null;
 
-            const path = createCurvedPath(source, target);
+            const path = createCurvedPath(source, target, -0.12);
             return (
               <g key={connection.id}>
                 <path
                   d={path}
                   className={`domain-link is-${connection.emphasis}`}
                   style={{
-                    strokeWidth: 1.5 + connection.intensity * 2.4,
+                    strokeWidth: 1.1 + connection.intensity * 1.45,
                     opacity:
                       connection.emphasis === "primary"
                         ? 1
@@ -230,29 +263,43 @@ export function KnowledgeNetwork({
               </g>
             );
           })}
-        </g>
+        </g> : null}
 
-        <g className="tangle-core" aria-hidden="true">
-          <circle cx="500" cy="365" r="92" fill="url(#core-gradient)" />
-          <circle cx="500" cy="365" r="56" className="core-pulse-ring ring-one" />
-          <circle cx="500" cy="365" r="68" className="core-pulse-ring ring-two" />
+        <g
+          className="tangle-core"
+          role="button"
+          tabIndex={0}
+          aria-label="Mostrar os pilares principais"
+          onClick={onCoreFocus}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onCoreFocus();
+            }
+          }}
+        >
+          <circle cx={networkCenter.x} cy={networkCenter.y} r="110" fill="url(#core-gradient)" />
+          <circle cx={networkCenter.x} cy={networkCenter.y} r="66" className="core-pulse-ring ring-one" />
+          <circle cx={networkCenter.x} cy={networkCenter.y} r="82" className="core-pulse-ring ring-two" />
           <circle
-            cx="500"
-            cy="365"
-            r="48"
+            cx={networkCenter.x}
+            cy={networkCenter.y}
+            r="54"
             className="core-orb"
             filter="url(#core-glow)"
           />
-          <text x="500" y="362" textAnchor="middle" className="core-title">
+          <text x={networkCenter.x} y={networkCenter.y - 3} textAnchor="middle" className="core-title">
             TANGLE
           </text>
-          <text x="500" y="384" textAnchor="middle" className="core-subtitle">
+          <text x={networkCenter.x} y={networkCenter.y + 21} textAnchor="middle" className="core-subtitle">
             tudo está ligado
           </text>
         </g>
 
-        <g className="cluster-hubs" aria-hidden="true">
-          {positionedClusters.map((cluster) => {
+        {level > 0 ? <g className="cluster-hubs">
+          {positionedClusters
+            .filter((cluster) => cluster.id !== "interligacoes")
+            .map((cluster) => {
             const inwardX = networkCenter.x - cluster.x;
             const inwardY = networkCenter.y - cluster.y;
             const length = Math.hypot(inwardX, inwardY) || 1;
@@ -262,8 +309,18 @@ export function KnowledgeNetwork({
             return (
               <g
                 key={cluster.id}
-                className={`cluster-hub tone-${palette[cluster.colorIndex]}`}
+                className={`cluster-hub tone-${palette[cluster.colorIndex]} ${activeClusterId === cluster.id ? "is-active" : ""}`}
                 transform={`translate(${cluster.x} ${cluster.y})`}
+                role="button"
+                tabIndex={0}
+                aria-label={`Mostrar conceitos de ${cluster.name}`}
+                onClick={() => onClusterFocus(cluster.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    onClusterFocus(cluster.id);
+                  }
+                }}
               >
                 <circle r="43" className="cluster-hub-aura" />
                 <circle r="29" className="cluster-hub-orb" />
@@ -284,11 +341,13 @@ export function KnowledgeNetwork({
                 </text>
               </g>
             );
-          })}
-        </g>
+            })}
+        </g> : null}
 
-        <g className="knowledge-nodes">
-          {positionedNodes.map((node) => {
+        {level > 1 ? <g className="knowledge-nodes">
+          {positionedNodes
+            .filter((node) => node.clusterId !== "interligacoes")
+            .map((node) => {
             const isPrimary = node.emphasis === "primary";
             const cluster = clusters.find(
               (candidate) => candidate.id === node.clusterId,
@@ -298,7 +357,7 @@ export function KnowledgeNetwork({
             return (
               <g
                 key={node.id}
-                className={`network-node is-${node.emphasis} ${node.isJourneyCurrent ? "is-journey-current" : ""} ${node.functionalState === "completed" ? "is-completed" : ""} tone-${palette[node.colorIndex]}`}
+                className={`network-node is-${node.emphasis} ${node.clusterId === activeClusterId ? "is-cluster-active" : "is-cluster-context"} ${node.isJourneyCurrent ? "is-journey-current" : ""} ${node.functionalState === "completed" ? "is-completed" : ""} tone-${palette[node.colorIndex]}`}
                 transform={`translate(${node.x} ${node.y})`}
                 role="button"
                 tabIndex={node.functionalState === "locked" ? -1 : 0}
@@ -335,8 +394,8 @@ export function KnowledgeNetwork({
                 </text>
               </g>
             );
-          })}
-        </g>
+            })}
+        </g> : null}
       </svg>
     </div>
   );
