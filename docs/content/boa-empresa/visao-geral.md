@@ -1,5 +1,3 @@
-# Visão Geral
-
 ## A empresa precisa ser financeiramente sustentável
 
 Uma empresa pode ter um excelente ambiente de trabalho, pagar bem e oferecer muitos benefícios. Porém, se não gerar lucro suficiente para manter as operações, dificilmente conseguirá sobreviver no longo prazo.

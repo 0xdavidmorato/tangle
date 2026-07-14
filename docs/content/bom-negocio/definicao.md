@@ -1,6 +1,6 @@
 # Definição
 
-## O que é um bom negócio?
+## O define um "bom negócio"?
 
 Um bom negócio é aquele que consegue criar valor de forma sustentável para todos os envolvidos.
 

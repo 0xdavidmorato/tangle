@@ -190,13 +190,25 @@ export function TangleExperience({
 
       {focusedNode ? (
         <ContentPanel
-          node={focusedNode}
-          markdown={contentByNodeId[focusedNode.id] ?? ""}
-          onClose={() => dispatch("blur")}
-          onComplete={() =>
-            dispatch({ type: "complete", nodeId: focusedNode.id })
-          }
-        />
+  node={focusedNode}
+  markdown={contentByNodeId[focusedNode.id] ?? ""}
+  onClose={() => dispatch("blur")}
+  onComplete={() => {
+    dispatch({ type: "complete", nodeId: focusedNode.id });
+
+    const currentIndex = state.nodes.findIndex(
+      (node) => node.id === focusedNode.id,
+    );
+
+    const nextNode = state.nodes[currentIndex + 1];
+
+    if (nextNode) {
+      focusNode(nextNode.id);
+    } else {
+      dispatch("blur");
+    }
+  }}
+/>
       ) : null}
     </main>
   );

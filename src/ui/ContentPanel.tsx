@@ -31,7 +31,7 @@ export function ContentPanel({
         <ReactMarkdown>{markdown}</ReactMarkdown>
       </div>
       <button className="complete-button" type="button" onClick={onComplete}>
-        Marcar como explorado
+        Próximo
         <span aria-hidden="true">→</span>
       </button>
     </aside>
