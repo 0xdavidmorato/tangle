@@ -50,7 +50,7 @@ test("filesystem content source reads repository content and rejects traversal",
     "docs/content/boa-empresa/visao-geral.md",
   );
 
-  assert.match(body, /Visão Geral/);
+  assert.match(body, /A empresa precisa ser financeiramente sustentável/);
   await assert.rejects(() => source.read("../outside.md"));
 });
 
