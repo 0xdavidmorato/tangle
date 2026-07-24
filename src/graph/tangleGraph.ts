@@ -6,6 +6,7 @@ const clusterDefinitions = [
   ["bom-funcionario", "Bom Funcionário"],
   ["bom-ordenado", "Bom Ordenado"],
   ["boas-praticas", "Boas Práticas"],
+  ["boas-pessoas", "Boas Pessoas"],
   ["interligacoes", "Interligações"],
 ] as const;
 
@@ -28,11 +29,15 @@ const contentNodes = [
   ["boas-praticas.definicao", "boas-praticas", "Definição", "definicao"],
   ["boas-praticas.beneficios", "boas-praticas", "Benefícios", "beneficios"],
   ["boas-praticas.aplicacao", "boas-praticas", "Aplicação", "aplicacao"],
+  ["boas-pessoas.definicao", "boas-pessoas", "Definição", "definicao"],
+  ["boas-pessoas.caracteristicas", "boas-pessoas", "Características", "caracteristicas"],
+  ["boas-pessoas.impacto", "boas-pessoas", "Impacto", "impacto"],
   ["interligacoes.introducao", "interligacoes", "Tudo está ligado", "introducao"],
 ] as const;
 
 const connections: Connection[] = [
-  { id: "empresa-negocio", sourceNodeId: "boa-empresa.visao-geral", targetNodeId: "bom-negocio.definicao", direction: "bidirectional", intensity: 1, priority: 1, meaning: "Uma boa empresa sustenta um bom negócio e é reforçada por ele.", animation: "none" },
+  { id: "empresa-pessoas", sourceNodeId: "boa-empresa.visao-geral", targetNodeId: "boas-pessoas.definicao", direction: "bidirectional", intensity: 1, priority: 1, meaning: "Uma boa empresa valoriza as pessoas e é fortalecida pelas suas atitudes.", animation: "none" },
+  { id: "pessoas-negocio", sourceNodeId: "boas-pessoas.impacto", targetNodeId: "bom-negocio.definicao", direction: "bidirectional", intensity: 1, priority: 1, meaning: "Boas pessoas criam relações de confiança que sustentam um bom negócio.", animation: "none" },
   { id: "funcionario-ordenado", sourceNodeId: "bom-funcionario.definicao", targetNodeId: "bom-ordenado.definicao", direction: "bidirectional", intensity: 1, priority: 1, meaning: "A valorização salarial influencia o colaborador e o valor que cria.", animation: "none" },
   { id: "praticas-empresa", sourceNodeId: "boas-praticas.definicao", targetNodeId: "boa-empresa.visao-geral", direction: "bidirectional", intensity: 0.9, priority: 0.9, meaning: "Boas práticas fortalecem a empresa e a sua cultura.", animation: "none" },
   { id: "funcionario-negocio", sourceNodeId: "bom-funcionario.definicao", targetNodeId: "bom-negocio.definicao", direction: "bidirectional", intensity: 0.9, priority: 0.9, meaning: "Os colaboradores e o negócio influenciam-se mutuamente.", animation: "none" },
@@ -73,7 +78,7 @@ export const tangleGraph: Graph = {
   connections,
   clusters,
   journeys: [
-    { id: "core-narrative", name: "Narrativa Principal", mode: "linear", nodeIds: ["boa-empresa.visao-geral", "bom-negocio.definicao", "bom-funcionario.definicao", "bom-ordenado.definicao", "boas-praticas.definicao", "interligacoes.introducao"] },
+    { id: "core-narrative", name: "Narrativa Principal", mode: "linear", nodeIds: ["boa-empresa.visao-geral", "boas-pessoas.definicao", "bom-negocio.definicao", "bom-funcionario.definicao", "bom-ordenado.definicao", "boas-praticas.definicao", "interligacoes.introducao"] },
     { id: "free-exploration", name: "Exploração Livre", mode: "exploratory", nodeIds: nodes.map((node) => node.id) },
   ],
   narrativeTimeline: ["initialization", "introduction", "exploration", "focus", "reflection", "conclusion"],

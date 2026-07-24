@@ -22,6 +22,32 @@ export interface RadialCluster extends LayoutPoint {
 
 export const networkCenter: LayoutPoint = { x: 520, y: 330 };
 
+interface ClusterVisual {
+  readonly x: number;
+  readonly y: number;
+  readonly colorIndex: number;
+}
+
+const clusterVisuals: Readonly<Record<string, ClusterVisual>> = {
+  "boa-empresa": { x: 260, y: 225, colorIndex: 0 },
+  "bom-negocio": { x: 780, y: 225, colorIndex: 1 },
+  "bom-funcionario": { x: 780, y: 435, colorIndex: 2 },
+  "bom-ordenado": { x: 520, y: 540, colorIndex: 3 },
+  "boas-praticas": { x: 260, y: 435, colorIndex: 4 },
+  "boas-pessoas": { x: 520, y: 120, colorIndex: 5 },
+  "interligacoes": { x: 520, y: 495, colorIndex: 6 },
+};
+
+const fallbackClusterVisual: ClusterVisual = {
+  x: networkCenter.x,
+  y: networkCenter.y,
+  colorIndex: 6,
+};
+
+export function getClusterVisual(clusterId: string): ClusterVisual {
+  return clusterVisuals[clusterId] ?? fallbackClusterVisual;
+}
+
 function canonical(value: number): number {
   return Number(value.toFixed(4));
 }
@@ -47,7 +73,7 @@ export function createRadialLayout(
       ...node,
       clusterIndex,
       nodeIndex,
-      colorIndex: clusterIndex % 6,
+      colorIndex: getClusterVisual(node.clusterId).colorIndex,
     };
 
     const satelliteCount = Math.max(1, cluster?.nodeIds.length ?? 1);
@@ -61,9 +87,9 @@ export function createRadialLayout(
     const standardSatelliteRadius =
       128 + Math.max(0, satelliteCount - 2) * 10 + (nodeIndex % 2) * 11;
     const satelliteRadius =
-      clusterIndex === 2
+      cluster?.id === "bom-funcionario"
         ? 88 + (nodeIndex % 2) * 8
-        : clusterIndex === 5
+        : cluster?.id === "interligacoes"
           ? 72
           : standardSatelliteRadius;
 
@@ -88,22 +114,13 @@ export function createRadialLayout(
 export function createRadialClusterLayout(
   clusters: readonly PresentationCluster[],
 ): RadialCluster[] {
-  const constellation = [
-    { x: 330, y: 175 },
-    { x: 710, y: 175 },
-    { x: 800, y: 405 },
-    { x: 455, y: 510 },
-    { x: 225, y: 355 },
-    { x: 520, y: 495 },
-  ];
-
-  return clusters.map((cluster, clusterIndex) => {
-    const placement = constellation[clusterIndex % constellation.length]!;
+  return clusters.map((cluster) => {
+    const placement = getClusterVisual(cluster.id);
 
     return {
       id: cluster.id,
       name: cluster.name,
-      colorIndex: clusterIndex % 6,
+      colorIndex: placement.colorIndex,
       x: canonical(placement.x),
       y: canonical(placement.y),
     };

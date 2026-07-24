@@ -92,6 +92,13 @@ export function NodeIcon({
       ) : null}
       {clusterIndex === 5 ? (
         <>
+          <circle {...common} cx="0" cy="-4" r="4" />
+          <path {...common} d="M-8 9c1-5 4-8 8-8s7 3 8 8Z" />
+          <path {...common} d="M0 4c2-3 6 0 0 5-6-5-2-8 0-5Z" />
+        </>
+      ) : null}
+      {clusterIndex === 6 ? (
+        <>
           <path {...common} d="M-2-5 1-8a5 5 0 0 1 7 7L5 2M2 5l-3 3a5 5 0 0 1-7-7l3-3M-4 4 4-4" />
         </>
       ) : null}

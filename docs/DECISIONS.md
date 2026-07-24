@@ -274,6 +274,38 @@ A `TangleEngine` passará a manter uma referência ao `Node` atualmente focado.
 Os restantes comportamentos relacionados com foco serão implementados de forma incremental.
 
 ---------------------------------------------------------------------
+# Data: 2026-07-24
+
+## Contexto
+
+O TANGLE passa a incluir o tema "Boas Pessoas", com conteúdo próprio sobre
+definição, características e impacto. A expansão deve manter o Graph como
+fonte de verdade e tornar as relações com os restantes pilares visíveis.
+
+## Decisão
+
+É criado o Cluster `boas-pessoas`, com os Nodes `definicao`,
+`caracteristicas` e `impacto`. Os conteúdos são armazenados em
+`docs/content/boas-pessoas` e os Nodes são ligados a Boa Empresa e Bom
+Negócio, formando uma sequência visual exterior sem cruzamentos.
+
+A narrativa principal introduz "Boas Pessoas" após "Boa Empresa" e antes de
+"Bom Negócio".
+
+## Justificação
+
+As pessoas são um elemento central das organizações e o novo Cluster permite
+explorar esse tema sem misturar conteúdo nos componentes ou alterar a Engine.
+As ligações explicitam que comportamentos individuais ligam a cultura da
+empresa à sustentabilidade do negócio.
+
+## Consequência
+
+O Graph passa a ter sete Clusters e vinte e dois Nodes. A exploração livre
+inclui os novos Nodes automaticamente; a narrativa linear passa também pelo
+Node de definição de Boas Pessoas.
+
+---------------------------------------------------------------------
 # Data: 2026-07-13
 
 ## Contexto

@@ -1,6 +1,6 @@
 "use client";
 
-import type { PresentationCluster } from "../presentation";
+import { getClusterVisual, type PresentationCluster } from "../presentation";
 import { NodeIcon } from "./NodeIcon";
 
 interface NavigationLegendProps {
@@ -11,7 +11,7 @@ interface NavigationLegendProps {
   readonly onClusterSelect: (clusterId: string) => void;
 }
 
-const tones = ["cyan", "gold", "orange", "violet", "green", "coral"];
+const tones = ["cyan", "gold", "orange", "violet", "green", "rose", "coral"];
 
 export function NavigationLegend({
   clusters,
@@ -30,21 +30,24 @@ export function NavigationLegend({
         <span className="legend-navigation-icon core-legend-icon" aria-hidden="true" />
         <span>Tangle (Central)</span>
       </button>
-      {clusters.map((cluster, index) => (
+      {clusters.map((cluster) => {
+        const clusterVisual = getClusterVisual(cluster.id);
+        return (
         <button
           key={cluster.id}
           type="button"
-          className={`legend-navigation-item tone-${tones[index % tones.length]} ${activeClusterId === cluster.id ? "is-active" : ""}`}
+          className={`legend-navigation-item tone-${tones[clusterVisual.colorIndex]} ${activeClusterId === cluster.id ? "is-active" : ""}`}
           onClick={() => onClusterSelect(cluster.id)}
         >
           <span className="legend-navigation-icon" aria-hidden="true">
             <svg viewBox="-14 -14 28 28">
-              <NodeIcon clusterIndex={index} nodeIndex={0} size={17} />
+              <NodeIcon clusterIndex={clusterVisual.colorIndex} nodeIndex={0} size={17} />
             </svg>
           </span>
           <span>{cluster.name}</span>
         </button>
-      ))}
+        );
+      })}
       <p className="legend-hint">
         <span aria-hidden="true">◉</span>
         Clique num nó<br />para explorar

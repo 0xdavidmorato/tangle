@@ -168,6 +168,7 @@ button { color: inherit; font: inherit; }
 .tone-orange { color: #ff9d51; stroke: #ff9d51; }
 .tone-violet { color: #aa86ff; stroke: #aa86ff; }
 .tone-green { color: #62dc9b; stroke: #62dc9b; }
+.tone-rose { color: #ef77c5; stroke: #ef77c5; }
 .tone-coral { color: #f87867; stroke: #f87867; }
 
 .journey-controls { position: absolute; z-index: 8; top: 72px; right: clamp(22px, 3vw, 48px); display: flex; gap: 3px; padding: 4px; border-radius: 999px; }
@@ -186,6 +187,7 @@ button { color: inherit; font: inherit; }
 .legend-navigation-item.tone-orange { color: #ff9d51; }
 .legend-navigation-item.tone-violet { color: #aa86ff; }
 .legend-navigation-item.tone-green { color: #62dc9b; }
+.legend-navigation-item.tone-rose { color: #ef77c5; }
 .legend-navigation-item.tone-coral { color: #f87867; }
 .legend-navigation-item:hover, .legend-navigation-item:focus-visible, .legend-navigation-item.is-active { background: color-mix(in srgb, currentColor 10%, transparent); text-shadow: 0 0 9px color-mix(in srgb, currentColor 58%, transparent); }
 .legend-navigation-item:hover .legend-navigation-icon, .legend-navigation-item:focus-visible .legend-navigation-icon, .legend-navigation-item.is-active .legend-navigation-icon { background: color-mix(in srgb, currentColor 18%, transparent); box-shadow: 0 0 16px color-mix(in srgb, currentColor 72%, transparent), inset 0 0 8px color-mix(in srgb, currentColor 15%, transparent); }

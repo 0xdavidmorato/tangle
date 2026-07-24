@@ -21,13 +21,13 @@ test("presentation projects focus and relations without hiding graph context", (
     (node) => node.id === "boa-empresa.visao-geral",
   );
   const relatedNode = state.nodes.find(
-    (node) => node.id === "bom-negocio.definicao",
+    (node) => node.id === "boas-pessoas.definicao",
   );
   const contextNode = state.nodes.find(
     (node) => node.id === "bom-ordenado.importancia",
   );
   const focusedConnection = state.connections.find(
-    (connection) => connection.id === "empresa-negocio",
+    (connection) => connection.id === "empresa-pessoas",
   );
 
   assert.equal(focusedNode.emphasis, "primary");
@@ -53,9 +53,9 @@ test("presentation reflects session state and journey progress", () => {
 
   assert.equal(completedNode.functionalState, "completed");
   assert.equal(state.journey.id, "core-narrative");
-  assert.equal(state.journey.currentNodeId, "bom-negocio.definicao");
+  assert.equal(state.journey.currentNodeId, "boas-pessoas.definicao");
   assert.equal(
-    state.nodes.find((node) => node.id === "bom-negocio.definicao")
+    state.nodes.find((node) => node.id === "boas-pessoas.definicao")
       .isJourneyCurrent,
     true,
   );
@@ -96,6 +96,25 @@ test("radial layout projects every satellite away from the network center", () =
       );
     }
   }
+});
+
+test("cluster hubs retain their configured positions and identities", () => {
+  const engine = new TangleEngine(tangleGraph);
+  const state = createPresentationState(engine);
+  const layout = createRadialClusterLayout(state.clusters);
+
+  assert.deepEqual(
+    layout.map(({ id, x, y, colorIndex }) => ({ id, x, y, colorIndex })),
+    [
+      { id: "boa-empresa", x: 260, y: 225, colorIndex: 0 },
+      { id: "bom-negocio", x: 780, y: 225, colorIndex: 1 },
+      { id: "bom-funcionario", x: 780, y: 435, colorIndex: 2 },
+      { id: "bom-ordenado", x: 520, y: 540, colorIndex: 3 },
+      { id: "boas-praticas", x: 260, y: 435, colorIndex: 4 },
+      { id: "boas-pessoas", x: 520, y: 120, colorIndex: 5 },
+      { id: "interligacoes", x: 520, y: 495, colorIndex: 6 },
+    ],
+  );
 });
 
 test("radial layout preserves readable spacing and safe bounds", () => {

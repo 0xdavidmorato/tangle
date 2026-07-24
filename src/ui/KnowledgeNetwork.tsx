@@ -24,7 +24,16 @@ interface KnowledgeNetworkProps {
   readonly onFocus: (nodeId: string) => void;
 }
 
-const palette = ["cyan", "gold", "orange", "violet", "green", "coral"];
+const palette = ["cyan", "gold", "orange", "violet", "green", "rose", "coral"];
+
+const connectionBends: Readonly<Record<string, number>> = {
+  "empresa-pessoas": 0.1,
+  "pessoas-negocio": 0.1,
+  "funcionario-ordenado": 0.1,
+  "praticas-empresa": 0.1,
+  "funcionario-negocio": -0.1,
+  "praticas-ordenado": -0.1,
+};
 
 export function KnowledgeNetwork({
   nodes,
@@ -119,7 +128,7 @@ export function KnowledgeNetwork({
 
         {level > 0 ? <g className="cluster-structure">
           {clusterRoots.map(({ cluster, root }, clusterIndex) => {
-            const tone = palette[clusterIndex % palette.length];
+            const tone = palette[root.colorIndex];
             const corePath = createCurvedPath(networkCenter, root, 0.045);
             const outwardAngle = Math.atan2(
               root.y - networkCenter.y,
@@ -239,7 +248,11 @@ export function KnowledgeNetwork({
               : null;
             if (!source || !target) return null;
 
-            const path = createCurvedPath(source, target, -0.12);
+            const path = createCurvedPath(
+              source,
+              target,
+              connectionBends[connection.id] ?? -0.12,
+            );
             return (
               <g key={connection.id}>
                 <path
