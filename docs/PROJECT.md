@@ -180,6 +180,19 @@ Inclui:
 
 ---
 
+## Boas Pessoas
+
+Representa os valores e comportamentos individuais que fortalecem as relações
+e a organização.
+
+Inclui:
+
+- definição;
+- características;
+- impacto.
+
+---
+
 # 8. O Elemento Mais Importante
 
 Existe um sexto conceito.
@@ -203,6 +216,10 @@ Boas Práticas ↔ Boa Empresa
 Bom Funcionário ↔ Bom Negócio
 
 Boas Práticas ↔ Bom Ordenado
+
+Boa Empresa ↔ Boas Pessoas
+
+Boas Pessoas ↔ Bom Negócio
 
 Estas relações são mais importantes do que os próprios capítulos.
 

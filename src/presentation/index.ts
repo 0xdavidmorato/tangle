@@ -3,6 +3,7 @@ export {
   createCurvedPath,
   createRadialClusterLayout,
   createRadialLayout,
+  getClusterVisual,
   networkCenter,
 } from "./RadialLayout";
 export type {
