@@ -62,6 +62,7 @@ button { color: inherit; font: inherit; }
   align-items: center;
   justify-content: space-between;
   padding: 22px clamp(22px, 3vw, 48px);
+  pointer-events: none;
 }
 
 .brand, .experience-status, .header-tools { display: flex; align-items: center; }
@@ -89,7 +90,7 @@ button { color: inherit; font: inherit; }
 }
 .motion-control {
   display: flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: 999px;
-  color: #7996a3; cursor: pointer; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #7996a3; cursor: pointer; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; pointer-events: auto;
 }
 .motion-control:hover, .motion-control:focus-visible { color: #d7fbff; border-color: rgba(66, 231, 242, 0.52); outline: none; }
 .motion-control-dot { width: 6px; height: 6px; border-radius: 50%; background: #506b77; }
