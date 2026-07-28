@@ -13,6 +13,8 @@ import { KnowledgeNetwork } from "./KnowledgeNetwork";
 import { NavigationLegend } from "./NavigationLegend";
 import { OrganicNavigation } from "./OrganicNavigation";
 
+type OrganicStage = "overview" | "concepts" | "relations" | "deep-dive";
+
 interface TangleExperienceProps {
   readonly graph: Graph;
   readonly contentByNodeId: Readonly<Record<string, string>>;
@@ -34,6 +36,7 @@ export function TangleExperience({
   const [motionEnabled, setMotionEnabled] = useState(true);
   const [networkLevel, setNetworkLevel] = useState<0 | 1 | 2>(0);
   const [activeClusterId, setActiveClusterId] = useState<string | null>(null);
+  const [organicStage, setOrganicStage] = useState<OrganicStage>("overview");
 
   function dispatch(event: EngineEvent) {
     engineRef.current!.dispatch(event);
@@ -56,11 +59,14 @@ export function TangleExperience({
     dispatch("blur");
     setActiveClusterId(null);
     setNetworkLevel(0);
+    setOrganicStage("overview");
   }
 
   function revealClusters() {
     dispatch("blur");
+    setActiveClusterId(null);
     setNetworkLevel(1);
+    setOrganicStage("overview");
   }
 
   function revealCluster(clusterId: string) {
@@ -72,6 +78,7 @@ export function TangleExperience({
     dispatch("blur");
     setActiveClusterId(clusterId);
     setNetworkLevel(2);
+    setOrganicStage("concepts");
   }
 
   function focusNode(nodeId: string) {
@@ -80,9 +87,11 @@ export function TangleExperience({
       if (node.clusterId === "interligacoes") {
         setActiveClusterId(null);
         setNetworkLevel(1);
+        setOrganicStage("relations");
       } else {
         setActiveClusterId(node.clusterId);
         setNetworkLevel(2);
+        setOrganicStage("deep-dive");
       }
     }
     dispatch({ type: "focus", nodeId });
@@ -94,6 +103,48 @@ export function TangleExperience({
     );
     if (interconnections) focusNode(interconnections.id);
   }
+
+  function revealConcepts() {
+    const nextCluster = activeClusterId
+      ?? state.clusters.find((cluster) => cluster.id !== "interligacoes")?.id;
+    if (nextCluster) revealCluster(nextCluster);
+  }
+
+  function deepenExploration() {
+    const preferredNode = state.journey?.currentNodeId
+      ? state.nodes.find((node) => node.id === state.journey?.currentNodeId)
+      : undefined;
+    const clusterNode = activeClusterId
+      ? state.nodes.find(
+        (node) => node.clusterId === activeClusterId && node.functionalState !== "locked",
+      )
+      : undefined;
+    const fallbackNode = state.nodes.find(
+      (node) => node.clusterId !== "interligacoes" && node.functionalState !== "locked",
+    );
+    const nextNode = preferredNode?.functionalState !== "locked"
+      ? preferredNode
+      : clusterNode ?? fallbackNode;
+
+    if (nextNode) focusNode(nextNode.id);
+  }
+
+  function closeFocusedNode() {
+    dispatch("blur");
+    if (focusedNode?.clusterId === "interligacoes") {
+      setActiveClusterId(null);
+      setNetworkLevel(1);
+      setOrganicStage("relations");
+      return;
+    }
+
+    setNetworkLevel(2);
+    setOrganicStage("concepts");
+  }
+
+  const activeClusterName = activeClusterId
+    ? state.clusters.find((cluster) => cluster.id === activeClusterId)?.name ?? null
+    : null;
 
   return (
     <main
@@ -179,20 +230,19 @@ export function TangleExperience({
       </div>
 
       <OrganicNavigation
-        level={networkLevel}
-        onCoreSelect={revealCore}
-        onClusterSelect={() => {
-          const nextCluster = activeClusterId ?? state.clusters[0]?.id;
-          if (nextCluster) revealCluster(nextCluster);
-        }}
-        onInterconnections={exploreInterconnections}
+        activeStage={organicStage}
+        activeClusterName={activeClusterName}
+        onOverview={revealClusters}
+        onConcepts={revealConcepts}
+        onRelations={exploreInterconnections}
+        onDeepDive={deepenExploration}
       />
 
       {focusedNode ? (
         <ContentPanel
   node={focusedNode}
   markdown={contentByNodeId[focusedNode.id] ?? ""}
-  onClose={() => dispatch("blur")}
+  onClose={closeFocusedNode}
   onComplete={() => {
     dispatch({ type: "complete", nodeId: focusedNode.id });
 
@@ -205,7 +255,7 @@ export function TangleExperience({
     if (nextNode) {
       focusNode(nextNode.id);
     } else {
-      dispatch("blur");
+      closeFocusedNode();
     }
   }}
 />
