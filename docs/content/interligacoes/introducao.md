@@ -2,9 +2,10 @@
 
 ## Tudo está ligado
 
-Ao longo desta formação explorámos cinco pilares fundamentais:
+Ao longo deste percurso, exploramos os seis pilares fundamentais:
 
 * **Boa Empresa**
+* **Boas Pessoas**
 * **Bom Funcionário**
 * **Bom Ordenado**
 * **Bom Negócio**
@@ -113,4 +114,3 @@ E melhores decisões conduzem a melhores empresas, melhores profissionais, melho
 No final, tudo se resume a uma ideia simples:
 
 > **Nenhum sucesso acontece sozinho. Nenhum problema existe isoladamente. Tudo está ligado.**
-Não existem causas isoladas nem soluções isoladas. Cada decisão dentro de uma organização gera consequências que afetam todas as outras áreas.

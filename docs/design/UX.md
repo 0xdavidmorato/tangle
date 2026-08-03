@@ -20,7 +20,7 @@ visão geral, tema, relações e aprofundamento.
 
 Interligações não ocupa lugar na constelação dos pilares. É apresentado como
 um cartão explicativo próprio, pois o seu objetivo é interpretar as relações
-entre os cinco pilares e não competir visualmente com eles.
+entre os seis pilares e não competir visualmente com eles.
 
 ## Rede em repouso
 
