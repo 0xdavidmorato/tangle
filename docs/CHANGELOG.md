@@ -81,3 +81,10 @@ v0.12
 - Boa Empresa recebe o conteúdo Parcerias, mapeado como Node no Graph.
 - Quando os conteúdos estão expandidos, os Nodes têm prioridade de interação
   sobre os controlos auxiliares da interface.
+
+v0.13
+
+- Fundação de avaliação introduz contratos de quiz, cálculo de nota e sessão
+  de progresso independente da interface.
+- Testes cobrem nota, respostas corretas, aprovação, repetição e elegibilidade
+  para certificado pedagógico.
