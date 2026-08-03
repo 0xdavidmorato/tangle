@@ -53,7 +53,7 @@ A palavra "TANGLE" significa literalmente:
 
 Essa palavra representa exatamente aquilo que pretendemos transmitir.
 
-O projeto não fala de cinco assuntos separados.
+O projeto não fala de seis assuntos separados.
 
 Fala de um único sistema composto por várias partes.
 
@@ -117,7 +117,7 @@ Sempre que um conceito for apresentado, deverá ser possível compreender:
 
 # 7. Estrutura Conceptual
 
-O mapa mental está organizado em cinco pilares principais.
+O mapa mental está organizado em seis pilares principais.
 
 ## Boa Empresa
 
@@ -196,7 +196,7 @@ Inclui:
 
 # 8. O Elemento Mais Importante
 
-Existe um sexto conceito.
+Existe ainda um conceito essencial.
 
 Não é um capítulo.
 
@@ -204,7 +204,7 @@ Não é um capítulo.
 
 ## Interligações
 
-As relações entre os cinco pilares.
+As relações entre os seis pilares.
 
 Exemplos:
 

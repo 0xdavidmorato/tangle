@@ -93,7 +93,7 @@ export function OrganicNavigation({
       <span className="interconnections-card-icon" aria-hidden="true">↔</span>
       <span className="interconnections-card-copy">
         <strong>Interligações</strong>
-        <small>Veja como os cinco pilares se influenciam.</small>
+        <small>Veja como os seis pilares se influenciam.</small>
       </span>
       <span aria-hidden="true">→</span>
     </button>
