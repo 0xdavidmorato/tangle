@@ -149,7 +149,7 @@ export function TangleExperience({
   return (
     <main
       ref={experienceRef}
-      className={`experience ${focusedNode ? "has-focus" : ""} ${motionEnabled ? "motion-on" : "motion-off"}`}
+      className={`experience ${focusedNode ? "has-focus" : ""} ${networkLevel === 2 ? "has-expanded-network" : ""} ${motionEnabled ? "motion-on" : "motion-off"}`}
       onPointerMove={handlePointerMove}
     >
       <header className="experience-header">

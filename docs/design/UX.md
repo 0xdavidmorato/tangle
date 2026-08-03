@@ -14,8 +14,9 @@ selecionar um Node e pode começar a explorar imediatamente.
 O núcleo TANGLE é também a primeira ação da narrativa: selecioná-lo revela os
 pilares principais. Selecionar um pilar revela os seus conceitos de conteúdo;
 selecionar um conceito abre o respetivo foco e contexto relacional. A legenda
-lateral e os cards de navegação orgânica oferecem os mesmos atalhos sem criar
-uma navegação por páginas.
+lateral e a navegação orgânica oferecem os mesmos atalhos sem criar uma
+navegação por páginas. Esta última organiza os atalhos em quatro etapas:
+visão geral, tema, relações e aprofundamento.
 
 Interligações não ocupa lugar na constelação dos pilares. É apresentado como
 um cartão explicativo próprio, pois o seu objetivo é interpretar as relações
@@ -23,7 +24,7 @@ entre os cinco pilares e não competir visualmente com eles.
 
 ## Rede em repouso
 
-- Todos os Nodes permanecem presentes.
+- Quando os conteúdos são revelados, todos os Nodes permanecem presentes.
 - Connections documentadas são distinguíveis da organização visual por Cluster.
 - O núcleo irradia filamentos para os Clusters; os Clusters organizam os seus
   Nodes sem transformar pertença em influência.
@@ -104,10 +105,15 @@ permaneçam integralmente visíveis.
 O enquadramento privilegia uma ocupação larga e assimétrica. A rede deve
 preencher a cena e reservar áreas de respiração para os controlos e o conteúdo,
 sem converter esses elementos em barras de navegação ou menus de páginas.
+Quando um controlo auxiliar partilha espaço com um Node revelado, o Node mantém
+prioridade visual e de interação; a navegação continua disponível fora da área
+ocupada pela rede.
 
 ## Acessibilidade
 
 - Nodes são alcançáveis por teclado e ativados por Enter ou Espaço.
+- A sobreposição de controlos auxiliares nunca pode impedir a ativação de um
+  Node revelado.
 - Elementos interativos possuem nomes acessíveis.
 - O conteúdo permanece texto HTML semântico depois de transformado do Markdown.
 - Um controlo visível permite pausar e reativar todo o movimento da experiência.

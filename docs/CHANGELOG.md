@@ -71,3 +71,13 @@ v0.11
 - Leques radiais adaptam-se à quantidade de Nodes.
 - Distância mínima e limites visuais passam a ser testados.
 - ViewBox ganha margem para manter toda a rede visível.
+
+v0.12
+
+- Navegação orgânica passa a orientar a exploração por visão geral, tema,
+  relações e aprofundamento.
+- O núcleo alterna visualmente entre TANGLE, Emaranhado e Teia sem alterar a
+  semântica do Graph.
+- Boa Empresa recebe o conteúdo Parcerias, mapeado como Node no Graph.
+- Quando os conteúdos estão expandidos, os Nodes têm prioridade de interação
+  sobre os controlos auxiliares da interface.
