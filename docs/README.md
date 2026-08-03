@@ -13,6 +13,7 @@ Antes de alterar qualquer parte do sistema consulte:
 - DECISIONS.md
 - DOMAIN.md
 - ENGINE_RULES.md
+- ASSESSMENT_RULES.md
 
 A documentação é a fonte de verdade do projeto.
 
