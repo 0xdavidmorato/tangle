@@ -105,14 +105,17 @@ button { color: inherit; font: inherit; }
   place-items: center;
   transition: transform 850ms var(--ease-organic), opacity 700ms ease;
 }
+.has-expanded-network .network-shell { position: relative; z-index: 9; }
 .has-focus .network-shell { transform: translateX(-13%) scale(0.88); }
 .knowledge-network {
   width: min(1480px, 100vw);
   height: min(840px, 96vh);
   overflow: visible;
   transform: translate(var(--look-x, 0), var(--look-y, 0));
+  pointer-events: none;
   transition: transform 1.2s var(--ease-organic);
 }
+.tangle-core, .cluster-hub, .network-node { pointer-events: all; }
 .network-atmosphere { filter: blur(14px); animation: atmosphere-breathe 9s ease-in-out infinite alternate; }
 
 .ambient-particles circle { fill: #7deaf4; opacity: 0.28; animation: particle-drift 8s ease-in-out infinite alternate; }

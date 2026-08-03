@@ -881,3 +881,32 @@ existir uma camada de carregamento de conteúdo; nesta fase, o contrato é
 documental e de tipo.
 
 ---------------------------------------------------------------------
+
+# Data: 2026-08-03
+
+## Contexto
+
+Com os conteúdos expandidos, o painel de navegação orgânica ocupava a mesma
+zona inferior usada pelos Nodes de Bom Ordenado. Como o painel era composto
+acima da rede, os Nodes ficavam visualmente encobertos e não recebiam o clique.
+
+## Decisão
+
+No nível de conteúdos, a rede é apresentada acima dos controlos auxiliares. O
+SVG deixa de capturar eventos no seu espaço vazio e devolve explicitamente a
+interação apenas ao núcleo, aos hubs e aos Nodes. Assim, um Node revelado tem
+prioridade sobre a navegação quando ambos ocupam a mesma área.
+
+## Justificação
+
+Os Nodes são a superfície primária de exploração do conhecimento; a navegação
+orgânica é um atalho complementar. A prioridade de interação deve refletir essa
+hierarquia sem alterar o Graph, a Engine ou a semântica da Presentation.
+
+## Consequência
+
+Os conteúdos de todos os Clusters continuam clicáveis quando a rede está
+expandida. Os controlos auxiliares mantêm-se utilizáveis nas áreas não
+ocupadas por elementos interativos da rede.
+
+---------------------------------------------------------------------
