@@ -127,7 +127,8 @@ Inclui:
 
 - visão geral;
 - características;
-- impacto.
+- impacto;
+- parcerias.
 
 ---
 
