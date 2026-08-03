@@ -14,6 +14,7 @@ const contentNodes = [
   ["boa-empresa.visao-geral", "boa-empresa", "Visão Geral", "visao-geral"],
   ["boa-empresa.caracteristicas", "boa-empresa", "Características", "caracteristicas"],
   ["boa-empresa.impacto", "boa-empresa", "Impacto", "impacto"],
+  ["boa-empresa.parcerias", "boa-empresa", "Parcerias", "parcerias"],
   ["bom-negocio.definicao", "bom-negocio", "Definição", "definicao"],
   ["bom-negocio.caracteristicas", "bom-negocio", "Características", "caracteristicas"],
   ["bom-negocio.viabilidade", "bom-negocio", "Viabilidade", "viabilidade"],

@@ -35,6 +35,36 @@ const connectionBends: Readonly<Record<string, number>> = {
   "praticas-ordenado": -0.1,
 };
 
+interface CoreWordProps {
+  readonly value: string;
+  readonly startDelay: number;
+  readonly className: string;
+}
+
+function CoreWord({ value, startDelay, className }: CoreWordProps) {
+  return (
+    <g className={`core-word ${className}`} aria-hidden="true">
+      <text className="core-title">
+        <textPath href="#core-word-arc" startOffset="50%" textAnchor="middle">
+          {Array.from(value).map((letter, index) => (
+            <tspan key={`${letter}-${index}`} opacity="0">
+              <animate
+                attributeName="opacity"
+                values="0;1;1;0"
+                keyTimes="0;0.06;0.82;1"
+                dur="15s"
+                begin={`${(startDelay + index * 0.085).toFixed(3)}s`}
+                repeatCount="indefinite"
+              />
+              {letter}
+            </tspan>
+          ))}
+        </textPath>
+      </text>
+    </g>
+  );
+}
+
 export function KnowledgeNetwork({
   nodes,
   clusters,
@@ -85,6 +115,22 @@ export function KnowledgeNetwork({
             <stop offset="48%" stopColor="#0d405c" stopOpacity="0.08" />
             <stop offset="100%" stopColor="#020814" stopOpacity="0" />
           </radialGradient>
+          <linearGradient id="core-word-tangle-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#d9ffff" />
+            <stop offset="52%" stopColor="#58eff7" />
+            <stop offset="100%" stopColor="#9effff" />
+          </linearGradient>
+          <linearGradient id="core-word-emaranhado-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fff0a8" />
+            <stop offset="55%" stopColor="#ffc75c" />
+            <stop offset="100%" stopColor="#ffe2a0" />
+          </linearGradient>
+          <linearGradient id="core-word-teia-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ffd3ef" />
+            <stop offset="52%" stopColor="#ee78cf" />
+            <stop offset="100%" stopColor="#d7b5ff" />
+          </linearGradient>
+          <path id="core-word-arc" d="M 471 339 Q 520 308 569 339" />
         </defs>
 
         <ellipse
@@ -301,12 +347,9 @@ export function KnowledgeNetwork({
             className="core-orb"
             filter="url(#core-glow)"
           />
-          <text x={networkCenter.x} y={networkCenter.y - 3} textAnchor="middle" className="core-title">
-            TANGLE
-          </text>
-          <text x={networkCenter.x} y={networkCenter.y + 21} textAnchor="middle" className="core-subtitle">
-            tudo está ligado
-          </text>
+          <CoreWord value="TANGLE" startDelay={0} className="core-word-tangle" />
+          <CoreWord value="EMARANHADO" startDelay={4.35} className="core-word-emaranhado" />
+          <CoreWord value="TEIA" startDelay={9.45} className="core-word-teia" />
         </g>
 
         {level > 0 ? <g className="cluster-hubs">
