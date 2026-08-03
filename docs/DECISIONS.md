@@ -910,3 +910,34 @@ expandida. Os controlos auxiliares mantêm-se utilizáveis nas áreas não
 ocupadas por elementos interativos da rede.
 
 ---------------------------------------------------------------------
+
+# Data: 2026-08-03
+
+## Contexto
+
+O TANGLE precisa de avaliar a compreensão de cada conteúdo e desbloquear um
+certificado pedagógico após a conclusão. Esta capacidade não pode misturar
+perguntas, resultados ou regras de aprovação com Graph, Engine ou componentes
+visuais existentes.
+
+## Decisão
+
+É criado o módulo `assessment`, independente da interface, com contratos de
+quiz, cálculo de nota e `AssessmentSession`. A sessão guarda as tentativas por
+Node, preserva a melhor nota e determina a aprovação com a nota mínima de 5
+valores. Nesta fase não existe banco de perguntas, persistência ou interface.
+
+## Justificação
+
+Isolar as regras permite testar a avaliação sem renderizar a experiência e
+mantém a Engine responsável apenas pelo comportamento do Graph. A UI futura
+consumirá resultados já calculados, sem conhecer respostas corretas nem regras
+de certificação.
+
+## Consequência
+
+Os quizzes podem ser associados aos IDs estáveis dos Nodes numa etapa seguinte.
+Repetições livres não removem uma aprovação já obtida e o certificado poderá
+ser desbloqueado quando todos os Nodes obrigatórios estiverem aprovados.
+
+---------------------------------------------------------------------
