@@ -15,3 +15,4 @@ export type {
 } from "./Quiz";
 export { AssessmentSession } from "./AssessmentSession";
 export type { NodeAssessmentProgress } from "./AssessmentSession";
+export { getQuizForNode, tangleQuizzes } from "./tangleQuizzes";

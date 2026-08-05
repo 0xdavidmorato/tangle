@@ -6,8 +6,10 @@ const {
   calculateScore,
   formatScore,
   scoreQuiz,
+  tangleQuizzes,
   validateQuiz,
 } = require("../.test-dist/assessment/index.js");
+const { tangleGraph } = require("../.test-dist/graph/tangleGraph.js");
 
 const quiz = {
   nodeId: "boa-empresa.parcerias",
@@ -108,4 +110,15 @@ test("preserves the best passing score across free repeats", () => {
   assert.equal(session.isCertificateEligible([quiz.nodeId]), true);
   assert.equal(session.getOverallScore([quiz.nodeId]), 10);
   assert.equal(session.isCertificateEligible([quiz.nodeId, "boas-pessoas.definicao"]), false);
+});
+
+test("provides exactly three valid questions for every content Node", () => {
+  const quizNodeIds = tangleQuizzes.map((quizDefinition) => quizDefinition.nodeId).sort();
+  const graphNodeIds = tangleGraph.nodes.map((node) => node.id).sort();
+
+  assert.deepEqual(quizNodeIds, graphNodeIds);
+  assert.ok(tangleQuizzes.every((quizDefinition) => {
+    validateQuiz(quizDefinition);
+    return quizDefinition.questions.length === 3;
+  }));
 });

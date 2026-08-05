@@ -88,3 +88,8 @@ v0.13
   de progresso independente da interface.
 - Testes cobrem nota, respostas corretas, aprovação, repetição e elegibilidade
   para certificado pedagógico.
+
+v0.14
+
+- Banco de perguntas associa três questões a cada conteúdo do Graph.
+- Cobertura automática impede que um Node de conteúdo fique sem quiz.
