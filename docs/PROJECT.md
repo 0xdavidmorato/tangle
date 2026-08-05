@@ -128,7 +128,8 @@ Inclui:
 - visão geral;
 - características;
 - impacto;
-- parcerias.
+- parcerias;
+- bons sócios.
 
 ---
 

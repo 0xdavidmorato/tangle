@@ -100,7 +100,7 @@ test("blur clears the complete focus context", () => {
 
 test("the concrete graph maps every content node to Markdown", () => {
   assert.equal(tangleGraph.clusters.length, 7);
-  assert.equal(tangleGraph.nodes.length, 23);
+  assert.equal(tangleGraph.nodes.length, 24);
   assert.ok(tangleGraph.nodes.every((node) => node.content[0]?.format === "markdown"));
 });
 
