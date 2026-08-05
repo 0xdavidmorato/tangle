@@ -941,3 +941,30 @@ Repetições livres não removem uma aprovação já obtida e o certificado pode
 ser desbloqueado quando todos os Nodes obrigatórios estiverem aprovados.
 
 ---------------------------------------------------------------------
+
+# Data: 2026-08-05
+
+## Contexto
+
+Cada conteúdo do Graph precisa de uma avaliação própria, mas criar perguntas
+nos componentes ou deixar Nodes sem quiz impediria uma certificação completa e
+auditável.
+
+## Decisão
+
+O banco inicial é declarado em `src/assessment/tangleQuizzes.ts` e associa três
+perguntas de escolha múltipla a cada ID de Node. Um teste compara os IDs do
+banco com os IDs do Graph, valida cada quiz e exige exatamente três perguntas.
+
+## Justificação
+
+Manter as perguntas como dados separados preserva o conteúdo e permite à UI
+futura reutilizar os mesmos quizzes. A cobertura bidirecional transforma a
+regra pedagógica numa garantia automatizada.
+
+## Consequência
+
+Os 24 conteúdos atuais possuem 72 perguntas. Qualquer Node novo exigirá um quiz
+correspondente antes de poder integrar a avaliação e o certificado.
+
+---------------------------------------------------------------------
