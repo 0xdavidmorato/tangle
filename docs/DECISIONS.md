@@ -996,3 +996,31 @@ sessão atual. Persistência entre sessões, progresso global e certificado
 continuam deliberadamente fora desta etapa.
 
 ---------------------------------------------------------------------
+
+# Data: 2026-08-09
+
+## Contexto
+
+Os resultados da avaliação desapareciam quando a página era fechada, impedindo
+uma formação composta por vários conteúdos de ser concluída ao longo do tempo.
+
+## Decisão
+
+A `AssessmentSession` passa a registar conteúdos lidos e a expor um snapshot
+versionado. A Infrastructure guarda esse snapshot no `localStorage` do browser
+e restaura-o no início da experiência. Dados ausentes, inválidos ou corrompidos
+são ignorados sem interromper a aplicação.
+
+## Justificação
+
+O armazenamento local preserva a proposta de certificado pedagógico sem login
+ou backend. O formato versionado mantém a persistência isolada e permite
+evoluções futuras sem alterar Graph, Engine ou dados dos quizzes.
+
+## Consequência
+
+Conteúdos concluídos, tentativas e melhores notas sobrevivem entre sessões no
+mesmo dispositivo e browser. Limpar os dados do browser reinicia o progresso;
+sincronização entre dispositivos continua fora do âmbito.
+
+---------------------------------------------------------------------
