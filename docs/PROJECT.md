@@ -3,9 +3,12 @@ PROJECT.md: visão, arquitetura e objetivos (o documento que acabámos de constr
 # TANGLE
 ## Tudo Está Ligado
 
-**Versão:** 1.0
+**Versão:** 1.1
 
 **Autor:** David Morato
+
+**Estado:** plataforma pedagógica interativa publicada, com avaliação local e
+certificado pedagógico em PDF.
 
 ---
 
@@ -388,7 +391,8 @@ Todo o software será construído sobre este modelo.
 
 # 14. Entidades Fundamentais
 
-O universo do TANGLE é composto por apenas seis entidades.
+O núcleo de conhecimento do TANGLE é composto por seis entidades. A avaliação
+pedagógica é um módulo complementar, deliberadamente independente do Graph.
 
 ## 1. Graph
 
@@ -458,8 +462,6 @@ Cada Node possui:
 
 • Conteúdo
 
-• Perguntas
-
 • Exemplos
 
 • Ligações
@@ -509,6 +511,8 @@ Bom Funcionário
 Bom Ordenado
 
 Boas Práticas
+
+Boas Pessoas
 
 Interligações
 
@@ -568,35 +572,30 @@ Ela controla:
 
 ---
 
+## 7. Avaliação Pedagógica
+
+O módulo de avaliação associa um quiz ao identificador de cada Node de
+conteúdo. As perguntas, opções, respostas corretas e explicações pertencem ao
+banco de avaliação, e não ao Graph nem aos componentes visuais.
+
+A `AssessmentSession` regista leituras, tentativas, melhores notas e
+aprovações. Estes dados são persistidos localmente no browser. O certificado é
+emitido apenas após a aprovação de todos os quizzes obrigatórios.
+
+As regras completas de perguntas, nota, repetição, persistência e certificado
+estão definidas em `ASSESSMENT_RULES.md`.
+
+---
+
 # 15. Hierarquia Conceptual
 
 A estrutura lógica é:
 
-Graph
+Graph → Clusters → Nodes → Conteúdo e Relações
 
-↓
-
-Clusters
-
-↓
-
-Nodes
-
-↓
-
-Conteúdo
-
-↓
-
-Perguntas
-
-↓
-
-Exemplos
-
-↓
-
-Relações
+Em paralelo, o banco de avaliação associa quizzes aos IDs dos Nodes de
+conteúdo. O progresso pedagógico é mantido pela `AssessmentSession`, sem
+alterar o conhecimento nem a navegação do Graph.
 
 ---
 
@@ -912,7 +911,9 @@ Todo o código deverá refletir o modelo de domínio definido na Parte 2.
 
 # 24. Camadas da Aplicação
 
-A aplicação divide-se em seis grandes camadas.
+A aplicação organiza-se em camadas de conhecimento, comportamento,
+apresentação e infraestrutura. A avaliação e o certificado complementam a
+experiência sem introduzir regras no Graph ou na UI.
 
 ────────────────────────────
 
@@ -937,6 +938,9 @@ Presentation
 ↓
 
 Infrastructure
+
+
+Avaliação → Sessão local → Certificado
 
 ────────────────────────────
 
@@ -992,9 +996,10 @@ Nunca conhece componentes gráficos.
 
 # 27. Graph
 
-O Graph representa todo o conhecimento.
+O Graph representa o conhecimento navegável e as suas relações.
 
-É a única fonte de verdade.
+É a fonte de verdade para Nodes, Clusters, Connections, Journeys e estados de
+exploração. O banco de avaliação é a fonte de verdade exclusiva das perguntas.
 
 Todos os componentes consultam o Graph.
 
@@ -1025,8 +1030,6 @@ Exemplos:
 Boa Empresa
 
 Bom Negócio
-
-Perguntas
 
 Descrições
 
@@ -1086,7 +1089,8 @@ Qualquer alteração tecnológica deverá ficar confinada a esta camada.
 
 # 31. Fluxo de Informação
 
-Todo o fluxo deverá seguir apenas um sentido.
+O fluxo do Graph e o fluxo da avaliação possuem responsabilidades distintas e
+seguem apenas um sentido.
 
 Utilizador
 
@@ -1110,7 +1114,12 @@ Presentation
 
 Renderização
 
-Nunca o contrário.
+
+Para a avaliação:
+
+Utilizador → Quiz → AssessmentSession → persistência local → UI/certificado
+
+Em nenhum dos fluxos a renderização ou as animações decidem regras de domínio.
 
 ---
 
@@ -1336,13 +1345,11 @@ A câmara faz parte da narrativa.
 
 # 39. Sistema de Conteúdo
 
-Cada Node deverá poder conter:
+Cada Node de conteúdo referencia o seu Markdown e pode fornecer:
 
 Título
 
 Descrição
-
-Perguntas
 
 Exemplos
 
@@ -1356,7 +1363,9 @@ Vídeos
 
 Documentos
 
-Sem necessidade de alterar qualquer componente.
+Perguntas não são armazenadas no Node: são definidas no banco de avaliação por
+ID. Assim, novos quizzes, conteúdos ou formatos de certificação podem evoluir
+sem alterar componentes ou o Graph.
 
 ---
 
@@ -1418,37 +1427,33 @@ Mas a arquitetura conceptual deverá permanecer estável.
 
 # 43. Roadmap do Projeto
 
-O desenvolvimento do TANGLE deverá seguir uma ordem lógica.
+## Estado Atual da Plataforma
 
-Nunca deverá começar pela interface.
+O TANGLE está publicado como aplicação estática em GitHub Pages. A experiência
+é implementada em Next.js e React e inclui:
 
-A ordem correta é:
+- sete Clusters: os seis pilares e Interligações;
+- 24 Nodes de conteúdo Markdown, todos mapeados no Graph;
+- navegação orgânica, foco relacional e percursos guiado e exploratório;
+- três perguntas de escolha múltipla por conteúdo, num total de 72 perguntas;
+- nota de 0 a 10, aprovação a partir de 5 valores e repetição livre;
+- persistência local de leituras, tentativas, melhores notas e aprovações;
+- certificado pedagógico em PDF, emitido localmente após 24 quizzes aprovados.
 
-Modelo de Domínio
+O certificado é intencionalmente pedagógico: não usa login, servidor,
+assinatura digital ou validação pública.
 
-↓
+O desenvolvimento do TANGLE seguiu uma ordem centrada no conhecimento:
 
-Arquitetura
+Modelo de Domínio → Arquitetura → Engine → Experiência → Conteúdo → Avaliação
+→ Refinamento.
 
-↓
-
-Engine
-
-↓
-
-Experiência
-
-↓
-
-Conteúdo
-
-↓
-
-Refinamento
+As primeiras quatro fases estão concluídas. O foco atual é validar a jornada
+completa, a acessibilidade e o polimento da experiência.
 
 ---
 
-# FASE 1 — Fundação
+# FASE 1 — Fundação · concluída
 
 Objetivo:
 
@@ -1472,7 +1477,7 @@ Um universo funcional sem qualquer preocupação estética.
 
 ---
 
-# FASE 2 — Experiência
+# FASE 2 — Experiência · concluída
 
 Objetivo:
 
@@ -1494,7 +1499,7 @@ Uma rede viva.
 
 ---
 
-# FASE 3 — Conteúdo
+# FASE 3 — Conteúdo · concluída
 
 Objetivo:
 
@@ -1512,6 +1517,8 @@ Bom Ordenado
 
 Boas Práticas
 
+Boas Pessoas
+
 Interligações
 
 Resultado esperado:
@@ -1520,7 +1527,7 @@ Toda a informação do mapa mental disponível.
 
 ---
 
-# FASE 4 — Narrativa
+# FASE 4 — Narrativa e Avaliação · concluída
 
 Objetivo:
 
@@ -1529,18 +1536,21 @@ Transformar conhecimento numa experiência.
 Inclui:
 
 - Sequência de exploração
-- Perguntas
+- Banco de quizzes: três perguntas por conteúdo
 - Reflexões
 - Comparações
 - Transições
+- Nota de 0 a 10, com aprovação a partir de 5 valores
+- Repetição livre, melhor nota e persistência local
+- Certificado pedagógico em PDF após aprovação de todos os quizzes
 
 Resultado esperado:
 
-Uma experiência pedagógica.
+Uma experiência pedagógica completa, sem login ou backend.
 
 ---
 
-# FASE 5 — Refinamento
+# FASE 5 — Refinamento e Validação · em curso
 
 Objetivo:
 
@@ -1553,6 +1563,12 @@ Inclui:
 - Polimento
 - Otimizações
 - Acessibilidade
+- Validação da jornada completa em diferentes ecrãs
+- Revisão de textos, feedbacks e estados visuais
+
+Resultado esperado:
+
+Uma experiência pedagógica estável, clara e inclusiva.
 
 ---
 
@@ -1733,11 +1749,18 @@ Boas Práticas
 
 ↓
 
+Boas Pessoas
+
+↓
+
 Influenciam-se mutuamente.
 
 Sem necessidade de explicações longas.
 
 A própria experiência deverá comunicar esta ideia.
+
+O participante deverá ainda poder consolidar essa compreensão nos quizzes e,
+ao concluir todas as avaliações, gerar o seu certificado pedagógico local.
 
 ---
 
@@ -1810,4 +1833,4 @@ Essa é a essência do projeto.
 
 # Fim do Documento
 
-**PROJECT.md — Versão 1.0**
+**PROJECT.md — Versão 1.1**
