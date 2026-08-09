@@ -66,6 +66,11 @@ complete à Engine.
 
 O painel nunca cria conhecimento nem decide progressão.
 
+Depois da leitura, cada conteúdo disponibiliza um acesso explícito ao seu
+teste de conhecimento. O teste é apresentado no mesmo painel e permite
+responder, submeter, consultar a nota, rever as respostas corretas e repetir
+livremente. Voltar à leitura não fecha o contexto nem altera o foco na rede.
+
 ## Formas de exploração
 
 ### Percurso guiado

@@ -93,3 +93,9 @@ v0.14
 
 - Banco de perguntas associa três questões a cada conteúdo do Graph.
 - Cobertura automática impede que um Node de conteúdo fique sem quiz.
+
+v0.15
+
+- Painel de conteúdo passa a disponibilizar testes de conhecimento por Node.
+- Participantes podem submeter respostas, rever correções e repetir cada quiz
+  durante a sessão atual.

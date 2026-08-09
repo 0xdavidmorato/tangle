@@ -1,11 +1,17 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import type { NodeAssessmentProgress, NodeQuiz, QuizAnswer, QuizResult } from "../assessment";
 import type { PresentationNode } from "../presentation";
+import { QuizPanel } from "./QuizPanel";
 
 interface ContentPanelProps {
   readonly node: PresentationNode;
   readonly markdown: string;
+  readonly quiz: NodeQuiz | null;
+  readonly assessmentProgress: NodeAssessmentProgress | null;
+  readonly onQuizSubmit: (answers: readonly QuizAnswer[]) => QuizResult;
   readonly onClose: () => void;
   readonly onComplete: () => void;
 }
@@ -13,9 +19,16 @@ interface ContentPanelProps {
 export function ContentPanel({
   node,
   markdown,
+  quiz,
+  assessmentProgress,
+  onQuizSubmit,
   onClose,
   onComplete,
 }: ContentPanelProps) {
+  const [showQuiz, setShowQuiz] = useState(false);
+
+  useEffect(() => setShowQuiz(false), [node.id]);
+
   return (
     <aside className="content-panel" aria-label={`Conteúdo: ${node.name}`}>
       <div className="panel-topline">
@@ -25,15 +38,15 @@ export function ContentPanel({
           <span className="sr-only">Fechar conteúdo</span>
         </button>
       </div>
-      <h2>{node.name}</h2>
-      <p className="panel-description">{node.description}</p>
-      <div className="markdown-content">
-        <ReactMarkdown>{markdown}</ReactMarkdown>
-      </div>
-      <button className="complete-button" type="button" onClick={onComplete}>
-        Próximo
-        <span aria-hidden="true">→</span>
-      </button>
+      {showQuiz && quiz && assessmentProgress ? (
+        <QuizPanel key={node.id} quiz={quiz} progress={assessmentProgress} onBack={() => setShowQuiz(false)} onSubmit={onQuizSubmit} />
+      ) : <>
+        <h2>{node.name}</h2>
+        <p className="panel-description">{node.description}</p>
+        <div className="markdown-content"><ReactMarkdown>{markdown}</ReactMarkdown></div>
+        {quiz ? <button className="quiz-start-button" type="button" onClick={() => setShowQuiz(true)}>Fazer teste <span aria-hidden="true">→</span></button> : null}
+        <button className="complete-button" type="button" onClick={onComplete}>Próximo <span aria-hidden="true">→</span></button>
+      </>}
     </aside>
   );
 }
