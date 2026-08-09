@@ -1024,3 +1024,31 @@ mesmo dispositivo e browser. Limpar os dados do browser reinicia o progresso;
 sincronização entre dispositivos continua fora do âmbito.
 
 ---------------------------------------------------------------------
+
+# Data: 2026-08-09
+
+## Contexto
+
+Com os quizzes e o progresso persistente disponíveis, faltava converter a
+conclusão pedagógica num resultado claro para o participante.
+
+## Decisão
+
+O certificado é desbloqueado apenas quando todos os Nodes com quiz estão
+aprovados. A interface apresenta essa progressão no cabeçalho e abre um painel
+para recolher o nome do participante. O PDF é gerado localmente no browser com
+`jspdf` e contém nome, data, número de quizzes e média das melhores notas.
+
+## Justificação
+
+Este fluxo cumpre o objetivo pedagógico sem introduzir autenticação, backend ou
+uma credencial verificável. A regra de elegibilidade permanece no domínio de
+avaliação, enquanto a UI apenas recolhe o nome e inicia o download.
+
+## Consequência
+
+O certificado é pessoal para fins pedagógicos, mas não pode ser validado por
+terceiros. O participante pode voltar a descarregá-lo no mesmo browser desde
+que o progresso local seja mantido.
+
+---------------------------------------------------------------------

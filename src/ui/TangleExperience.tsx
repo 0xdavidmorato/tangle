@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type PointerEvent } from "react";
-import { AssessmentSession, getQuizForNode, type QuizAnswer } from "../assessment";
+import { AssessmentSession, getQuizForNode, tangleQuizzes, type QuizAnswer } from "../assessment";
+import { createCertificateDetails } from "../certificate";
 import type { EngineEvent } from "../engine";
 import {
   loadAssessmentSession,
@@ -14,6 +15,7 @@ import {
   type PresentationState,
 } from "../presentation";
 import { ContentPanel } from "./ContentPanel";
+import { CertificatePanel } from "./CertificatePanel";
 import { KnowledgeNetwork } from "./KnowledgeNetwork";
 import { NavigationLegend } from "./NavigationLegend";
 import { OrganicNavigation } from "./OrganicNavigation";
@@ -44,6 +46,7 @@ export function TangleExperience({
   const [networkLevel, setNetworkLevel] = useState<0 | 1 | 2>(0);
   const [activeClusterId, setActiveClusterId] = useState<string | null>(null);
   const [organicStage, setOrganicStage] = useState<OrganicStage>("overview");
+  const [showCertificate, setShowCertificate] = useState(false);
   const [, setAssessmentRevision] = useState(0);
 
   useEffect(() => {
@@ -169,6 +172,9 @@ export function TangleExperience({
   const focusedAssessmentProgress = focusedQuiz
     ? assessmentSessionRef.current.getProgress(focusedQuiz.nodeId)
     : null;
+  const requiredQuizNodeIds = tangleQuizzes.map((quiz) => quiz.nodeId);
+  const approvedQuizCount = requiredQuizNodeIds.filter((nodeId) => assessmentSessionRef.current!.getProgress(nodeId).isPassed).length;
+  const certificateEligible = assessmentSessionRef.current.isCertificateEligible(requiredQuizNodeIds);
 
   return (
     <main
@@ -204,6 +210,7 @@ export function TangleExperience({
             <span className="status-separator">/</span>
             <span>{state.nodes.length} conceitos</span>
           </div>
+          <button className="certificate-control" type="button" disabled={!certificateEligible} onClick={() => setShowCertificate(true)}>{certificateEligible ? "Emitir certificado" : `Certificado ${approvedQuizCount}/${requiredQuizNodeIds.length}`}</button>
         </div>
       </header>
 
@@ -293,6 +300,7 @@ export function TangleExperience({
   }}
 />
       ) : null}
+      {showCertificate ? <CertificatePanel onClose={() => setShowCertificate(false)} detailsFor={(participantName) => createCertificateDetails(assessmentSessionRef.current!, requiredQuizNodeIds, participantName)} /> : null}
     </main>
   );
 }

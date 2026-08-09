@@ -104,3 +104,8 @@ v0.16
 
 - Leituras concluídas e resultados de avaliação passam a persistir localmente.
 - Dados locais inválidos são ignorados sem comprometer a experiência.
+
+v0.17
+
+- Certificado pedagógico é desbloqueado após aprovação de todos os quizzes.
+- Participantes podem gerar e descarregar localmente o certificado em PDF.

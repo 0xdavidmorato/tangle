@@ -10,6 +10,7 @@ const {
   validateQuiz,
 } = require("../.test-dist/assessment/index.js");
 const { tangleGraph } = require("../.test-dist/graph/tangleGraph.js");
+const { createCertificateDetails } = require("../.test-dist/certificate/index.js");
 const {
   ASSESSMENT_PROGRESS_STORAGE_KEY,
   loadAssessmentSession,
@@ -156,4 +157,25 @@ test("ignores invalid locally stored assessment data", () => {
 
   assert.equal(session.getProgress(quiz.nodeId).isRead, false);
   assert.equal(session.getProgress(quiz.nodeId).attempts.length, 0);
+});
+
+test("creates a certificate only for a completed assessment", () => {
+  const session = new AssessmentSession();
+  session.submit(quiz, [
+    { questionId: "trust", optionId: "a" },
+    { questionId: "transparency", optionId: "b" },
+    { questionId: "problems", optionId: "c" },
+  ]);
+
+  const details = createCertificateDetails(
+    session,
+    [quiz.nodeId],
+    "  Ana Silva  ",
+    new Date("2026-08-09T00:00:00Z"),
+  );
+  assert.equal(details.participantName, "Ana Silva");
+  assert.equal(details.completedQuizCount, 1);
+  assert.equal(details.overallScore, 10);
+  assert.throws(() => createCertificateDetails(session, [quiz.nodeId], ""));
+  assert.throws(() => createCertificateDetails(session, [quiz.nodeId, "missing"], "Ana Silva"));
 });
