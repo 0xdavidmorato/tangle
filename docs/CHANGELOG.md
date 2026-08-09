@@ -114,3 +114,9 @@ v0.18
 
 - Next.js e PostCSS são atualizados para versões sem vulnerabilidades conhecidas
   nas dependências de produção.
+
+v0.19
+
+- PROJECT.md passa a documentar o estado atual da plataforma, incluindo os
+  24 conteúdos, avaliação, persistência local, certificado e roadmap de
+  refinamento.
