@@ -64,6 +64,10 @@ O painel apresenta o Markdown pertencente ao Node. O utilizador pode percorrer
 o texto sem abandonar o universo visual. Marcar o conceito como explorado envia
 complete à Engine.
 
+O cabeçalho do painel identifica o conteúdo pelo seu título contextual, como
+`Definição de Boas Pessoas`. O título curto de origem no Markdown não é
+repetido visualmente; os seus subtítulos continuam a estruturar a leitura.
+
 O painel nunca cria conhecimento nem decide progressão.
 
 Depois da leitura, cada conteúdo disponibiliza um acesso explícito ao seu

@@ -254,7 +254,6 @@ button { color: inherit; font: inherit; }
 .icon-button { display: grid; width: 32px; height: 32px; border: 1px solid rgba(104, 198, 217, 0.22); border-radius: 50%; color: #a8c4cd; background: rgba(0, 0, 0, 0.15); cursor: pointer; font-size: 21px; place-items: center; }
 .icon-button:hover, .icon-button:focus-visible { border-color: rgba(89, 231, 242, 0.6); color: white; outline: none; }
 .content-panel h2 { margin: 21px 0 8px; font-size: 33px; font-weight: 460; letter-spacing: -0.04em; }
-.panel-description { margin: 0 0 23px; color: #86a5b1; font-size: 13px; }
 .markdown-content { color: #c5d8de; font-size: 13px; line-height: 1.68; }
 .markdown-content h1 { margin: 26px 0 12px; color: #f3fdff; font-size: 21px; font-weight: 540; }
 .markdown-content h2 { margin: 24px 0 8px; color: #dff9fc; font-size: 16px; font-weight: 520; letter-spacing: -0.015em; }

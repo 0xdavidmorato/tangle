@@ -31,6 +31,7 @@ test("presentation projects focus and relations without hiding graph context", (
   );
 
   assert.equal(focusedNode.emphasis, "primary");
+  assert.equal(focusedNode.clusterName, "Boa Empresa");
   assert.equal(relatedNode.emphasis, "related");
   assert.equal(contextNode.emphasis, "context");
   assert.equal(focusedConnection.emphasis, "primary");
