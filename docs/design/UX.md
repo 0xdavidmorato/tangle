@@ -73,6 +73,10 @@ livremente. Voltar à leitura não fecha o contexto nem altera o foco na rede.
 As leituras concluídas e os melhores resultados são mantidos localmente no
 dispositivo e reaparecem quando o utilizador regressa à experiência.
 
+O cabeçalho apresenta a progressão dos quizzes até ao certificado. Quando todos
+os quizzes estão aprovados, o participante pode introduzir o seu nome e
+descarregar o certificado pedagógico em PDF, sem sair da experiência.
+
 ## Formas de exploração
 
 ### Percurso guiado
