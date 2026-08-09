@@ -10,6 +10,11 @@ const {
   validateQuiz,
 } = require("../.test-dist/assessment/index.js");
 const { tangleGraph } = require("../.test-dist/graph/tangleGraph.js");
+const {
+  ASSESSMENT_PROGRESS_STORAGE_KEY,
+  loadAssessmentSession,
+  saveAssessmentSession,
+} = require("../.test-dist/infrastructure/assessment/index.js");
 
 const quiz = {
   nodeId: "boa-empresa.parcerias",
@@ -121,4 +126,34 @@ test("provides exactly three valid questions for every content Node", () => {
     validateQuiz(quizDefinition);
     return quizDefinition.questions.length === 3;
   }));
+});
+
+test("persists read content and assessment attempts locally", () => {
+  const values = new Map();
+  const storage = {
+    getItem(key) { return values.get(key) ?? null; },
+    setItem(key, value) { values.set(key, value); },
+  };
+  const session = new AssessmentSession();
+  session.markContentRead(quiz.nodeId);
+  session.submit(quiz, [
+    { questionId: "trust", optionId: "a" },
+    { questionId: "transparency", optionId: "b" },
+    { questionId: "problems", optionId: "c" },
+  ]);
+
+  saveAssessmentSession(session, storage);
+  const restored = loadAssessmentSession(storage);
+
+  assert.equal(restored.getProgress(quiz.nodeId).isRead, true);
+  assert.equal(restored.getProgress(quiz.nodeId).isPassed, true);
+  assert.ok(values.has(ASSESSMENT_PROGRESS_STORAGE_KEY));
+});
+
+test("ignores invalid locally stored assessment data", () => {
+  const storage = { getItem() { return "{not-json"; }, setItem() {} };
+  const session = loadAssessmentSession(storage);
+
+  assert.equal(session.getProgress(quiz.nodeId).isRead, false);
+  assert.equal(session.getProgress(quiz.nodeId).attempts.length, 0);
 });

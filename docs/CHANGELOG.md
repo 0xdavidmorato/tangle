@@ -99,3 +99,8 @@ v0.15
 - Painel de conteúdo passa a disponibilizar testes de conhecimento por Node.
 - Participantes podem submeter respostas, rever correções e repetir cada quiz
   durante a sessão atual.
+
+v0.16
+
+- Leituras concluídas e resultados de avaliação passam a persistir localmente.
+- Dados locais inválidos são ignorados sem comprometer a experiência.

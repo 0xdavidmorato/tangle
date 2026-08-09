@@ -3,15 +3,23 @@ import { scoreQuiz } from "./Quiz";
 
 export interface NodeAssessmentProgress {
   readonly nodeId: string;
+  readonly isRead: boolean;
   readonly attempts: readonly QuizResult[];
   readonly latestResult: QuizResult | null;
   readonly bestResult: QuizResult | null;
   readonly isPassed: boolean;
 }
 
+export interface AssessmentSessionSnapshot {
+  readonly version: 1;
+  readonly readNodeIds: readonly string[];
+  readonly attemptsByNodeId: Readonly<Record<string, readonly QuizResult[]>>;
+}
+
 function emptyProgress(nodeId: string): NodeAssessmentProgress {
   return {
     nodeId,
+    isRead: false,
     attempts: [],
     latestResult: null,
     bestResult: null,
@@ -21,6 +29,22 @@ function emptyProgress(nodeId: string): NodeAssessmentProgress {
 
 export class AssessmentSession {
   private readonly attemptsByNodeId = new Map<string, QuizResult[]>();
+  private readonly readNodeIds = new Set<string>();
+
+  static fromSnapshot(snapshot: AssessmentSessionSnapshot) {
+    if (snapshot.version !== 1) throw new Error("Unsupported assessment snapshot.");
+
+    const session = new AssessmentSession();
+    snapshot.readNodeIds.forEach((nodeId) => session.readNodeIds.add(nodeId));
+    Object.entries(snapshot.attemptsByNodeId).forEach(([nodeId, attempts]) => {
+      session.attemptsByNodeId.set(nodeId, [...attempts]);
+    });
+    return session;
+  }
+
+  markContentRead(nodeId: string) {
+    this.readNodeIds.add(nodeId);
+  }
 
   submit(quiz: NodeQuiz, answers: readonly QuizAnswer[]): QuizResult {
     const result = scoreQuiz(quiz, answers);
@@ -39,6 +63,7 @@ export class AssessmentSession {
 
     return {
       nodeId,
+      isRead: this.readNodeIds.has(nodeId),
       attempts: [...attempts],
       latestResult: attempts.at(-1) ?? null,
       bestResult,
@@ -64,5 +89,18 @@ export class AssessmentSession {
       this.getProgress(nodeId).bestResult!.score,
     );
     return bestScores.reduce((total, score) => total + score, 0) / bestScores.length;
+  }
+
+  toSnapshot(): AssessmentSessionSnapshot {
+    return {
+      version: 1,
+      readNodeIds: [...this.readNodeIds],
+      attemptsByNodeId: Object.fromEntries(
+        [...this.attemptsByNodeId.entries()].map(([nodeId, attempts]) => [
+          nodeId,
+          [...attempts],
+        ]),
+      ),
+    };
   }
 }

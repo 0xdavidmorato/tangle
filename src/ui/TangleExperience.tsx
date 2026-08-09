@@ -1,8 +1,12 @@
 "use client";
 
-import { useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { AssessmentSession, getQuizForNode, type QuizAnswer } from "../assessment";
 import type { EngineEvent } from "../engine";
+import {
+  loadAssessmentSession,
+  saveAssessmentSession,
+} from "../infrastructure/assessment";
 import { TangleEngine } from "../engine";
 import type { Graph } from "../graph";
 import {
@@ -41,6 +45,11 @@ export function TangleExperience({
   const [activeClusterId, setActiveClusterId] = useState<string | null>(null);
   const [organicStage, setOrganicStage] = useState<OrganicStage>("overview");
   const [, setAssessmentRevision] = useState(0);
+
+  useEffect(() => {
+    assessmentSessionRef.current = loadAssessmentSession();
+    setAssessmentRevision((revision) => revision + 1);
+  }, []);
 
   function dispatch(event: EngineEvent) {
     engineRef.current!.dispatch(event);
@@ -144,6 +153,13 @@ export function TangleExperience({
 
     setNetworkLevel(2);
     setOrganicStage("concepts");
+  }
+
+  function markFocusedContentRead() {
+    if (!focusedNode) return;
+    assessmentSessionRef.current!.markContentRead(focusedNode.id);
+    saveAssessmentSession(assessmentSessionRef.current!);
+    setAssessmentRevision((revision) => revision + 1);
   }
 
   const activeClusterName = activeClusterId
@@ -254,11 +270,13 @@ export function TangleExperience({
   assessmentProgress={focusedAssessmentProgress}
   onQuizSubmit={(answers: readonly QuizAnswer[]) => {
     const result = assessmentSessionRef.current!.submit(focusedQuiz!, answers);
+    saveAssessmentSession(assessmentSessionRef.current!);
     setAssessmentRevision((revision) => revision + 1);
     return result;
   }}
   onClose={closeFocusedNode}
   onComplete={() => {
+    markFocusedContentRead();
     dispatch({ type: "complete", nodeId: focusedNode.id });
 
     const currentIndex = state.nodes.findIndex(

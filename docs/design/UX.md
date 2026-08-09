@@ -70,6 +70,8 @@ Depois da leitura, cada conteúdo disponibiliza um acesso explícito ao seu
 teste de conhecimento. O teste é apresentado no mesmo painel e permite
 responder, submeter, consultar a nota, rever as respostas corretas e repetir
 livremente. Voltar à leitura não fecha o contexto nem altera o foco na rede.
+As leituras concluídas e os melhores resultados são mantidos localmente no
+dispositivo e reaparecem quando o utilizador regressa à experiência.
 
 ## Formas de exploração
 

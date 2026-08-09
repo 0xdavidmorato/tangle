@@ -74,9 +74,10 @@ A aprovação é preservada quando o participante repete um quiz. A tentativa
 mais recente pode ser apresentada como feedback, mas o desbloqueio do
 certificado é determinado pela melhor nota registada em cada Node.
 
-Os resultados existem apenas na sessão do navegador. Numa fase posterior,
-podem ser persistidos localmente no dispositivo para que o progresso sobreviva
-ao encerramento da página, sem introduzir contas ou serviços externos.
+Os resultados são persistidos localmente no dispositivo para que o progresso
+sobreviva ao encerramento da página, sem introduzir contas ou serviços
+externos. Dados locais inválidos ou corrompidos são ignorados e iniciam uma
+nova sessão de avaliação.
 
 ---
 
