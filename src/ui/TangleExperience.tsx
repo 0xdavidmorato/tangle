@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type PointerEvent } from "react";
+import { AssessmentSession, getQuizForNode, type QuizAnswer } from "../assessment";
 import type { EngineEvent } from "../engine";
 import { TangleEngine } from "../engine";
 import type { Graph } from "../graph";
@@ -25,10 +26,12 @@ export function TangleExperience({
   contentByNodeId,
 }: TangleExperienceProps) {
   const engineRef = useRef<TangleEngine | null>(null);
+  const assessmentSessionRef = useRef<AssessmentSession | null>(null);
   const experienceRef = useRef<HTMLElement | null>(null);
   if (!engineRef.current) {
     engineRef.current = new TangleEngine(graph);
   }
+  if (!assessmentSessionRef.current) assessmentSessionRef.current = new AssessmentSession();
 
   const [state, setState] = useState<PresentationState>(() =>
     createPresentationState(engineRef.current!),
@@ -37,6 +40,7 @@ export function TangleExperience({
   const [networkLevel, setNetworkLevel] = useState<0 | 1 | 2>(0);
   const [activeClusterId, setActiveClusterId] = useState<string | null>(null);
   const [organicStage, setOrganicStage] = useState<OrganicStage>("overview");
+  const [, setAssessmentRevision] = useState(0);
 
   function dispatch(event: EngineEvent) {
     engineRef.current!.dispatch(event);
@@ -145,6 +149,10 @@ export function TangleExperience({
   const activeClusterName = activeClusterId
     ? state.clusters.find((cluster) => cluster.id === activeClusterId)?.name ?? null
     : null;
+  const focusedQuiz = focusedNode ? getQuizForNode(focusedNode.id) : null;
+  const focusedAssessmentProgress = focusedQuiz
+    ? assessmentSessionRef.current.getProgress(focusedQuiz.nodeId)
+    : null;
 
   return (
     <main
@@ -242,6 +250,13 @@ export function TangleExperience({
         <ContentPanel
   node={focusedNode}
   markdown={contentByNodeId[focusedNode.id] ?? ""}
+  quiz={focusedQuiz}
+  assessmentProgress={focusedAssessmentProgress}
+  onQuizSubmit={(answers: readonly QuizAnswer[]) => {
+    const result = assessmentSessionRef.current!.submit(focusedQuiz!, answers);
+    setAssessmentRevision((revision) => revision + 1);
+    return result;
+  }}
   onClose={closeFocusedNode}
   onComplete={() => {
     dispatch({ type: "complete", nodeId: focusedNode.id });

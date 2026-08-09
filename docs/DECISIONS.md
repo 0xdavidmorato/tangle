@@ -968,3 +968,31 @@ Os 24 conteúdos atuais possuem 72 perguntas. Qualquer Node novo exigirá um qui
 correspondente antes de poder integrar a avaliação e o certificado.
 
 ---------------------------------------------------------------------
+
+# Data: 2026-08-09
+
+## Contexto
+
+O banco de perguntas e as regras de avaliação existem, mas ainda não estavam
+acessíveis durante a leitura dos conteúdos.
+
+## Decisão
+
+O `ContentPanel` oferece uma ação explícita para iniciar o teste do Node em
+foco. O `QuizPanel` apresenta as perguntas, só permite submeter quando todas
+forem respondidas e mostra nota, correção, explicações e repetição no mesmo
+painel. A sessão de avaliação permanece no componente Experience.
+
+## Justificação
+
+Manter leitura e avaliação no mesmo contexto preserva a experiência contínua
+do TANGLE. A UI usa a `AssessmentSession` para calcular resultados, sem
+duplicar regras de nota ou respostas corretas.
+
+## Consequência
+
+O participante pode realizar e repetir o teste de qualquer conteúdo durante a
+sessão atual. Persistência entre sessões, progresso global e certificado
+continuam deliberadamente fora desta etapa.
+
+---------------------------------------------------------------------
