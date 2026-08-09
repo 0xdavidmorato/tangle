@@ -109,3 +109,8 @@ v0.17
 
 - Certificado pedagógico é desbloqueado após aprovação de todos os quizzes.
 - Participantes podem gerar e descarregar localmente o certificado em PDF.
+
+v0.18
+
+- Next.js e PostCSS são atualizados para versões sem vulnerabilidades conhecidas
+  nas dependências de produção.
