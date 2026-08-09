@@ -13,6 +13,7 @@ export interface PresentationNode {
   readonly name: string;
   readonly description: string;
   readonly clusterId: string;
+  readonly clusterName: string;
   readonly functionalState: FunctionalState;
   readonly emphasis: PresentationEmphasis;
   readonly isJourneyCurrent: boolean;

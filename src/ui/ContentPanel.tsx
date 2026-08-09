@@ -16,6 +16,12 @@ interface ContentPanelProps {
   readonly onComplete: () => void;
 }
 
+function focusedTitle(node: PresentationNode) {
+  return node.clusterName === "Interligações"
+    ? `${node.clusterName}: ${node.name}`
+    : `${node.name} de ${node.clusterName}`;
+}
+
 export function ContentPanel({
   node,
   markdown,
@@ -41,9 +47,10 @@ export function ContentPanel({
       {showQuiz && quiz && assessmentProgress ? (
         <QuizPanel key={node.id} quiz={quiz} progress={assessmentProgress} onBack={() => setShowQuiz(false)} onSubmit={onQuizSubmit} />
       ) : <>
-        <h2>{node.name}</h2>
-        <p className="panel-description">{node.description}</p>
-        <div className="markdown-content"><ReactMarkdown>{markdown}</ReactMarkdown></div>
+        <h2>{focusedTitle(node)}</h2>
+        <div className="markdown-content">
+          <ReactMarkdown components={{ h1: () => null }}>{markdown}</ReactMarkdown>
+        </div>
         {assessmentProgress?.isPassed ? <p className="assessment-status is-passed">✓ Teste aprovado · melhor nota: {assessmentProgress.bestResult!.score.toFixed(1)}/10</p> : assessmentProgress?.isRead ? <p className="assessment-status">✓ Conteúdo concluído · teste disponível</p> : null}
         {quiz ? <button className="quiz-start-button" type="button" onClick={() => setShowQuiz(true)}>Fazer teste <span aria-hidden="true">→</span></button> : null}
         <button className="complete-button" type="button" onClick={onComplete}>Próximo <span aria-hidden="true">→</span></button>

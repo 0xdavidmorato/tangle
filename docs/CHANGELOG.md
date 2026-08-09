@@ -120,3 +120,8 @@ v0.19
 - PROJECT.md passa a documentar o estado atual da plataforma, incluindo os
   24 conteúdos, avaliação, persistência local, certificado e roadmap de
   refinamento.
+
+v0.20
+
+- O painel de conteúdo passa a identificar o conceito com título contextual,
+  evitando a repetição do título curto do Node e do Markdown.

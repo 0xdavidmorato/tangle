@@ -11,12 +11,16 @@ export function createPresentationState(engine: Engine): PresentationState {
   const focusedConnectionIds = new Set(
     engine.focusedConnections.map((connection) => connection.id),
   );
+  const clusterNames = new Map(
+    engine.graph.clusters.map((cluster) => [cluster.id, cluster.name]),
+  );
 
   const nodes: PresentationNode[] = engine.graph.nodes.map((node) => ({
     id: node.id,
     name: node.name,
     description: node.description,
     clusterId: node.clusterId,
+    clusterName: clusterNames.get(node.clusterId) ?? node.clusterId,
     functionalState:
       engine.getFunctionalState(node.id) ?? node.functionalState,
     emphasis:
