@@ -68,6 +68,10 @@ O cabeçalho do painel identifica o conteúdo pelo seu título contextual, como
 `Definição de Boas Pessoas`. O título curto de origem no Markdown não é
 repetido visualmente; os seus subtítulos continuam a estruturar a leitura.
 
+Tabelas Markdown são apresentadas com cabeçalhos e colunas legíveis. Quando o
+painel não tem largura suficiente, a tabela mantém a sua estrutura e pode ser
+percorrida horizontalmente sem quebrar o conteúdo.
+
 O painel nunca cria conhecimento nem decide progressão.
 
 Depois da leitura, cada conteúdo disponibiliza um acesso explícito ao seu

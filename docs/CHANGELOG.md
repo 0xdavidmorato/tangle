@@ -148,3 +148,8 @@ v0.24
 
 - O controlo de reinício de progresso passa a receber interação no cabeçalho.
 - Pausar movimento deixa de interromper a abertura e a leitura dos conteúdos.
+
+v0.25
+
+- Tabelas Markdown passam a ter suporte completo e apresentação responsiva no
+  painel de conteúdo.
