@@ -131,3 +131,10 @@ v0.21
 - Painéis de conteúdo e certificado passam a gerir foco, Escape e navegação
   por Tab como diálogos acessíveis.
 - A experiência respeita a preferência do sistema para reduzir movimento.
+
+v0.22
+
+- A rede passa a indicar conteúdos lidos e quizzes aprovados, com progresso
+  agregado por pilar e em Interligações.
+- Leituras sem tentativa de quiz passam a ser preservadas corretamente no
+  estado de avaliação.

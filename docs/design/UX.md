@@ -101,6 +101,18 @@ conclusão é definida pelo utilizador.
 - journey current: próximo Node do percurso linear;
 - completed: Node já explorado na sessão.
 
+## Progresso pedagógico
+
+- Um ponto discreto indica que o conteúdo foi lido, mas o quiz ainda não foi
+  aprovado.
+- Um selo verde com visto indica quiz aprovado.
+- Cada pilar apresenta a contagem de quizzes aprovados sobre o total dos seus
+  conteúdos, tanto no hub da rede como na navegação lateral.
+- Interligações apresenta a sua própria contagem no cartão dedicado.
+
+Estes indicadores representam o progresso persistido localmente e não alteram
+as relações, a Journey ou os estados semânticos do Graph.
+
 Esses papéis são semânticos. Cor, escala, brilho ou movimento podem evoluir sem
 alterar Engine ou Graph.
 

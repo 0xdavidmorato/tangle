@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState, type PointerEvent } from "react";
-import { AssessmentSession, getQuizForNode, tangleQuizzes, type QuizAnswer } from "../assessment";
+import {
+  AssessmentSession,
+  getQuizForNode,
+  tangleQuizzes,
+  type AssessmentProgressSummary,
+  type NodeAssessmentProgress,
+  type QuizAnswer,
+} from "../assessment";
 import { createCertificateDetails } from "../certificate";
 import type { EngineEvent } from "../engine";
 import {
@@ -199,6 +206,22 @@ export function TangleExperience({
     ? assessmentSessionRef.current.getProgress(focusedQuiz.nodeId)
     : null;
   const requiredQuizNodeIds = tangleQuizzes.map((quiz) => quiz.nodeId);
+  const assessmentByNodeId: Readonly<Record<string, NodeAssessmentProgress>> =
+    Object.fromEntries(
+      requiredQuizNodeIds.map((nodeId) => [
+        nodeId,
+        assessmentSessionRef.current!.getProgress(nodeId),
+      ]),
+    );
+  const assessmentByClusterId: Readonly<Record<string, AssessmentProgressSummary>> =
+    Object.fromEntries(
+      state.clusters.map((cluster) => [
+        cluster.id,
+        assessmentSessionRef.current!.summarize(
+          cluster.nodeIds.filter((nodeId) => requiredQuizNodeIds.includes(nodeId)),
+        ),
+      ]),
+    );
   const approvedQuizCount = requiredQuizNodeIds.filter((nodeId) => assessmentSessionRef.current!.getProgress(nodeId).isPassed).length;
   const certificateEligible = assessmentSessionRef.current.isCertificateEligible(requiredQuizNodeIds);
 
@@ -244,6 +267,7 @@ export function TangleExperience({
         clusters={state.clusters}
         activeClusterId={activeClusterId}
         level={networkLevel}
+        assessmentByClusterId={assessmentByClusterId}
         onCoreSelect={revealCore}
         onClusterSelect={revealCluster}
       />
@@ -254,6 +278,8 @@ export function TangleExperience({
         connections={state.connections}
         level={networkLevel}
         activeClusterId={activeClusterId}
+        assessmentByNodeId={assessmentByNodeId}
+        assessmentByClusterId={assessmentByClusterId}
         onCoreFocus={revealClusters}
         onClusterFocus={revealCluster}
         onFocus={focusNode}
@@ -289,6 +315,7 @@ export function TangleExperience({
       <OrganicNavigation
         activeStage={organicStage}
         activeClusterName={activeClusterName}
+        interconnectionsProgress={assessmentByClusterId.interligacoes}
         onOverview={revealClusters}
         onConcepts={revealConcepts}
         onRelations={exploreInterconnections}

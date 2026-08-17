@@ -10,6 +10,12 @@ export interface NodeAssessmentProgress {
   readonly isPassed: boolean;
 }
 
+export interface AssessmentProgressSummary {
+  readonly totalCount: number;
+  readonly readCount: number;
+  readonly passedCount: number;
+}
+
 export interface AssessmentSessionSnapshot {
   readonly version: 1;
   readonly readNodeIds: readonly string[];
@@ -55,7 +61,12 @@ export class AssessmentSession {
 
   getProgress(nodeId: string): NodeAssessmentProgress {
     const attempts = this.attemptsByNodeId.get(nodeId) ?? [];
-    if (attempts.length === 0) return emptyProgress(nodeId);
+    if (attempts.length === 0) {
+      return {
+        ...emptyProgress(nodeId),
+        isRead: this.readNodeIds.has(nodeId),
+      };
+    }
 
     const bestResult = attempts.reduce((best, attempt) =>
       attempt.score > best.score ? attempt : best,
@@ -68,6 +79,15 @@ export class AssessmentSession {
       latestResult: attempts.at(-1) ?? null,
       bestResult,
       isPassed: bestResult.passed,
+    };
+  }
+
+  summarize(nodeIds: readonly string[]): AssessmentProgressSummary {
+    const progress = nodeIds.map((nodeId) => this.getProgress(nodeId));
+    return {
+      totalCount: progress.length,
+      readCount: progress.filter((node) => node.isRead).length,
+      passedCount: progress.filter((node) => node.isPassed).length,
     };
   }
 

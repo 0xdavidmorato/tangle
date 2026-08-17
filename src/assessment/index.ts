@@ -14,5 +14,9 @@ export type {
   QuizResult,
 } from "./Quiz";
 export { AssessmentSession } from "./AssessmentSession";
-export type { AssessmentSessionSnapshot, NodeAssessmentProgress } from "./AssessmentSession";
+export type {
+  AssessmentProgressSummary,
+  AssessmentSessionSnapshot,
+  NodeAssessmentProgress,
+} from "./AssessmentSession";
 export { getQuizForNode, tangleQuizzes } from "./tangleQuizzes";

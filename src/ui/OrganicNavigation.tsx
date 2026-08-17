@@ -1,8 +1,11 @@
 "use client";
 
+import type { AssessmentProgressSummary } from "../assessment";
+
 interface OrganicNavigationProps {
   readonly activeStage: OrganicStage;
   readonly activeClusterName: string | null;
+  readonly interconnectionsProgress: AssessmentProgressSummary | undefined;
   readonly onOverview: () => void;
   readonly onConcepts: () => void;
   readonly onRelations: () => void;
@@ -41,6 +44,7 @@ function StageIcon({ name }: { readonly name: string }) {
 export function OrganicNavigation({
   activeStage,
   activeClusterName,
+  interconnectionsProgress,
   onOverview,
   onConcepts,
   onRelations,
@@ -88,12 +92,13 @@ export function OrganicNavigation({
     <button
       type="button"
       className="interconnections-card"
+      aria-label={`Explorar Interligações: ${interconnectionsProgress?.passedCount ?? 0} de ${interconnectionsProgress?.totalCount ?? 0} quizzes aprovados`}
       onClick={onRelations}
     >
       <span className="interconnections-card-icon" aria-hidden="true">↔</span>
       <span className="interconnections-card-copy">
         <strong>Interligações</strong>
-        <small>Veja como os seis pilares se influenciam.</small>
+        <small>{`${interconnectionsProgress?.passedCount ?? 0}/${interconnectionsProgress?.totalCount ?? 0} aprovados · veja como os seis pilares se influenciam.`}</small>
       </span>
       <span aria-hidden="true">→</span>
     </button>
