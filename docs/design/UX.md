@@ -149,6 +149,8 @@ ocupada pela rede.
 - Elementos interativos possuem nomes acessíveis.
 - O conteúdo permanece texto HTML semântico depois de transformado do Markdown.
 - Um controlo visível permite pausar e reativar todo o movimento da experiência.
+- Pausar movimento afeta apenas animações decorativas; nunca deve impedir
+  cliques, transições funcionais, abertura de conteúdo ou leitura.
 - Ao abrir conteúdo ou certificado, o foco entra no respetivo diálogo, permanece
   nele durante a navegação por Tab e regressa ao controlo de origem ao fechar.
 - Escape fecha os diálogos de conteúdo e certificado.

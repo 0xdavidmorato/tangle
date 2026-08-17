@@ -94,7 +94,7 @@ button { color: inherit; font: inherit; }
 }
 .motion-control:hover, .motion-control:focus-visible { color: #d7fbff; border-color: rgba(66, 231, 242, 0.52); outline: none; }
 .certificate-control { padding: 7px 10px; border: 1px solid rgba(98, 220, 155, .38); border-radius: 999px; color: #9be8bd; background: rgba(28, 119, 73, .16); cursor: pointer; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }.certificate-control:hover, .certificate-control:focus-visible { border-color: #62dc9b; background: rgba(53, 185, 104, .18); outline: none; }.certificate-control:disabled { border-color: rgba(109, 145, 153, .2); color: #66818a; background: transparent; cursor: not-allowed; }
-.progress-reset-control { padding: 7px 10px; border: 1px solid rgba(245, 200, 78, .3); border-radius: 999px; color: #d9be70; background: rgba(103, 77, 17, .13); cursor: pointer; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }.progress-reset-control:hover, .progress-reset-control:focus-visible { border-color: #f5c84e; color: #fff0b5; background: rgba(126, 91, 14, .23); outline: none; }
+.progress-reset-control { padding: 7px 10px; border: 1px solid rgba(245, 200, 78, .3); border-radius: 999px; color: #d9be70; background: rgba(103, 77, 17, .13); cursor: pointer; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; pointer-events: auto; }.progress-reset-control:hover, .progress-reset-control:focus-visible { border-color: #f5c84e; color: #fff0b5; background: rgba(126, 91, 14, .23); outline: none; }
 .motion-control-dot { width: 6px; height: 6px; border-radius: 50%; background: #506b77; }
 .motion-control[aria-pressed="true"] .motion-control-dot { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
 .experience-status { gap: 8px; color: #668592; font: 9px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -307,7 +307,7 @@ button { color: inherit; font: inherit; }
 @keyframes panel-enter { from { opacity: 0; transform: translateX(28px) scale(.98); } }
 @keyframes organic-node-pulse { 0%,100% { opacity: .42; transform: scale(.78); } 50% { opacity: 1; transform: scale(1.12); } }
 
-.experience.motion-off *, .experience.motion-off *::before, .experience.motion-off *::after { animation-play-state: paused !important; transition-duration: .01ms !important; }
+.experience.motion-off .status-pulse, .experience.motion-off .network-atmosphere, .experience.motion-off .ambient-particles circle, .experience.motion-off .cluster-halo, .experience.motion-off .core-filament.is-echo, .experience.motion-off .domain-link.is-primary, .experience.motion-off .energy-trail, .experience.motion-off .tangle-core, .experience.motion-off .core-orb, .experience.motion-off .core-pulse-ring, .experience.motion-off .core-word-tangle, .experience.motion-off .core-word-emaranhado, .experience.motion-off .core-word-teia, .experience.motion-off .node-aura, .experience.motion-off .journey-ring, .experience.motion-off .cluster-hub-aura, .experience.motion-off .organic-heading-mark i { animation-play-state: paused !important; }
 .experience.motion-off .energy-trail, .experience.motion-off .core-pulse-ring { display: none; }
 
 @media (max-width: 850px) {
