@@ -21,6 +21,7 @@ import { NavigationLegend } from "./NavigationLegend";
 import { OrganicNavigation } from "./OrganicNavigation";
 
 type OrganicStage = "overview" | "concepts" | "relations" | "deep-dive";
+type FocusReturnTarget = HTMLElement | SVGElement;
 
 interface TangleExperienceProps {
   readonly graph: Graph;
@@ -34,6 +35,8 @@ export function TangleExperience({
   const engineRef = useRef<TangleEngine | null>(null);
   const assessmentSessionRef = useRef<AssessmentSession | null>(null);
   const experienceRef = useRef<HTMLElement | null>(null);
+  const contentTriggerRef = useRef<FocusReturnTarget | null>(null);
+  const certificateTriggerRef = useRef<HTMLButtonElement | null>(null);
   if (!engineRef.current) {
     engineRef.current = new TangleEngine(graph);
   }
@@ -42,7 +45,7 @@ export function TangleExperience({
   const [state, setState] = useState<PresentationState>(() =>
     createPresentationState(engineRef.current!),
   );
-  const [motionEnabled, setMotionEnabled] = useState(true);
+  const [motionEnabled, setMotionEnabled] = useState(false);
   const [networkLevel, setNetworkLevel] = useState<0 | 1 | 2>(0);
   const [activeClusterId, setActiveClusterId] = useState<string | null>(null);
   const [organicStage, setOrganicStage] = useState<OrganicStage>("overview");
@@ -52,6 +55,14 @@ export function TangleExperience({
   useEffect(() => {
     assessmentSessionRef.current = loadAssessmentSession();
     setAssessmentRevision((revision) => revision + 1);
+  }, []);
+
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotion = () => setMotionEnabled(!preference.matches);
+    updateMotion();
+    preference.addEventListener("change", updateMotion);
+    return () => preference.removeEventListener("change", updateMotion);
   }, []);
 
   function dispatch(event: EngineEvent) {
@@ -97,7 +108,15 @@ export function TangleExperience({
     setOrganicStage("concepts");
   }
 
-  function focusNode(nodeId: string) {
+  function focusNode(nodeId: string, trigger?: FocusReturnTarget) {
+    if (trigger) {
+      contentTriggerRef.current = trigger;
+    } else if (!focusedNode) {
+      const activeElement = document.activeElement;
+      if (activeElement instanceof HTMLElement || activeElement instanceof SVGElement) {
+        contentTriggerRef.current = activeElement;
+      }
+    }
     const node = state.nodes.find((candidate) => candidate.id === nodeId);
     if (node) {
       if (node.clusterId === "interligacoes") {
@@ -151,11 +170,18 @@ export function TangleExperience({
       setActiveClusterId(null);
       setNetworkLevel(1);
       setOrganicStage("relations");
+      requestAnimationFrame(() => contentTriggerRef.current?.focus());
       return;
     }
 
     setNetworkLevel(2);
     setOrganicStage("concepts");
+    requestAnimationFrame(() => contentTriggerRef.current?.focus());
+  }
+
+  function closeCertificate() {
+    setShowCertificate(false);
+    requestAnimationFrame(() => certificateTriggerRef.current?.focus());
   }
 
   function markFocusedContentRead() {
@@ -210,7 +236,7 @@ export function TangleExperience({
             <span className="status-separator">/</span>
             <span>{state.nodes.length} conceitos</span>
           </div>
-          <button className="certificate-control" type="button" disabled={!certificateEligible} onClick={() => setShowCertificate(true)}>{certificateEligible ? "Emitir certificado" : `Certificado ${approvedQuizCount}/${requiredQuizNodeIds.length}`}</button>
+          <button ref={certificateTriggerRef} className="certificate-control" type="button" disabled={!certificateEligible} onClick={() => setShowCertificate(true)}>{certificateEligible ? "Emitir certificado" : `Certificado ${approvedQuizCount}/${requiredQuizNodeIds.length}`}</button>
         </div>
       </header>
 
@@ -300,7 +326,7 @@ export function TangleExperience({
   }}
 />
       ) : null}
-      {showCertificate ? <CertificatePanel onClose={() => setShowCertificate(false)} detailsFor={(participantName) => createCertificateDetails(assessmentSessionRef.current!, requiredQuizNodeIds, participantName)} /> : null}
+      {showCertificate ? <CertificatePanel onClose={closeCertificate} detailsFor={(participantName) => createCertificateDetails(assessmentSessionRef.current!, requiredQuizNodeIds, participantName)} /> : null}
     </main>
   );
 }

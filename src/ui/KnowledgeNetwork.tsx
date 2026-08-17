@@ -21,7 +21,7 @@ interface KnowledgeNetworkProps {
   readonly activeClusterId: string | null;
   readonly onCoreFocus: () => void;
   readonly onClusterFocus: (clusterId: string) => void;
-  readonly onFocus: (nodeId: string) => void;
+  readonly onFocus: (nodeId: string, trigger: SVGGElement) => void;
 }
 
 const palette = ["cyan", "gold", "orange", "violet", "green", "rose", "coral"];
@@ -419,11 +419,11 @@ export function KnowledgeNetwork({
                 tabIndex={node.functionalState === "locked" ? -1 : 0}
                 aria-label={`Explorar ${node.name}`}
                 aria-disabled={node.functionalState === "locked"}
-                onClick={() => onFocus(node.id)}
+                onClick={(event) => onFocus(node.id, event.currentTarget)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    onFocus(node.id);
+                    onFocus(node.id, event.currentTarget);
                   }
                 }}
               >

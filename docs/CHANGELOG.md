@@ -125,3 +125,9 @@ v0.20
 
 - O painel de conteúdo passa a identificar o conceito com título contextual,
   evitando a repetição do título curto do Node e do Markdown.
+
+v0.21
+
+- Painéis de conteúdo e certificado passam a gerir foco, Escape e navegação
+  por Tab como diálogos acessíveis.
+- A experiência respeita a preferência do sistema para reduzir movimento.
