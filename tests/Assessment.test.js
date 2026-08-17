@@ -13,6 +13,7 @@ const { tangleGraph } = require("../.test-dist/graph/tangleGraph.js");
 const { createCertificateDetails } = require("../.test-dist/certificate/index.js");
 const {
   ASSESSMENT_PROGRESS_STORAGE_KEY,
+  clearAssessmentSession,
   loadAssessmentSession,
   saveAssessmentSession,
 } = require("../.test-dist/infrastructure/assessment/index.js");
@@ -165,6 +166,23 @@ test("persists read content and assessment attempts locally", () => {
   assert.equal(restored.getProgress(quiz.nodeId).isRead, true);
   assert.equal(restored.getProgress(quiz.nodeId).isPassed, true);
   assert.ok(values.has(ASSESSMENT_PROGRESS_STORAGE_KEY));
+});
+
+test("clears only the locally persisted assessment session", () => {
+  const values = new Map();
+  const storage = {
+    getItem(key) { return values.get(key) ?? null; },
+    setItem(key, value) { values.set(key, value); },
+    removeItem(key) { values.delete(key); },
+  };
+  const session = new AssessmentSession();
+  session.markContentRead(quiz.nodeId);
+  saveAssessmentSession(session, storage);
+
+  clearAssessmentSession(storage);
+
+  assert.equal(values.has(ASSESSMENT_PROGRESS_STORAGE_KEY), false);
+  assert.equal(loadAssessmentSession(storage).getProgress(quiz.nodeId).isRead, false);
 });
 
 test("ignores invalid locally stored assessment data", () => {

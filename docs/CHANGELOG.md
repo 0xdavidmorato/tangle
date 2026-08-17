@@ -138,3 +138,8 @@ v0.22
   agregado por pilar e em Interligações.
 - Leituras sem tentativa de quiz passam a ser preservadas corretamente no
   estado de avaliação.
+
+v0.23
+
+- Participantes podem reiniciar, após confirmação, apenas o progresso local de
+  leituras e quizzes guardado no browser.

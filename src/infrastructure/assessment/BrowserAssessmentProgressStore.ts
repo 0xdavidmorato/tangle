@@ -6,7 +6,7 @@ import {
 
 export const ASSESSMENT_PROGRESS_STORAGE_KEY = "tangle.assessment-progress.v1";
 
-type StorageLike = Pick<Storage, "getItem" | "setItem">;
+type StorageLike = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
 function isQuizResult(value: unknown): value is QuizResult {
   if (!value || typeof value !== "object") return false;
@@ -54,4 +54,9 @@ export function saveAssessmentSession(
 ) {
   if (!storage) return;
   storage.setItem(ASSESSMENT_PROGRESS_STORAGE_KEY, JSON.stringify(session.toSnapshot()));
+}
+
+export function clearAssessmentSession(storage = browserStorage()) {
+  if (!storage) return;
+  storage.removeItem(ASSESSMENT_PROGRESS_STORAGE_KEY);
 }

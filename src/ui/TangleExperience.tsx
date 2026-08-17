@@ -12,6 +12,7 @@ import {
 import { createCertificateDetails } from "../certificate";
 import type { EngineEvent } from "../engine";
 import {
+  clearAssessmentSession,
   loadAssessmentSession,
   saveAssessmentSession,
 } from "../infrastructure/assessment";
@@ -191,6 +192,18 @@ export function TangleExperience({
     requestAnimationFrame(() => certificateTriggerRef.current?.focus());
   }
 
+  function resetAssessmentProgress() {
+    const confirmed = window.confirm(
+      "Quer reiniciar todo o progresso local? Leituras e resultados dos quizzes deste browser serão apagados.",
+    );
+    if (!confirmed) return;
+
+    clearAssessmentSession();
+    assessmentSessionRef.current = new AssessmentSession();
+    setShowCertificate(false);
+    setAssessmentRevision((revision) => revision + 1);
+  }
+
   function markFocusedContentRead() {
     if (!focusedNode) return;
     assessmentSessionRef.current!.markContentRead(focusedNode.id);
@@ -224,6 +237,9 @@ export function TangleExperience({
     );
   const approvedQuizCount = requiredQuizNodeIds.filter((nodeId) => assessmentSessionRef.current!.getProgress(nodeId).isPassed).length;
   const certificateEligible = assessmentSessionRef.current.isCertificateEligible(requiredQuizNodeIds);
+  const hasAssessmentProgress = Object.values(assessmentByNodeId).some(
+    (progress) => progress.isRead || progress.attempts.length > 0,
+  );
 
   return (
     <main
@@ -260,6 +276,7 @@ export function TangleExperience({
             <span>{state.nodes.length} conceitos</span>
           </div>
           <button ref={certificateTriggerRef} className="certificate-control" type="button" disabled={!certificateEligible} onClick={() => setShowCertificate(true)}>{certificateEligible ? "Emitir certificado" : `Certificado ${approvedQuizCount}/${requiredQuizNodeIds.length}`}</button>
+          {hasAssessmentProgress ? <button className="progress-reset-control" type="button" onClick={resetAssessmentProgress}>Reiniciar progresso</button> : null}
         </div>
       </header>
 

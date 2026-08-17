@@ -113,6 +113,11 @@ conclusão é definida pelo utilizador.
 Estes indicadores representam o progresso persistido localmente e não alteram
 as relações, a Journey ou os estados semânticos do Graph.
 
+Quando existe progresso guardado, o cabeçalho disponibiliza o controlo
+`Reiniciar progresso`. A confirmação explica que apenas as leituras e os
+resultados dos quizzes deste browser serão apagados. Após confirmação, os
+indicadores e contadores regressam imediatamente a zero.
+
 Esses papéis são semânticos. Cor, escala, brilho ou movimento podem evoluir sem
 alterar Engine ou Graph.
 
