@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { NodeAssessmentProgress, NodeQuiz, QuizAnswer, QuizResult } from "../assessment";
 import type { PresentationNode } from "../presentation";
 import { QuizPanel } from "./QuizPanel";
@@ -65,7 +66,19 @@ export function ContentPanel({
       ) : <>
         <h2 id={`content-title-${node.id}`}>{focusedTitle(node)}</h2>
         <div className="markdown-content">
-          <ReactMarkdown components={{ h1: () => null }}>{markdown}</ReactMarkdown>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              h1: () => null,
+              table: ({ children }) => (
+                <div className="markdown-table-wrap">
+                  <table>{children}</table>
+                </div>
+              ),
+            }}
+          >
+            {markdown}
+          </ReactMarkdown>
         </div>
         {assessmentProgress?.isPassed ? <p className="assessment-status is-passed">✓ Teste aprovado · melhor nota: {assessmentProgress.bestResult!.score.toFixed(1)}/10</p> : assessmentProgress?.isRead ? <p className="assessment-status">✓ Conteúdo concluído · teste disponível</p> : null}
         {quiz ? <button className="quiz-start-button" type="button" onClick={() => setShowQuiz(true)}>Fazer teste <span aria-hidden="true">→</span></button> : null}
