@@ -143,3 +143,8 @@ v0.23
 
 - Participantes podem reiniciar, após confirmação, apenas o progresso local de
   leituras e quizzes guardado no browser.
+
+v0.24
+
+- O controlo de reinício de progresso passa a receber interação no cabeçalho.
+- Pausar movimento deixa de interromper a abertura e a leitura dos conteúdos.
