@@ -1,5 +1,6 @@
 "use client";
 
+import type { AssessmentProgressSummary } from "../assessment";
 import { getClusterVisual, type PresentationCluster } from "../presentation";
 import { NodeIcon } from "./NodeIcon";
 
@@ -7,6 +8,7 @@ interface NavigationLegendProps {
   readonly clusters: readonly PresentationCluster[];
   readonly activeClusterId: string | null;
   readonly level: 0 | 1 | 2;
+  readonly assessmentByClusterId: Readonly<Record<string, AssessmentProgressSummary>>;
   readonly onCoreSelect: () => void;
   readonly onClusterSelect: (clusterId: string) => void;
 }
@@ -17,6 +19,7 @@ export function NavigationLegend({
   clusters,
   activeClusterId,
   level,
+  assessmentByClusterId,
   onCoreSelect,
   onClusterSelect,
 }: NavigationLegendProps) {
@@ -32,6 +35,7 @@ export function NavigationLegend({
       </button>
       {clusters.map((cluster) => {
         const clusterVisual = getClusterVisual(cluster.id);
+        const progress = assessmentByClusterId[cluster.id];
         return (
         <button
           key={cluster.id}
@@ -44,7 +48,10 @@ export function NavigationLegend({
               <NodeIcon clusterIndex={clusterVisual.colorIndex} nodeIndex={0} size={17} />
             </svg>
           </span>
-          <span>{cluster.name}</span>
+          <span className="legend-navigation-copy">
+            <span>{cluster.name}</span>
+            <small>{`${progress?.passedCount ?? 0}/${progress?.totalCount ?? 0} aprovados`}</small>
+          </span>
         </button>
         );
       })}

@@ -1,6 +1,10 @@
 "use client";
 
 import type {
+  AssessmentProgressSummary,
+  NodeAssessmentProgress,
+} from "../assessment";
+import type {
   PresentationCluster,
   PresentationConnection,
   PresentationNode,
@@ -19,6 +23,8 @@ interface KnowledgeNetworkProps {
   readonly connections: readonly PresentationConnection[];
   readonly level: 0 | 1 | 2;
   readonly activeClusterId: string | null;
+  readonly assessmentByNodeId: Readonly<Record<string, NodeAssessmentProgress>>;
+  readonly assessmentByClusterId: Readonly<Record<string, AssessmentProgressSummary>>;
   readonly onCoreFocus: () => void;
   readonly onClusterFocus: (clusterId: string) => void;
   readonly onFocus: (nodeId: string, trigger: SVGGElement) => void;
@@ -71,6 +77,8 @@ export function KnowledgeNetwork({
   connections,
   level,
   activeClusterId,
+  assessmentByNodeId,
+  assessmentByClusterId,
   onCoreFocus,
   onClusterFocus,
   onFocus,
@@ -356,6 +364,7 @@ export function KnowledgeNetwork({
           {positionedClusters
             .filter((cluster) => cluster.id !== "interligacoes")
             .map((cluster) => {
+            const progress = assessmentByClusterId[cluster.id];
             const inwardX = networkCenter.x - cluster.x;
             const inwardY = networkCenter.y - cluster.y;
             const length = Math.hypot(inwardX, inwardY) || 1;
@@ -369,7 +378,7 @@ export function KnowledgeNetwork({
                 transform={`translate(${cluster.x} ${cluster.y})`}
                 role="button"
                 tabIndex={0}
-                aria-label={`Mostrar conceitos de ${cluster.name}`}
+                aria-label={`Mostrar conceitos de ${cluster.name}: ${progress?.passedCount ?? 0} de ${progress?.totalCount ?? 0} quizzes aprovados`}
                 onClick={() => onClusterFocus(cluster.id)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
@@ -395,6 +404,17 @@ export function KnowledgeNetwork({
                 >
                   {cluster.name}
                 </text>
+                <text
+                  x={labelX}
+                  y={labelY + 14}
+                  textAnchor={
+                    labelX > 8 ? "start" : labelX < -8 ? "end" : "middle"
+                  }
+                  className="cluster-progress"
+                  aria-hidden="true"
+                >
+                  {`${progress?.passedCount ?? 0}/${progress?.totalCount ?? 0} aprovados`}
+                </text>
               </g>
             );
             })}
@@ -404,6 +424,17 @@ export function KnowledgeNetwork({
           {positionedNodes
             .filter((node) => node.clusterId !== "interligacoes")
             .map((node) => {
+            const assessment = assessmentByNodeId[node.id];
+            const learningState = assessment?.isPassed
+              ? "passed"
+              : assessment?.isRead
+                ? "read"
+                : "unread";
+            const learningLabel = assessment?.isPassed
+              ? "teste aprovado"
+              : assessment?.isRead
+                ? "conteúdo lido; teste por concluir"
+                : "conteúdo por ler";
             const isPrimary = node.emphasis === "primary";
             const cluster = clusters.find(
               (candidate) => candidate.id === node.clusterId,
@@ -413,11 +444,11 @@ export function KnowledgeNetwork({
             return (
               <g
                 key={node.id}
-                className={`network-node is-${node.emphasis} ${node.clusterId === activeClusterId ? "is-cluster-active" : "is-cluster-context"} ${node.isJourneyCurrent ? "is-journey-current" : ""} ${node.functionalState === "completed" ? "is-completed" : ""} tone-${palette[node.colorIndex]}`}
+                className={`network-node is-${node.emphasis} is-learning-${learningState} ${node.clusterId === activeClusterId ? "is-cluster-active" : "is-cluster-context"} ${node.isJourneyCurrent ? "is-journey-current" : ""} ${node.functionalState === "completed" ? "is-completed" : ""} tone-${palette[node.colorIndex]}`}
                 transform={`translate(${node.x} ${node.y})`}
                 role="button"
                 tabIndex={node.functionalState === "locked" ? -1 : 0}
-                aria-label={`Explorar ${node.name}`}
+                aria-label={`Explorar ${node.name}: ${learningLabel}`}
                 aria-disabled={node.functionalState === "locked"}
                 onClick={(event) => onFocus(node.id, event.currentTarget)}
                 onKeyDown={(event) => {
@@ -436,6 +467,12 @@ export function KnowledgeNetwork({
                   <circle r={radius + 17} className="journey-ring" />
                 ) : null}
                 <circle r={radius} className="node-orb" />
+                {learningState === "passed" ? <>
+                  <circle cx={radius * 0.74} cy={-radius * 0.74} r="6" className="node-progress-badge is-passed" aria-hidden="true" />
+                  <text x={radius * 0.74} y={-radius * 0.74 + 3.1} textAnchor="middle" className="node-progress-check" aria-hidden="true">✓</text>
+                </> : learningState === "read" ? (
+                  <circle cx={radius * 0.74} cy={-radius * 0.74} r="4" className="node-progress-badge is-read" aria-hidden="true" />
+                ) : null}
                 <NodeIcon
                   clusterIndex={clusterIndex}
                   nodeIndex={nodeIndex + 1}

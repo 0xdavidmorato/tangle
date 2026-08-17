@@ -118,6 +118,22 @@ test("preserves the best passing score across free repeats", () => {
   assert.equal(session.isCertificateEligible([quiz.nodeId, "boas-pessoas.definicao"]), false);
 });
 
+test("summarizes reading and approval progress for a group of Nodes", () => {
+  const session = new AssessmentSession();
+  session.markContentRead(quiz.nodeId);
+  session.submit(quiz, [
+    { questionId: "trust", optionId: "a" },
+    { questionId: "transparency", optionId: "b" },
+    { questionId: "problems", optionId: "c" },
+  ]);
+  session.markContentRead("boas-pessoas.definicao");
+
+  assert.deepEqual(
+    session.summarize([quiz.nodeId, "boas-pessoas.definicao", "missing"]),
+    { totalCount: 3, readCount: 2, passedCount: 1 },
+  );
+});
+
 test("provides exactly three valid questions for every content Node", () => {
   const quizNodeIds = tangleQuizzes.map((quizDefinition) => quizDefinition.nodeId).sort();
   const graphNodeIds = tangleGraph.nodes.map((node) => node.id).sort();
