@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { jsPDF } from "jspdf";
 import type { CertificateDetails } from "../certificate";
+import { trapFocus } from "./focus";
 
 interface CertificatePanelProps { readonly detailsFor: (participantName: string) => CertificateDetails; readonly onClose: () => void; }
 
@@ -25,10 +26,12 @@ function downloadCertificate(details: CertificateDetails) {
 export function CertificatePanel({ detailsFor, onClose }: CertificatePanelProps) {
   const [participantName, setParticipantName] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => closeButtonRef.current?.focus(), []);
   function issue() { try { downloadCertificate(detailsFor(participantName)); setError(null); } catch (reason) { setError(reason instanceof Error ? reason.message : "Não foi possível emitir o certificado."); } }
-  return <aside className="certificate-panel" role="dialog" aria-modal="true" aria-label="Emitir certificado pedagógico">
-    <div className="panel-topline"><span className="eyebrow">Formação concluída</span><button className="icon-button" type="button" onClick={onClose}><span aria-hidden="true">×</span><span className="sr-only">Fechar certificado</span></button></div>
-    <div className="certificate-mark" aria-hidden="true">✦</div><h2>O seu certificado está pronto</h2><p>Concluiu todos os quizzes. Indique o nome que deve constar no certificado pedagógico.</p>
+  return <aside className="certificate-panel" role="dialog" aria-modal="true" aria-labelledby="certificate-title" onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); onClose(); return; } trapFocus(event, event.currentTarget); }}>
+    <div className="panel-topline"><span className="eyebrow">Formação concluída</span><button ref={closeButtonRef} className="icon-button" type="button" onClick={onClose}><span aria-hidden="true">×</span><span className="sr-only">Fechar certificado</span></button></div>
+    <div className="certificate-mark" aria-hidden="true">✦</div><h2 id="certificate-title">O seu certificado está pronto</h2><p>Concluiu todos os quizzes. Indique o nome que deve constar no certificado pedagógico.</p>
     <label className="certificate-name">Nome do participante<input value={participantName} onChange={(event) => setParticipantName(event.target.value)} placeholder="O seu nome completo" autoComplete="name" /></label>
     {error ? <p className="certificate-error" role="alert">{error}</p> : null}<button className="complete-button" type="button" onClick={issue}>Descarregar certificado PDF <span aria-hidden="true">↓</span></button><small>Este certificado é pedagógico, local e não verificável externamente.</small>
   </aside>;

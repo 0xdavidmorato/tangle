@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import type { NodeAssessmentProgress, NodeQuiz, QuizAnswer, QuizResult } from "../assessment";
 import type { PresentationNode } from "../presentation";
 import { QuizPanel } from "./QuizPanel";
+import { trapFocus } from "./focus";
 
 interface ContentPanelProps {
   readonly node: PresentationNode;
@@ -32,14 +33,29 @@ export function ContentPanel({
   onComplete,
 }: ContentPanelProps) {
   const [showQuiz, setShowQuiz] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => setShowQuiz(false), [node.id]);
+  useEffect(() => closeButtonRef.current?.focus(), [node.id]);
 
   return (
-    <aside className="content-panel" aria-label={`Conteúdo: ${node.name}`}>
+    <aside
+      className="content-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`content-title-${node.id}`}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          onClose();
+          return;
+        }
+        trapFocus(event, event.currentTarget);
+      }}
+    >
       <div className="panel-topline">
         <span className="eyebrow">Conceito em foco</span>
-        <button className="icon-button" type="button" onClick={onClose}>
+        <button ref={closeButtonRef} className="icon-button" type="button" onClick={onClose}>
           <span aria-hidden="true">×</span>
           <span className="sr-only">Fechar conteúdo</span>
         </button>
@@ -47,7 +63,7 @@ export function ContentPanel({
       {showQuiz && quiz && assessmentProgress ? (
         <QuizPanel key={node.id} quiz={quiz} progress={assessmentProgress} onBack={() => setShowQuiz(false)} onSubmit={onQuizSubmit} />
       ) : <>
-        <h2>{focusedTitle(node)}</h2>
+        <h2 id={`content-title-${node.id}`}>{focusedTitle(node)}</h2>
         <div className="markdown-content">
           <ReactMarkdown components={{ h1: () => null }}>{markdown}</ReactMarkdown>
         </div>
