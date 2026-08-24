@@ -92,6 +92,7 @@ button { color: inherit; font: inherit; }
   display: grid;
   min-height: 100vh;
   place-items: center;
+  pointer-events: none;
   transition: transform 850ms var(--ease-organic), opacity 700ms ease;
 }
 .has-expanded-network .network-shell { position: relative; z-index: 9; }
