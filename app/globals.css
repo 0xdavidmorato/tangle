@@ -303,7 +303,7 @@ button { color: inherit; font: inherit; }
   .experience-header { padding: 17px 20px; }
   .brand-logo { width: 92px; }
   .experience-status, .guidance-detail { display: none; }
-  .knowledge-network { width: 1180px; max-width: none; transform: scale(.75); }
+  .knowledge-network { width: min(100vw, 620px); height: auto; max-width: 100%; transform: none; }
   .has-focus .network-shell { opacity: .2; transform: scale(.94); }
   .navigation-legend { top: 92px; left: 12px; width: 148px; }
   .legend-navigation-item { min-height: 31px; padding: 4px 6px; font-size: 10px; }

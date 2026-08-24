@@ -162,3 +162,10 @@ v0.26
   principal.
 - O workflow de publicação executa testes unitários, tipagem e validação no
   browser antes de gerar o GitHub Pages.
+
+v0.27
+
+- Em ecrãs pequenos, a rede adapta-se à largura disponível para manter todos
+  os nós visíveis, incluindo os que se encontram do lado direito.
+- A suite de browser passa a impedir regressões de nós fora da área visível no
+  telemóvel.
