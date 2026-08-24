@@ -36,6 +36,15 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Install browser for end-to-end tests
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end and accessibility tests
+        run: npm run test:e2e
+
       - name: Build static export
         run: npm run build
 

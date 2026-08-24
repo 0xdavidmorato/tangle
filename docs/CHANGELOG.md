@@ -153,3 +153,12 @@ v0.25
 
 - Tabelas Markdown passam a ter suporte completo e apresentação responsiva no
   painel de conteúdo.
+
+v0.26
+
+- Suite end-to-end com Playwright valida teclado, foco, movimento pausado,
+  reinício de progresso, tabela Markdown e layout móvel.
+- Auditoria Axe impede violações graves ou críticas de acessibilidade na tela
+  principal.
+- O workflow de publicação executa testes unitários, tipagem e validação no
+  browser antes de gerar o GitHub Pages.

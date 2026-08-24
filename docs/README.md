@@ -21,6 +21,17 @@ A documentação é a fonte de verdade do projeto.
 
 `npm run dev`
 
+## Validação antes de publicar
+
+`npm test` verifica as regras de domínio e `npm run typecheck` confirma os
+contratos TypeScript. Para validar a experiência no browser — teclado, foco,
+movimento pausado, progresso, tabelas, acessibilidade e ecrã pequeno — execute:
+
+`npm run test:e2e`
+
+Na primeira execução, instale o browser de teste com
+`npx playwright install chromium`.
+
 ## Versão publicada
 
 https://0xdavidmorato.github.io/tangle/

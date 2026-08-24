@@ -98,7 +98,7 @@ export function KnowledgeNetwork({
       <svg
         className="knowledge-network"
         viewBox="-65 -25 1170 700"
-        role="img"
+        role="group"
         aria-labelledby="network-title network-description"
       >
         <title id="network-title">Rede de conhecimento TANGLE</title>
