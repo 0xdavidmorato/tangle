@@ -66,22 +66,9 @@ button { color: inherit; font: inherit; }
 }
 
 .brand, .experience-status, .header-tools { display: flex; align-items: center; }
-.brand { gap: 12px; }
+.brand { min-width: 0; }
 .header-tools { gap: 11px; }
-
-.brand-mark {
-  position: relative;
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgba(92, 236, 244, 0.38);
-  border-radius: 50%;
-  box-shadow: 0 0 25px rgba(41, 210, 231, 0.18), inset 0 0 14px rgba(41, 210, 231, 0.1);
-}
-.brand-mark span { position: absolute; top: 18px; left: 8px; width: 21px; height: 1px; background: var(--cyan); transform-origin: center; }
-.brand-mark span:nth-child(2) { transform: rotate(60deg); }
-.brand-mark span:nth-child(3) { transform: rotate(-60deg); }
-.brand strong { display: block; font-size: 15px; letter-spacing: 0.2em; }
-.brand small { display: block; margin-top: 2px; color: #67c9d5; font-size: 9px; letter-spacing: 0.08em; }
+.brand-logo { display: block; width: 124px; height: auto; filter: drop-shadow(0 0 14px rgba(174, 215, 255, .22)); }
 
 .motion-control, .journey-controls {
   border: 1px solid rgba(109, 207, 224, 0.17);
@@ -313,6 +300,7 @@ button { color: inherit; font: inherit; }
 
 @media (max-width: 850px) {
   .experience-header { padding: 17px 20px; }
+  .brand-logo { width: 92px; }
   .experience-status, .guidance-detail { display: none; }
   .knowledge-network { width: 1180px; max-width: none; transform: scale(.75); }
   .has-focus .network-shell { opacity: .2; transform: scale(.94); }
