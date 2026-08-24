@@ -72,6 +72,22 @@ test("não apresenta violações críticas ou graves de acessibilidade", async (
 test.describe("em ecrã pequeno", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
+  test("mantém os nós da rede dentro da área visível", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: /Bom Negócio 0\/5 aprovados/ }).click();
+
+    const nodeOrbs = page.locator(".knowledge-nodes .node-orb");
+    await expect(nodeOrbs).not.toHaveCount(0);
+    const isEveryNodeVisible = await nodeOrbs.evaluateAll((elements) =>
+      elements.every((element) => {
+        const bounds = element.getBoundingClientRect();
+        return bounds.left >= 0 && bounds.right <= window.innerWidth;
+      }),
+    );
+
+    expect(isEveryNodeVisible).toBe(true);
+  });
+
   test("mantém a tabela navegável dentro do painel", async ({ page }) => {
     await openCaseStudy(page);
 
