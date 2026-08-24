@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
-const isGitHubPages = process.env.GITHUB_ACTIONS === "true";
+const isGitHubPages = process.env.GITHUB_ACTIONS === "true"
+  && process.env.PLAYWRIGHT_TEST !== "true";
 const repositoryBasePath = "/tangle";
 
 const nextConfig: NextConfig = {

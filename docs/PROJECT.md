@@ -1565,6 +1565,7 @@ Inclui:
 - Acessibilidade
 - Validação da jornada completa em diferentes ecrãs
 - Revisão de textos, feedbacks e estados visuais
+- Testes end-to-end de navegação, acessibilidade e layout móvel antes do deploy
 
 Resultado esperado:
 
