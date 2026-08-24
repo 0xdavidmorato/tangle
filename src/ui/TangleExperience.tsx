@@ -27,6 +27,7 @@ import { CertificatePanel } from "./CertificatePanel";
 import { KnowledgeNetwork } from "./KnowledgeNetwork";
 import { NavigationLegend } from "./NavigationLegend";
 import { OrganicNavigation } from "./OrganicNavigation";
+import logoDavid from "../../docs/assets/logo_david.png";
 
 type OrganicStage = "overview" | "concepts" | "relations" | "deep-dive";
 type FocusReturnTarget = HTMLElement | SVGElement;
@@ -249,15 +250,13 @@ export function TangleExperience({
     >
       <header className="experience-header">
         <div className="brand">
-          <div className="brand-mark" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </div>
-          <div>
-            <strong>TANGLE</strong>
-            <small>David Morato</small>
-          </div>
+          <img
+            className="brand-logo"
+            src={logoDavid.src}
+            width={logoDavid.width}
+            height={logoDavid.height}
+            alt="David Morato"
+          />
         </div>
         <div className="header-tools">
           <button
